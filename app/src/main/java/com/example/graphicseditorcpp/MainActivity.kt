@@ -1,16 +1,21 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -22,7 +27,7 @@ class MainActivity : AppCompatActivity() {
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    external fun stringFromJNI(): String
+    private external fun stringFromJNI(): String
 
     companion object {
 
@@ -31,27 +36,61 @@ class MainActivity : AppCompatActivity() {
             System.loadLibrary("native-lib")
         }
 
-        private val REQUEST_TAKE_PHOTO = 0
-        private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
+        private const val idPickFromGallery = 0
+        private const val idPickFromCamera = 1
+
+        private const val permissionGallery = 0
+        private const val permissionCamera = 1
     }
 
-    fun pickFromGallery(view: View) {
-        selectImageInAlbum()
-        takePhoto()
-    }
+    fun processButtonPressing(view: View) {
 
-    private fun selectImageInAlbum() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
+        if(view.id == pickFromGallery.id) {
+
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), permissionGallery)
+            }
+
+            pickFromGallery()
+        }
+        if(view.id == pickFromCamera.id) {
+
+            if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+
+                requestPermissions(arrayOf(android.Manifest.permission.CAMERA), permissionCamera)
+            }
+
+            pickFromCamera()
         }
     }
 
-    private fun takePhoto() {
-        val intent1 = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent1.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent1, REQUEST_TAKE_PHOTO)
+    private fun pickFromGallery() {
+
+        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, idPickFromGallery)
+    }
+
+    private fun pickFromCamera() {
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, idPickFromCamera)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
+            requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
+
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            imageForProcessing.setImageBitmap(imageBitmap)
+        }
+        else {
+
+            Toast.makeText(applicationContext, "Unexpected error", Toast.LENGTH_LONG).show()
         }
     }
+
 }

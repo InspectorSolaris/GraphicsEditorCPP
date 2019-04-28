@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
+    <string name="gallery_button">pick From Gallery</string>
+    <string name="camera_button">pick From Camera</string>
+    <string name="imageForProcessing">TODO</string>
 </resources>
