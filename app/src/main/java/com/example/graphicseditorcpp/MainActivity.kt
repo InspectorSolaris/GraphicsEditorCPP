@@ -18,16 +18,12 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Example of a call to a native method
-        sample_text.text = stringFromJNI()
     }
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
      * which is packaged with this application.
      */
-    private external fun stringFromJNI(): String
 
     companion object {
 
@@ -51,8 +47,10 @@ class MainActivity : AppCompatActivity() {
 
                 requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), permissionGallery)
             }
+            else {
 
-            pickFromGallery()
+                pickFromGallery()
+            }
         }
         if(view.id == pickFromCamera.id) {
 
@@ -60,8 +58,10 @@ class MainActivity : AppCompatActivity() {
 
                 requestPermissions(arrayOf(android.Manifest.permission.CAMERA), permissionCamera)
             }
+            else {
 
-            pickFromCamera()
+                pickFromCamera()
+            }
         }
     }
 
