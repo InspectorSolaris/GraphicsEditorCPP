@@ -56,27 +56,12 @@ class MainActivity : AppCompatActivity() {
 
             if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
 
-                requestPermissions(arrayOf(android.Manifest.permission.CAMERA), permissionCamera)
+                requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), permissionCamera)
             }
             else {
 
                 pickFromCamera()
             }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
-            requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageForProcessing.setImageBitmap(imageBitmap)
-        }
-        else {
-
-            Toast.makeText(applicationContext, "Unexpected error", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -87,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
             permissionGallery -> {
 
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     pickFromGallery()
                 }
@@ -99,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
             permissionCamera -> {
 
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if(grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                     pickFromCamera()
                 }
@@ -108,6 +93,18 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
                 }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
+            requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
+
+//            val imageBitmap = data?.extras?.get("data") as Bitmap
+//            imageForProcessing.setImageBitmap(imageBitmap)
+            imageForProcessing.setImageURI(data?.data)
         }
     }
 
