@@ -6,11 +6,12 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -103,8 +104,10 @@ class MainActivity : AppCompatActivity() {
             requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
 
 //            val imageBitmap = data?.extras?.get("data") as Bitmap
+//            imageForProcessing.setImageURI(data?.data)
+
+//            val imageBitmap = getCompressedBitmap(data)
 //            imageForProcessing.setImageBitmap(imageBitmap)
-            imageForProcessing.setImageURI(data?.data)
         }
     }
 
@@ -121,4 +124,8 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
+//    private fun getCompressedBitmap(data: Intent?) {
+//
+//
+//    }
 }
