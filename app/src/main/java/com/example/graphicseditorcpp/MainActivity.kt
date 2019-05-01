@@ -65,19 +65,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun pickFromGallery() {
-
-        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
-        galleryIntent.type = "image/*"
-        startActivityForResult(galleryIntent, idPickFromGallery)
-    }
-
-    private fun pickFromCamera() {
-
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, idPickFromCamera)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         super.onActivityResult(requestCode, resultCode, data)
@@ -91,6 +78,50 @@ class MainActivity : AppCompatActivity() {
 
             Toast.makeText(applicationContext, "Unexpected error", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when(requestCode) {
+
+            permissionGallery -> {
+
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    pickFromGallery()
+                }
+                else {
+
+                    Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            permissionCamera -> {
+
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    pickFromCamera()
+                }
+                else {
+
+                    Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun pickFromGallery() {
+
+        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, idPickFromGallery)
+    }
+
+    private fun pickFromCamera() {
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
 }
