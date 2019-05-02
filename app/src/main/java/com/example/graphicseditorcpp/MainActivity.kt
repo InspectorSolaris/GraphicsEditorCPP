@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         // Used to load the 'native-lib' library on application startup.
         init {
             System.loadLibrary("native-lib")
+            System.loadLibrary("algorithms")
         }
 
         private const val idPickFromGallery = 0
@@ -42,26 +43,40 @@ class MainActivity : AppCompatActivity() {
 
     fun processButtonPressing(view: View) {
 
-        if(view.id == pickFromGallery.id) {
+        when(view.id) {
 
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            pickFromGallery.id -> {
 
-                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), permissionGallery)
+                if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+                    requestPermissions(
+                        arrayOf(
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE
+                        ), permissionGallery)
+
+                } else {
+
+                    pickFromGallery()
+
+                }
             }
-            else {
 
-                pickFromGallery()
-            }
-        }
-        if(view.id == pickFromCamera.id) {
+            pickFromCamera.id -> {
 
-            if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
 
-                requestPermissions(arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE), permissionCamera)
-            }
-            else {
+                    requestPermissions(
+                        arrayOf(
+                            android.Manifest.permission.CAMERA,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ), permissionCamera
+                    )
 
-                pickFromCamera()
+                } else {
+
+                    pickFromCamera()
+
+                }
             }
         }
     }
@@ -76,10 +91,11 @@ class MainActivity : AppCompatActivity() {
                 if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     pickFromGallery()
-                }
-                else {
+
+                } else {
 
                     Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
+
                 }
             }
 
@@ -88,10 +104,11 @@ class MainActivity : AppCompatActivity() {
                 if(grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                     pickFromCamera()
-                }
-                else {
 
-                    Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
+                } else {
+
+                    Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show()
+
                 }
             }
         }
@@ -113,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun pickFromGallery() {
 
-        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        val galleryIntent = Intent(Intent.ACTION_PICK)
         galleryIntent.type = "image/*"
         startActivityForResult(galleryIntent, idPickFromGallery)
     }
