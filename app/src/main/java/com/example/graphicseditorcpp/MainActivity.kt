@@ -16,10 +16,15 @@ import android.widget.Toast
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
+    private val idPickFromGallery = 0
+    private val idPickFromCamera = 1
+
+    private val permissionGallery = 0
+    private val permissionCamera = 1
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -34,17 +39,10 @@ class MainActivity : AppCompatActivity() {
             System.loadLibrary("algorithms")
         }
 
-        private const val idPickFromGallery = 0
-        private const val idPickFromCamera = 1
-
-        private const val permissionGallery = 0
-        private const val permissionCamera = 1
     }
 
     fun processButtonPressing(view: View) {
-
         when(view.id) {
-
             pickFromGallery.id -> {
 
                 if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -60,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-
             pickFromCamera.id -> {
 
                 if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
@@ -82,35 +79,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode) {
 
             permissionGallery -> {
 
                 if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                     pickFromGallery()
-
                 } else {
-
                     Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
-
                 }
             }
-
             permissionCamera -> {
 
                 if(grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
                     pickFromCamera()
-
                 } else {
-
                     Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show()
-
                 }
             }
+
         }
     }
 
@@ -125,18 +113,17 @@ class MainActivity : AppCompatActivity() {
 
 //            val imageBitmap = getCompressedBitmap(data)
 //            imageForProcessing.setImageBitmap(imageBitmap)
+
         }
     }
 
     private fun pickFromGallery() {
-
         val galleryIntent = Intent(Intent.ACTION_PICK)
         galleryIntent.type = "image/*"
         startActivityForResult(galleryIntent, idPickFromGallery)
     }
 
     private fun pickFromCamera() {
-
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
