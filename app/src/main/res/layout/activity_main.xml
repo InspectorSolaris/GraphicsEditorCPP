@@ -55,24 +55,20 @@
         <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="550dp" app:srcCompat="@drawable/ic_add_circle_outline"
-                android:id="@+id/imageButtonPickFirst" android:layout_alignParentEnd="true"
+                android:id="@+id/imageButtonPickFirst"
                 android:background="@color/colorPrimary" android:scaleType="centerInside"
-                android:layout_below="@+id/constraintLayout"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
                 android:contentDescription="@string/image_button_pick_first" android:onClick="processButtonPressing"
         />
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/imageButtonPickFirst" android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true">
+        >
             <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="54dp"
                     app:srcCompat="@drawable/ic_star_border_black_24dp"
-                    android:id="@+id/imageButtonUndo4"
+                    android:id="@+id/imageButtonAlgorithmAStar"
                     app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
                     app:layout_constraintVertical_bias="1.0"
@@ -80,30 +76,30 @@
                     android:contentDescription="@string/image_button_undo"
                     android:layout_marginStart="0dp" app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintHorizontal_bias="1.0" android:onClick="processButtonPressing"
-                    android:layout_weight="1" android:layout_alignTop="@+id/null"
-                    android:layout_alignStart="@+id/null"/>
+                    android:layout_weight="1"
+            />
             <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="54dp"
                     app:srcCompat="@drawable/ic_palette_black_24dp"
-                    android:id="@+id/imageButtonRedo2"
+                    android:id="@+id/imageButtonTools"
                     app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
                     app:layout_constraintVertical_bias="0.0"
                     app:layout_constraintEnd_toStartOf="@+id/imageButtonPickNew"
                     android:contentDescription="@string/image_button_redo" android:onClick="processButtonPressing"
-                    android:layout_weight="1" android:layout_alignTop="@+id/null"/>
+                    android:layout_weight="1"/>
             <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="54dp"
                     app:srcCompat="@drawable/ic_file_upload_black_24dp"
-                    android:id="@+id/imageButtonPickNew2"
+                    android:id="@+id/imageButtonExport"
                     app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
                     app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
                     android:contentDescription="@string/image_button_pick_new"
                     android:onClick="processButtonPressing"
-                    android:layout_weight="1" android:layout_alignEnd="@+id/null"/>
+                    android:layout_weight="1"/>
         </LinearLayout>
     </LinearLayout>
 
