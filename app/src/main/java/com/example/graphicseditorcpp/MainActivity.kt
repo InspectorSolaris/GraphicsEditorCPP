@@ -3,15 +3,18 @@ package com.example.graphicseditorcpp
 import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import kotlinx.android.synthetic.main.activity_main.*
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
+import java.io.File
+import android.net.Uri
+import android.os.Environment
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,11 +23,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    private val idPickFromGallery = 0
-    private val idPickFromCamera = 1
+    private val idPickFromGallery = 1
+    private val idPickFromCamera = 2
 
-    private val permissionGallery = 0
-    private val permissionCamera = 1
+    private val permissionGallery = 1
+    private val permissionCamera = 2
+
+    private var imageFileForProcessing : File? = null
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -108,28 +113,38 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
             requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
 
-//            val imageBitmap = data?.extras?.get("data") as Bitmap
-//            imageForProcessing.setImageURI(data?.data)
-
-//            val imageBitmap = getCompressedBitmap(data)
-//            imageForProcessing.setImageBitmap(imageBitmap)
-
+            imageForProcessing.setImageURI(Uri.fromFile(imageFileForProcessing))
         }
     }
 
     private fun pickFromGallery() {
+        val imageDate = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageDir  = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imageFile = File.createTempFile("processedImg_$(imageDate)", ".png", imageDir)
+
         val galleryIntent = Intent(Intent.ACTION_PICK)
         galleryIntent.type = "image/*"
+        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile))
         startActivityForResult(galleryIntent, idPickFromGallery)
+
+        imageFileForProcessing = imageFile
     }
 
     private fun pickFromCamera() {
+        val imageDate = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageDir  = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imageFile = File.createTempFile("processedImg_$(imageDate)", ".png", imageDir)
+
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile))
         startActivityForResult(cameraIntent, idPickFromCamera)
+
+        imageFileForProcessing = imageFile
     }
 
-//    private fun getCompressedBitmap(data: Intent?) {
-//
-//
-//    }
+    private fun getCompressedBitmap(data: Intent?) : Bitmap {
+
+
+
+    }
 }
