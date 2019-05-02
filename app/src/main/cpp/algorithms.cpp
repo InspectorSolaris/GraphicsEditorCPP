@@ -7,49 +7,59 @@
 // parameters: original pic, angle of rotation
 // return: turned on specified angle picture
 
-void pictureTurning();
+extern "C" JNIEXPORT void JNICALL
+pictureTurning();
 
 // parameters: original pic, ...
 // return: color corrected picture
 
-void pictureColorcorrection();
+extern "C" JNIEXPORT void JNICALL
+pictureColorcorrection();
 
 // parameters: original pic, scale ratio
 // return: scaled on specified ratio picture
 
-void pictureScaling();
+extern "C" JNIEXPORT void JNICALL
+pictureScaling();
 
 // parameters: original pic, ...
 // return: ...
 
-void pictureSegmentation();
+extern "C" JNIEXPORT void JNICALL
+pictureSegmentation();
 
 // parameters: original pic, retouching parameters
 // return: retouched pic
 
-void pictureRetouching();
+extern "C" JNIEXPORT void JNICALL
+pictureRetouching();
 
 // parameters: original pic, retouching parameters
 // return: masked pic
 
-void pictureUnsharpMasking();
+extern "C" JNIEXPORT void JNICALL
+pictureUnsharpMasking();
 
 // parameters: original pic, bilinear algorithm parameters
 // return: processed pic
 
-void pictureBilinearFiltration();
+extern "C" JNIEXPORT void JNICALL
+pictureBilinearFiltration();
 
 // parameters: original pic, trilinear algorithm parameters
 // return: processed pic
 
-void pictureTrilinearFiltration();
+extern "C" JNIEXPORT void JNICALL
+pictureTrilinearFiltration();
 
 // parameters: original pic (clear pic), positions of points
 // return: interpolated with splines broken line on original pic
 
-void drawLines();
+extern "C" JNIEXPORT void JNICALL
+drawLines();
 
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
 
-void algotihmAStar();
+extern "C" JNIEXPORT void JNICALL
+algotihmAStar();
