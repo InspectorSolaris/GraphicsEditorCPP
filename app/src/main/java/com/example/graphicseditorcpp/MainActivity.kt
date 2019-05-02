@@ -8,8 +8,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.provider.MediaStore
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.Toast
+import kotlinx.android.synthetic.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,9 +20,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Example of a call to a native method
-        sample_text.text = stringFromJNI()
     }
 
     /**
@@ -45,24 +44,24 @@ class MainActivity : AppCompatActivity() {
 
     fun processButtonPressing(view: View) {
 
-        if(view.id == pickFromGallery.id) {
-
-            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
-                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), permissionGallery)
-            }
-
-            pickFromGallery()
-        }
-        if(view.id == pickFromCamera.id) {
-
-            if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-
-                requestPermissions(arrayOf(android.Manifest.permission.CAMERA), permissionCamera)
-            }
-
-            pickFromCamera()
-        }
+//        if(view.id == pickFromGallery.id) {
+//
+//            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+//
+//                requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), permissionGallery)
+//            }
+//
+//            pickFromGallery()
+//        }
+//        if(view.id == pickFromCamera.id) {
+//
+//            if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+//
+//                requestPermissions(arrayOf(android.Manifest.permission.CAMERA), permissionCamera)
+//            }
+//
+//            pickFromCamera()
+//        }
     }
 
     private fun pickFromGallery() {
@@ -84,8 +83,8 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
             requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
 
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            imageForProcessing.setImageBitmap(imageBitmap)
+//            val imageBitmap = data?.extras?.get("data") as Bitmap
+//            imageForProcessing.setImageBitmap(imageBitmap)
         }
         else {
 

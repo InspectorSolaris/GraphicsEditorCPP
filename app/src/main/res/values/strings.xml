@@ -2,5 +2,8 @@
     <string name="app_name">GraphicsEditorCPP</string>
     <string name="gallery_button">pick From Gallery</string>
     <string name="camera_button">pick From Camera</string>
-    <string name="imageForProcessing">TODO</string>
+    <string name="image_button_undo">Undo changes</string>
+    <string name="image_button_redo">Redo changes</string>
+    <string name="image_button_pick_new">Pick image</string>
+    <string name="image_button_pick_first">Pick first image</string>
 </resources>
