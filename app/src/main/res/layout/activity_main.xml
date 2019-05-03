@@ -32,15 +32,6 @@
         <ImageButton
                 android:layout_width="54dp"
                 android:layout_height="54dp"
-                app:srcCompat="@drawable/ic_image"
-                android:id="@+id/imageButtonPickNew"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-                android:background="#00FFFFFF" android:scaleType="centerInside"
-                app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
-                android:contentDescription="@string/image_button_pick_new" android:onClick="processButtonPressing"/>
-        <ImageButton
-                android:layout_width="54dp"
-                android:layout_height="54dp"
                 app:srcCompat="@drawable/ic_redo"
                 android:id="@+id/imageButtonRedo"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
@@ -48,6 +39,15 @@
                 app:layout_constraintVertical_bias="0.0"
                 app:layout_constraintEnd_toStartOf="@+id/imageButtonPickNew"
                 android:contentDescription="@string/image_button_redo" android:onClick="processButtonPressing"/>
+        <ImageButton
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_image"
+                android:id="@+id/imageButtonPickNew"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#00FFFFFF" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/image_button_pick_new" android:onClick="processButtonPressing"/>
     </android.support.constraint.ConstraintLayout>
     <ImageButton
             android:layout_width="match_parent"

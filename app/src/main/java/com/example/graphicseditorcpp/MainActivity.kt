@@ -13,6 +13,7 @@ import android.widget.Toast
 import java.io.File
 import android.net.Uri
 import android.os.Environment
+import java.io.FileInputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionCamera = 2
 
     private var imageFileForProcessing : File? = null
+    private var imageBitmapForProcessing : Bitmap? = null
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -113,7 +115,8 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
             requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
 
-            imageForProcessing.setImageURI(Uri.fromFile(imageFileForProcessing))
+            imageBitmapForProcessing = getCompressedBitmap()
+            imageForProcessing.setImageBitmap(imageBitmapForProcessing)
         }
     }
 
@@ -142,9 +145,38 @@ class MainActivity : AppCompatActivity() {
         imageFileForProcessing = imageFile
     }
 
-    private fun getCompressedBitmap(data: Intent?) : Bitmap {
+    private fun getCompressedBitmap() : Bitmap {
+        val bfOptions : BitmapFactory.Options = BitmapFactory.Options()
+        bfOptions.inJustDecodeBounds = true
 
+        var fiStream : FileInputStream = FileInputStream(imageFileForProcessing)
+        BitmapFactory.decodeStream(fiStream, null, bfOptions)
+        fiStream.close()
 
+        val imageMaxSize = 1024
+        var l = 1
+        var scale = 0
+        var r = 100
 
+        while(l < r) {
+
+            scale = r - (r - l) / 2
+
+            if(bfOptions.outHeight / scale > imageMaxSize ||
+                bfOptions.outWidth / scale > imageMaxSize) {
+                l = scale + 1
+            } else {
+                r = scale - 1
+            }
+        }
+
+        bfOptions.inJustDecodeBounds = false
+        bfOptions.inSampleSize = scale
+
+        fiStream = FileInputStream(imageFileForProcessing)
+        val resultBitmap = BitmapFactory.decodeStream(fiStream, null, bfOptions) as Bitmap
+        fiStream.close()
+
+        return resultBitmap
     }
 }
