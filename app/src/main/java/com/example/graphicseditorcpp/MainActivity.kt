@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity() {
     private val permissionGallery = 1
     private val permissionCamera = 2
 
-    private var imageFileForProcessing : File? = null
-    private var imageBitmapForProcessing : Bitmap? = null
+    private var imageForProcessingFile : File? = null
+    private var imageForProcessingBitmap : Bitmap? = null
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -56,7 +56,8 @@ class MainActivity : AppCompatActivity() {
 
                     requestPermissions(
                         arrayOf(
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE
+                            android.Manifest.permission.CAMERA,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                         ), permissionGallery)
 
                 } else {
@@ -91,7 +92,9 @@ class MainActivity : AppCompatActivity() {
 
             permissionGallery -> {
 
-                if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if(grantResults.size > 1 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     pickFromGallery()
                 } else {
                     Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
@@ -99,7 +102,9 @@ class MainActivity : AppCompatActivity() {
             }
             permissionCamera -> {
 
-                if(grantResults.size > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                if(grantResults.size > 1 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     pickFromCamera()
                 } else {
                     Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show()
@@ -115,8 +120,8 @@ class MainActivity : AppCompatActivity() {
         if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
             requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
 
-            imageBitmapForProcessing = getCompressedBitmap()
-            imageForProcessing.setImageBitmap(imageBitmapForProcessing)
+            imageForProcessingBitmap = getCompressedBitmap()
+            imageForProcessing.setImageBitmap(imageForProcessingBitmap)
         }
     }
 
@@ -130,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile))
         startActivityForResult(galleryIntent, idPickFromGallery)
 
-        imageFileForProcessing = imageFile
+        imageForProcessingFile = imageFile
     }
 
     private fun pickFromCamera() {
@@ -142,18 +147,28 @@ class MainActivity : AppCompatActivity() {
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageFile))
         startActivityForResult(cameraIntent, idPickFromCamera)
 
-        imageFileForProcessing = imageFile
+        imageForProcessingFile = imageFile
     }
 
     private fun getCompressedBitmap() : Bitmap {
         val bfOptions : BitmapFactory.Options = BitmapFactory.Options()
         bfOptions.inJustDecodeBounds = true
 
-        var fiStream : FileInputStream = FileInputStream(imageFileForProcessing)
+        var fiStream = FileInputStream(imageForProcessingFile)
         BitmapFactory.decodeStream(fiStream, null, bfOptions)
         fiStream.close()
 
-        val imageMaxSize = 1024
+        bfOptions.inJustDecodeBounds = false
+        bfOptions.inSampleSize = binarySearch(bfOptions.outHeight as Double, bfOptions.outWidth as Double, 1024)
+
+        fiStream = FileInputStream(imageForProcessingFile)
+        val resultBitmap = BitmapFactory.decodeStream(fiStream, null, bfOptions) as Bitmap
+        fiStream.close()
+
+        return resultBitmap
+    }
+
+    private fun binarySearch(a : Double, b : Double, maxSize : Int) : Int {
         var l = 1
         var scale = 0
         var r = 100
@@ -162,21 +177,14 @@ class MainActivity : AppCompatActivity() {
 
             scale = r - (r - l) / 2
 
-            if(bfOptions.outHeight / scale > imageMaxSize ||
-                bfOptions.outWidth / scale > imageMaxSize) {
+            if(a / scale > maxSize ||
+                b / scale > maxSize) {
                 l = scale + 1
             } else {
                 r = scale - 1
             }
         }
 
-        bfOptions.inJustDecodeBounds = false
-        bfOptions.inSampleSize = scale
-
-        fiStream = FileInputStream(imageFileForProcessing)
-        val resultBitmap = BitmapFactory.decodeStream(fiStream, null, bfOptions) as Bitmap
-        fiStream.close()
-
-        return resultBitmap
+        return scale
     }
 }
