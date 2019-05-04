@@ -47,7 +47,7 @@
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 android:background="#00FFFFFF" android:scaleType="centerInside"
                 app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
-                android:onClick="showPopup" android:contentDescription="@string/pick_new_photo"/>
+                android:contentDescription="@string/pick_new_photo"/>
     </android.support.constraint.ConstraintLayout>
     <ImageView
             android:layout_width="wrap_content"

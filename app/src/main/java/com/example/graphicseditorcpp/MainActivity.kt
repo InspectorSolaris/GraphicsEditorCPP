@@ -28,11 +28,11 @@ class MainActivity : AppCompatActivity() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.galleryItem -> {
-                        Toast.makeText(this, " GALLERY", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "GALLERY", Toast.LENGTH_SHORT).show()
                         true
                     }
                     R.id.cameraItem -> {
-                        Toast.makeText(this, " CAMERA", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "CAMERA", Toast.LENGTH_SHORT).show()
                         true
                     }
                     else -> false
@@ -65,39 +65,43 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun tryLoadFromGallery() {
+        if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+            checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), permissionGallery)
+
+        } else {
+            pickFromGallery()
+        }
+    }
+
+    private fun tryLoadFromCamera() {
+        if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
+            checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            requestPermissions(
+                arrayOf(
+                    android.Manifest.permission.CAMERA,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), permissionCamera)
+
+        } else {
+            pickFromCamera()
+        }
+    }
+
     fun processButtonPressing(view: View) {
         when(view.id) {
             imageButtonPickFromGallery.id -> {
-
-                if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-                        checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
-                    requestPermissions(
-                        arrayOf(
-                            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ), permissionGallery)
-
-                } else {
-                    pickFromGallery()
-                }
-
+                tryLoadFromGallery()
             }
             imageButtonPickFromCamera.id -> {
-
-                if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
-                        checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-
-                    requestPermissions(
-                        arrayOf(
-                            android.Manifest.permission.CAMERA,
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ), permissionCamera)
-
-                } else {
-                    pickFromCamera()
-                }
-
+                tryLoadFromCamera()
             }
         }
     }
@@ -131,6 +135,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun createImageFile() : File {
+        val imageFileName = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
+        val imageFileExt = ".png"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageForProcessingPath = absolutePath
+        }
+    }
+
+    private fun pickFromGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK)
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, idPickFromGallery)
+    }
+
+    private fun pickFromCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
+        startActivityForResult(cameraIntent, idPickFromCamera)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -153,33 +184,6 @@ class MainActivity : AppCompatActivity() {
             imageForProcessing.setImageURI(imageUri)
 
             imageForProcessingPath = imageUri.toString()
-        }
-    }
-
-    private fun pickFromGallery() {
-        val galleryIntent = Intent(Intent.ACTION_PICK)
-        galleryIntent.type = "image/*"
-        startActivityForResult(galleryIntent, idPickFromGallery)
-    }
-
-    private fun pickFromCamera() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
-        startActivityForResult(cameraIntent, idPickFromCamera)
-    }
-
-    private fun createImageFile() : File {
-        val imageFileName = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
-        val imageFileExt = ".png"
-        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        return File.createTempFile(
-            imageFileName,
-            imageFileExt,
-            imageFileDir
-        ).apply {
-            imageForProcessingPath = absolutePath
         }
     }
 }
