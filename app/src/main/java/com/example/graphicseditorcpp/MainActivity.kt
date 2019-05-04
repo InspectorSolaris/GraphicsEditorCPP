@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.Toast
 import java.io.File
 import android.net.Uri
-import android.os.Environment
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        imageForProcessingFileDir = filesDir
     }
 
     private val idPickFromGallery = 1
@@ -28,10 +29,14 @@ class MainActivity : AppCompatActivity() {
     private val permissionGallery = 1
     private val permissionCamera = 2
 
+    private val imageForProcessingFileName : String = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
+    private val imageForProcessingFileExt : String = ".tmp"
+    private var imageForProcessingFileDir : File? = null
+
     private var imageForProcessingFile = File.createTempFile(
-        "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}",
-        ".png",
-        getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        imageForProcessingFileName,
+        imageForProcessingFileExt,
+        imageForProcessingFileDir
     )
 
     /**
