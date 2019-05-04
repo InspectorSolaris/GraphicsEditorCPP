@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun tryLoadFromGallery() {
+    private fun tryPickFromGallery() {
         if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
             checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun tryLoadFromCamera() {
+    private fun tryPickFromCamera() {
         if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
             checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
@@ -98,10 +98,10 @@ class MainActivity : AppCompatActivity() {
     fun processButtonPressing(view: View) {
         when(view.id) {
             imageButtonPickFromGallery.id -> {
-                tryLoadFromGallery()
+                tryPickFromGallery()
             }
             imageButtonPickFromCamera.id -> {
-                tryLoadFromCamera()
+                tryPickFromCamera()
             }
         }
     }
