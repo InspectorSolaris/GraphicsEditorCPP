@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionCamera = 2
 
     private var imageForProcessingFile = File.createTempFile(
-        "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())}",
+        "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}",
         ".png",
         getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     )
@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
             requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
