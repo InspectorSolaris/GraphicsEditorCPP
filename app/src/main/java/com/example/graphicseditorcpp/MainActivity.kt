@@ -22,6 +22,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        imageButtonPickNew.setOnClickListener {
+            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
+            popupMenu.inflate(R.menu.popup_menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.galleryItem -> {
+                        Toast.makeText(this, " GALLERY", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.cameraItem -> {
+                        Toast.makeText(this, " CAMERA", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 
     private val idPickFromGallery = 1
