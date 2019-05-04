@@ -56,9 +56,8 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
             android:contentDescription="@string/image_for_processing"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromGallery"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/imageButtonPickFromCamera"
-    />
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"/>
     <ImageButton
             android:layout_width="0dp"
             android:layout_height="0dp" app:srcCompat="@drawable/ic_add_a_photo"

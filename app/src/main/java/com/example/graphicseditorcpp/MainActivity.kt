@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.Toast
 import java.io.File
 import android.net.Uri
+import android.os.Environment
+import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        imageForProcessingFileDir = filesDir
     }
 
     private val idPickFromGallery = 1
@@ -29,15 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionGallery = 1
     private val permissionCamera = 2
 
-    private val imageForProcessingFileName : String = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
-    private val imageForProcessingFileExt : String = ".tmp"
-    private var imageForProcessingFileDir : File? = null
-
-    private var imageForProcessingFile = File.createTempFile(
-        imageForProcessingFileName,
-        imageForProcessingFileExt,
-        imageForProcessingFileDir
-    )
+    private var imageForProcessingPath : String? = null
 
     /**
      * A native method that is implemented by the 'native-lib' native library,
@@ -122,28 +115,53 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK ||
-            requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
 
+        val imageUri : Uri? = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
+            data?.data
+        }
+        else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
+            Uri.fromFile(File(imageForProcessingPath))
+        }
+        else {
+            null
+        }
+
+        if(imageUri != null) {
             imageButtonPickFromGallery.visibility = View.GONE
             imageButtonPickFromGallery.isEnabled = false
             imageButtonPickFromCamera.visibility = View.GONE
             imageButtonPickFromCamera.isEnabled = false
 
-            imageForProcessing.setImageURI(Uri.fromFile(imageForProcessingFile))
+            imageForProcessing.setImageURI(imageUri)
+
+            imageForProcessingPath = imageUri.toString()
         }
     }
 
     private fun pickFromGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK)
         galleryIntent.type = "image/*"
-        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageForProcessingFile))
         startActivityForResult(galleryIntent, idPickFromGallery)
     }
 
     private fun pickFromCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageForProcessingFile))
+        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
         startActivityForResult(cameraIntent, idPickFromCamera)
+    }
+
+    private fun createImageFile() : File {
+        val imageFileName = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
+        val imageFileExt = ".png"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageForProcessingPath = absolutePath
+        }
     }
 }
