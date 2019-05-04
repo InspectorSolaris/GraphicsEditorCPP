@@ -28,11 +28,13 @@ class MainActivity : AppCompatActivity() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.galleryItem -> {
-                        Toast.makeText(this, "GALLERY", Toast.LENGTH_SHORT).show()
+                        tryPickFromGallery()
+                        //Toast.makeText(this, "GALLERY", Toast.LENGTH_SHORT).show()
                         true
                     }
                     R.id.cameraItem -> {
-                        Toast.makeText(this, "CAMERA", Toast.LENGTH_SHORT).show()
+                        tryPickFromCamera()
+                        //Toast.makeText(this, "CAMERA", Toast.LENGTH_SHORT).show()
                         true
                     }
                     else -> false
