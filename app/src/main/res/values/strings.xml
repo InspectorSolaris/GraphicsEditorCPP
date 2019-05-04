@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
-    <string name="gallery_button">pick From Gallery</string>
-    <string name="camera_button">pick From Camera</string>
-    <string name="image_button_undo">Undo changes</string>
-    <string name="image_button_redo">Redo changes</string>
-    <string name="image_button_pick_new">Pick image</string>
-    <string name="image_button_pick_first">Pick first image</string>
+    <string name="pick_new_photo">Pick new photo</string>
+    <string name="redo_changes">Redo changes</string>
+    <string name="undo_changes">Undo changes</string>
+    <string name="export_image">Export image</string>
+    <string name="main_tools_for_processing">Main tools for processing</string>
+    <string name="algorithm_astar">Algorithm AStar</string>
+    <string name="pick_image_from_gallery">Pick image from Gallery</string>
+    <string name="pick_image_from_camera">Pick image from Camera</string>
+    <string name="image_for_processing">Image for processing</string>
+
 </resources>
