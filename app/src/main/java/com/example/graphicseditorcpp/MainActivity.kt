@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
     fun processButtonPressing(view: View) {
         when(view.id) {
-            imageButtonPickFromCamera.id -> {
+            imageButtonPickFromGallery.id -> {
 
                 if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
                         checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-            imageButtonPickFromGallery.id -> {
+            imageButtonPickFromCamera.id -> {
 
                 if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
                         checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
