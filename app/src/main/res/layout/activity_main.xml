@@ -49,6 +49,36 @@
                 app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
                 android:onClick="showPopup" android:contentDescription="@string/pick_new_photo"/>
     </android.support.constraint.ConstraintLayout>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="@color/colorPrimaryDark"
+            android:id="@+id/imageForProcessing"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:contentDescription="@string/image_for_processing"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromGallery"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/imageButtonPickFromCamera"
+    />
+    <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_add_a_photo"
+            android:id="@+id/imageButtonPickFromCamera"
+            android:background="#00FFFFFF" android:onClick="processButtonPressing"
+            android:contentDescription="@string/pick_image_from_camera"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButtonPickFromGallery"/>
+    <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_photo_library"
+            android:id="@+id/imageButtonPickFromGallery"
+            android:background="#00FFFFFF"
+            android:onClick="processButtonPressing" android:contentDescription="@string/pick_image_from_gallery"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/imageButtonPickFromCamera"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -90,33 +120,5 @@
                 android:onClick="processButtonPressing"
                 android:layout_weight="1" android:contentDescription="@string/export_image"/>
     </LinearLayout>
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@color/colorPrimary" android:id="@+id/imageForProcessing"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromCamera"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="@+id/imageButtonPickFromGallery"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-            android:contentDescription="@string/image_for_processing"/>
-    <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="0dp" app:srcCompat="@drawable/ic_add_a_photo"
-            android:id="@+id/imageButtonPickFromCamera"
-            android:background="#00FFFFFF" android:onClick="processButtonPressing"
-            android:contentDescription="@string/pick_image_from_camera"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButtonPickFromGallery"/>
-    <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="0dp" app:srcCompat="@drawable/ic_photo_library"
-            android:id="@+id/imageButtonPickFromGallery"
-            android:background="#00FFFFFF"
-            android:onClick="processButtonPressing" android:contentDescription="@string/pick_image_from_gallery"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/imageButtonPickFromCamera"/>
 
 </android.support.constraint.ConstraintLayout>
