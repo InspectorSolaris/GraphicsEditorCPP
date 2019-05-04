@@ -10,6 +10,8 @@ import android.view.View
 import android.widget.Toast
 import java.io.File
 import android.net.Uri
+import android.util.Log
+import android.widget.PopupMenu
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,6 +21,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        imageButtonPickNew.setOnClickListener {
+            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
+            popupMenu.inflate(R.menu.popup_menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.galleryItem -> {
+                        Toast.makeText(this, " GALLERY", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.cameraItem -> {
+                        Toast.makeText(this, " CAMERA", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
 
         imageForProcessingFileDir = filesDir
     }
@@ -146,4 +167,5 @@ class MainActivity : AppCompatActivity() {
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(imageForProcessingFile))
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
+
 }
