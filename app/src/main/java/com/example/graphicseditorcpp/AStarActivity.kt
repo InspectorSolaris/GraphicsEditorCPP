@@ -1,15 +1,20 @@
 package com.example.graphicseditorcpp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_astar.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 class AStarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
+
+
 
         aStarSettingsButton.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
@@ -33,5 +38,18 @@ class AStarActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
+    }
+
+    fun processButtonPressing(view: View) {
+        when(view.id) {
+            fromAStarToMainButton.id -> {
+                goToMain()
+            }
+        }
+    }
+
+    private fun goToMain(){
+        val mainIntent = Intent(this, MainActivity::class.java)
+        startActivity(mainIntent)
     }
 }
