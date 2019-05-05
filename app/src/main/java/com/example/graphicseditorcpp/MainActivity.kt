@@ -105,6 +105,9 @@ class MainActivity : AppCompatActivity() {
             imageButtonPickFromCamera.id -> {
                 tryPickFromCamera()
             }
+            imageButtonAlgorithmAStar.id -> {
+                goToAStar()
+            }
         }
     }
 
@@ -162,6 +165,11 @@ class MainActivity : AppCompatActivity() {
         cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
         startActivityForResult(cameraIntent, idPickFromCamera)
+    }
+
+    private fun goToAStar(){
+        val aStarIntent = Intent(this, AStarActivity::class.java)
+        startActivity(aStarIntent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
