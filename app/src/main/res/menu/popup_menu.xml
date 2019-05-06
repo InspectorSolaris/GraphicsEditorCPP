@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 android:background="@color/colorPrimaryDark">
-    <item android:id="@+id/galleryItem"
-          android:title="Pick from Gallery"
-    />
-    <item android:id="@+id/cameraItem"
-          android:title="Pick from Camera"
-    />
+    <item android:id="@+id/popupPickFromGallery"
+          android:title="@string/pick_image_from_gallery"
+          android:onClick="processPopupMenuItem"/>
+    <item android:id="@+id/popupPickFromCamera"
+          android:title="@string/pick_image_from_camera"
+          android:onClick="processPopupMenuItem"/>
 </menu>

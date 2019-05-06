@@ -10,4 +10,15 @@
     <string name="pick_image_from_camera">Pick image from Camera</string>
     <string name="image_for_processing">Image for processing</string>
 
+    <string name="button_astar_start">Start</string>
+    <string name="button_astar_finish">Finish</string>
+    <string name="button_astar_wall">Wall</string>
+    <string name="button_astar_run">Run</string>
+    <string name="imagebutton_back_to_mainactivity">Back to MainActivity</string>
+    <string name="imagebutton_settings_for_astar">Settings for AStar</string>
+    <string name="popup_change_size">Change size</string>
+    <string name="popup_choose_empirics">Choose empirics</string>
+    <string name="popup_manhattan_dist">Manhattan</string>
+    <string name="popup_euclid_dist">Euclid</string>
+
 </resources>

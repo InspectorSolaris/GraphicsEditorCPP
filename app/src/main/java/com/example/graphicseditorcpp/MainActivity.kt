@@ -21,27 +21,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        imageButtonPickNew.setOnClickListener {
-            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
-            popupMenu.inflate(R.menu.popup_menu)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
-                    R.id.galleryItem -> {
-                        tryPickFromGallery()
-                        //Toast.makeText(this, "GALLERY", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    R.id.cameraItem -> {
-                        tryPickFromCamera()
-                        //Toast.makeText(this, "CAMERA", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
-        }
     }
 
     private val idPickFromGallery = 1
@@ -96,15 +75,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun processButtonPressing(view: View) {
+    fun processPopupMenuItem(view: View) {
         when(view.id) {
-            imageButtonPickFromGallery.id -> {
+            R.id.imageButtonPickNew -> {
+                val popupMenu = android.support.v7.widget.PopupMenu(this, imageButtonPickNew)
+                popupMenu.inflate(R.menu.popup_menu)
+                popupMenu.show()
+            }
+            R.id.popupPickFromGallery -> {
                 tryPickFromGallery()
             }
-            imageButtonPickFromCamera.id -> {
+            R.id.popupPickFromCamera -> {
                 tryPickFromCamera()
             }
-            imageButtonAlgorithmAStar.id -> {
+        }
+    }
+
+    fun processButtonPressing(view: View) {
+        when(view.id) {
+            R.id.imageButtonPickFromGallery -> {
+                tryPickFromGallery()
+            }
+            R.id.imageButtonPickFromCamera -> {
+                tryPickFromCamera()
+            }
+            R.id.imageButtonAlgorithmAStar -> {
                 goToAStar()
             }
         }
