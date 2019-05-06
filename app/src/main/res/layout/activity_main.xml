@@ -42,7 +42,7 @@
         <ImageButton
                 android:layout_width="54dp"
                 android:layout_height="54dp"
-                app:srcCompat="@drawable/ic_image"
+                app:srcCompat="@drawable/ic_add_to_photos_black_24dp"
                 android:id="@+id/imageButtonPickNew"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 android:background="#00FFFFFF" android:scaleType="centerInside"
