@@ -14,8 +14,6 @@ class AStarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
-
-
         aStarSettingsButton.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
             popupMenu.inflate(R.menu.a_star_popup_menu)
@@ -49,7 +47,6 @@ class AStarActivity : AppCompatActivity() {
     }
 
     private fun goToMain(){
-        val mainIntent = Intent(this, MainActivity::class.java)
-        startActivity(mainIntent)
+        finish()
     }
 }

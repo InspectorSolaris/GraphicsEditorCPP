@@ -7,11 +7,11 @@
 #ifndef GRAPHICSEDITORCPP_ALGORITHMS_H
 #define GRAPHICSEDITORCPP_ALGORITHMS_H
 
-#include <jni.h>
-#include <android/bitmap.h>
-
 // parameters: original pic, angle of rotation
 // return: turned on specified angle picture
+
+#include <jni.h>
+#include <android/bitmap.h>
 
 extern "C" JNIEXPORT void JNICALL
 pictureTurning();
