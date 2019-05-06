@@ -11,8 +11,10 @@ import android.widget.Toast
 import java.io.File
 import android.net.Uri
 import android.os.Environment
+import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.tools_layout.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,6 +24,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        imageButtonTools.setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val view = layoutInflater.inflate(R.layout.tools_layout, null)
+            dialog.setContentView(view)
+            dialog.show()
+        }
         imageButtonPickNew.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
             popupMenu.inflate(R.menu.popup_menu)
@@ -106,6 +114,9 @@ class MainActivity : AppCompatActivity() {
             }
             imageButtonAlgorithmAStar.id -> {
                 goToAStar()
+            }
+            buttonRotate0.id -> {
+            Toast.makeText(this, "You tried to rotate", Toast.LENGTH_SHORT).show()
             }
         }
     }

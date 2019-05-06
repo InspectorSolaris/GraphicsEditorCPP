@@ -8,6 +8,7 @@
         tools:context=".MainActivity"
         android:background="@color/colorPrimary"
 >
+    <include layout="@layout/tools_layout" android:visibility="invisible"/>
 
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -112,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="54dp"
                 app:srcCompat="@drawable/ic_file_upload_black_24dp"
-                android:id="@+id/imageButtonExport"
+                android:id="@+id/buttonRotate"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
                 app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"

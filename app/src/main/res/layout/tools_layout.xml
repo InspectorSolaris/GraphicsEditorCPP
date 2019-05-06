@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             tools:context=".MainActivity"
+                                             android:layout_height="match_parent"
+                                             android:background="@color/colorPrimaryDark"
+                                             app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+
+>
+    <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/tableLayout" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+    >
+
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate0"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate2"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate3"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate4"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate5"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate6"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate7"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate8"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonRotate9"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1" android:text="ROTATE" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+        </TableRow>
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>
