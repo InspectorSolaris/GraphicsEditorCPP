@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/resizeItem"
-          android:title="Change size"
+    <item android:id="@+id/popupResizeAStarMap"
+          android:title="@string/popup_change_size"
     />
-    <item android:id="@+id/EmpiricsItem"
-          android:title="Choose empirics">
+    <item android:id="@+id/popupEmpirics"
+          android:title="@string/popup_choose_empirics">
         <menu>
-            <item android:id="@+id/firstEmpiric"
-                  android:title="First one"
+            <item android:id="@+id/popupManhattanDist"
+                  android:title="@string/popup_manhattan_dist"
             />
-            <item android:id="@+id/secondEmpiric"
-                  android:title="Second one"
+            <item android:id="@+id/popupEuclidDist"
+                  android:title="@string/popup_euclid_dist"
             />
         </menu>
     </item>

@@ -1,6 +1,5 @@
 package com.example.graphicseditorcpp
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,43 +11,36 @@ class AStarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
+    }
 
-
-
-        imageButtonAStarSettingsButton.setOnClickListener {
-            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
-            popupMenu.inflate(R.menu.a_star_popup_menu)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
-                    R.id.resizeItem -> {
-                        Toast.makeText(this, "You tried to change size", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    R.id.firstEmpiric -> {
-                        Toast.makeText(this, "You chose first empiric", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    R.id.secondEmpiric -> {
-                        Toast.makeText(this, "You chose second empiric", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    else -> false
-                }
+    fun processPopupMenuItem(view: View) {
+        when(view.id) {
+            R.id.imageButtonAStarSettingsButton -> {
+                val popupMenu = android.support.v7.widget.PopupMenu(this, imageButtonAStarSettingsButton)
+                popupMenu.inflate(R.menu.a_star_popup_menu)
+                popupMenu.show()
             }
-            popupMenu.show()
+            R.id.popupResizeAStarMap -> {
+                Toast.makeText(this, "You tried to change size", Toast.LENGTH_SHORT).show()
+            }
+            R.id.popupManhattanDist -> {
+                Toast.makeText(this, "You chose first empiric", Toast.LENGTH_SHORT).show()
+            }
+            R.id.popupEuclidDist -> {
+                Toast.makeText(this, "You chose second empiric", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     fun processButtonPressing(view: View) {
         when(view.id) {
             imageButtonBackToMainActivity.id -> {
-                goToMain()
+                returnToPreviousActivity()
             }
         }
     }
 
-    private fun goToMain(){
-        val mainIntent = Intent(this, MainActivity::class.java)
-        startActivity(mainIntent)
+    private fun returnToPreviousActivity(){
+        finish()
     }
 }
