@@ -9,5 +9,11 @@
     <string name="pick_image_from_gallery">Pick image from Gallery</string>
     <string name="pick_image_from_camera">Pick image from Camera</string>
     <string name="image_for_processing">Image for processing</string>
+    <string name="button_astar_start">Start</string>
+    <string name="button_astar_finish">Finish</string>
+    <string name="button_astar_wall">Wall</string>
+    <string name="button_astar_run">RUN</string>
+    <string name="imagebutton_back_to_mainactivity">Back to MainActivity</string>
+    <string name="imagebutton_settings_for_astar">Settings for AStar</string>
 
 </resources>

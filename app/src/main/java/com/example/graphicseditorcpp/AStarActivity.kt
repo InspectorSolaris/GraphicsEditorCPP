@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_astar.*
-import kotlinx.android.synthetic.main.activity_main.*
 
 class AStarActivity : AppCompatActivity() {
 
@@ -16,7 +15,7 @@ class AStarActivity : AppCompatActivity() {
 
 
 
-        aStarSettingsButton.setOnClickListener {
+        imageButtonAStarSettingsButton.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
             popupMenu.inflate(R.menu.a_star_popup_menu)
             popupMenu.setOnMenuItemClickListener { item ->
@@ -42,7 +41,7 @@ class AStarActivity : AppCompatActivity() {
 
     fun processButtonPressing(view: View) {
         when(view.id) {
-            fromAStarToMainButton.id -> {
+            imageButtonBackToMainActivity.id -> {
                 goToMain()
             }
         }
