@@ -2,17 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/popupResizeMap"
-          android:title="Change size"
+          android:title="@string/astar_activity_popup_resizemap"
     />
     <item android:id="@+id/EmpiricsItem"
-          android:title="Choose empirics">
+          android:title="@string/astar_activity_popup_empirics">
         <menu>
             <item android:id="@+id/popupManhattanDist"
-                  android:title="Manhattan"
+                  android:title="@string/astar_activity_popup_manhattandist"
             />
             <item android:id="@+id/popupEuclidDist"
-                  android:title="Euclid"
+                  android:title="@string/astar_activity_popup_eucliddist"
             />
+        </menu>
+    </item>
+    <item android:title="@string/astar_activity_popup_directions" android:id="@+id/DirectionsItem">
+        <menu
+        >
+            <item android:title="@string/astar_activity_popup_4directional" android:id="@+id/popup4Directional"
+            />
+            <item android:title="@string/astar_activity_popup_8directional" android:id="@+id/popup8Directional"
+            />
+            <item android:title="@string/astar_activity_popup_8directionalcheck"
+                  android:id="@+id/popup8DirectionalCheck"/>
         </menu>
     </item>
 

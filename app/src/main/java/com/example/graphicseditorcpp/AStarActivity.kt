@@ -11,12 +11,47 @@ class AStarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
+
+        imageButtonAStarSettings.setOnClickListener {
+            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
+            popupMenu.inflate(R.menu.a_star_popup_menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.popupResizeMap -> {
+                        Toast.makeText(this, "You tried to change size", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.popupManhattanDist -> {
+                        Toast.makeText(this, "You chose Manhattan Dist as empiric", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.popupEuclidDist -> {
+                        Toast.makeText(this, "You chose Euclid Dist as empiric", Toast.LENGTH_SHORT).show()
+                        true
+                    }
+                    R.id.popup4Directional -> {
+                        Toast.makeText(this, "4 directions", Toast.LENGTH_LONG).show()
+                        true
+                    }
+                    R.id.popup8Directional -> {
+                        Toast.makeText(this, "8 directions", Toast.LENGTH_LONG).show()
+                        true
+                    }
+                    R.id.popup8DirectionalCheck -> {
+                        Toast.makeText(this, "8 directions with check", Toast.LENGTH_LONG).show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 
     fun processButtonPressing(view: View) {
         when(view.id) {
             R.id.imageButtonBack -> {
-                goToMain()
+                backToPreviousActivity()
             }
             R.id.imageButtonAStarSettings -> {
 
@@ -26,18 +61,18 @@ class AStarActivity : AppCompatActivity() {
 
             }
             R.id.popupResizeMap -> {
-                Toast.makeText(this, "You tried to change size", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You tried to change size", Toast.LENGTH_LONG).show()
             }
             R.id.popupManhattanDist -> {
-                Toast.makeText(this, "You chose Manhattan Dist as empiric", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You chose Manhattan Dist as empiric", Toast.LENGTH_LONG).show()
             }
             R.id.popupEuclidDist -> {
-                Toast.makeText(this, "You chose Euclid Dist as empiric", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "You chose Euclid Dist as empiric", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun goToMain(){
+    private fun backToPreviousActivity(){
         finish()
     }
 }

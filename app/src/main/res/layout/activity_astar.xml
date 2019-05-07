@@ -24,7 +24,8 @@
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 android:background="#00FFFFFF" android:scaleType="centerInside"
                 app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/imageButtonAStarSettings" android:onClick="processButtonPressing"/>
+                android:id="@+id/imageButtonAStarSettings"
+                android:contentDescription="@string/astar_activity_imagebutton_astarsettings"/>
         <ImageButton
                 android:layout_width="54dp"
                 android:layout_height="54dp"
@@ -35,18 +36,19 @@
                 android:id="@+id/imageButtonBack"
                 android:onClick="processButtonPressing"
                 app:layout_constraintStart_toStartOf="parent"
-        />
+                android:contentDescription="@string/astar_activity_imagebutton_back"/>
     </android.support.constraint.ConstraintLayout>
 
     <Button
-            android:text="RUN"
+            android:text="@string/astar_activity_button_runastar_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/buttonRunAStar"
             android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:onClick="processButtonPressing"/>
+            app:layout_constraintBottom_toBottomOf="parent" android:onClick="processButtonPressing"
+            android:contentDescription="@string/astar_activity_button_runastar"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
@@ -54,26 +56,29 @@
             app:layout_constraintBottom_toTopOf="@+id/buttonRunAStar" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:id="@+id/linearLayout">
-        <Button
-                android:text="START"
+        <Button style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/astar_activity_button_setstart_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonSetStart"
                 android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
-                android:layout_weight="1" android:onClick="processButtonPressing"/>
-        <Button
-                android:text="FINISH"
+                android:layout_weight="1" android:onClick="processButtonPressing"
+                android:contentDescription="@string/astar_activity_button_setstart"/>
+        <Button style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/astar_activity_button_setfinish_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonSetFinish"
                 android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
-                android:layout_weight="1" android:onClick="processButtonPressing"/>
-        <Button
-                android:text="WALL"
+                android:layout_weight="1" android:onClick="processButtonPressing"
+                android:contentDescription="@string/astar_activity_button_setfinish"/>
+        <Button style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/astar_activity_button_setwall_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonSetWall"
                 android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
-                android:layout_weight="1" android:onClick="processButtonPressing"/>
+                android:layout_weight="1" android:onClick="processButtonPressing"
+                android:contentDescription="@string/astar_activity_button_setwall"/>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

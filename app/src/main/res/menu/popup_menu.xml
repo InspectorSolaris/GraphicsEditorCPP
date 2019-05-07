@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 android:background="@color/colorPrimaryDark">
     <item android:id="@+id/popupPickFromGallery"
-          android:title="Pick from Gallery"
+          android:title="@string/main_activity_popup_pickfromgallery"
     />
     <item android:id="@+id/popupPickFromCamera"
-          android:title="Pick from Camera"
+          android:title="@string/main_activity_popup_pickfromcamera"
     />
 </menu>

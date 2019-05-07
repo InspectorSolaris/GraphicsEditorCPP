@@ -1,13 +1,33 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
-    <string name="pick_new_photo">Pick new photo</string>
-    <string name="redo_changes">Redo changes</string>
-    <string name="undo_changes">Undo changes</string>
-    <string name="export_image">Export image</string>
-    <string name="main_tools_for_processing">Main tools for processing</string>
-    <string name="algorithm_astar">Algorithm AStar</string>
-    <string name="pick_image_from_gallery">Pick image from Gallery</string>
-    <string name="pick_image_from_camera">Pick image from Camera</string>
-    <string name="image_for_processing">Image for processing</string>
+    <string name="main_activity_imagebutton_redu">Redo changes</string>
+    <string name="main_activity_imagebutton_picknew">Pick new image</string>
+    <string name="main_activity_imagebutton_undo">Undo changes</string>
+    <string name="main_activity_image_for_processing">Image for processing</string>
+    <string name="main_activity_imagebutton_pickfromgallery">Pick image from gallery</string>
+    <string name="main_activity_imagebutton_pickfromcamera">Pick image from camera</string>
+    <string name="main_activity_imagebutton_algorithmastar">AStar algorithm</string>
+    <string name="main_activity_imagebutton_tools">Image processing tools</string>
+    <string name="main_activity_button_export">Export processed image</string>
+    <string name="astar_activity_button_setstart_text">Start</string>
+    <string name="astar_activity_button_setfinish_text">Finish</string>
+    <string name="astar_activity_button_setwall_text">Wall</string>
+    <string name="astar_activity_button_runastar_text">Run</string>
+    <string name="astar_activity_imagebutton_astarsettings">Settings for AStar algorithm</string>
+    <string name="astar_activity_imagebutton_back">Back to previous activity</string>
+    <string name="astar_activity_button_setstart">Set start for AStar</string>
+    <string name="astar_activity_button_setfinish">Set finish for AStar</string>
+    <string name="astar_activity_button_setwall">Set wall for AStar</string>
+    <string name="astar_activity_button_runastar">Run AStar algorithm</string>
+    <string name="main_activity_popup_pickfromgallery">Pick from Gallery</string>
+    <string name="main_activity_popup_pickfromcamera">Pick from Camera</string>
+    <string name="astar_activity_popup_resizemap">Size</string>
+    <string name="astar_activity_popup_empirics">Empirics</string>
+    <string name="astar_activity_popup_manhattandist">Manhattan</string>
+    <string name="astar_activity_popup_eucliddist">Euclid</string>
+    <string name="astar_activity_popup_directions">Directions</string>
+    <string name="astar_activity_popup_4directional">4 directional</string>
+    <string name="astar_activity_popup_8directional">8 directional</string>
+    <string name="astar_activity_popup_8directionalcheck">8 directional (check)</string>
 
 </resources>

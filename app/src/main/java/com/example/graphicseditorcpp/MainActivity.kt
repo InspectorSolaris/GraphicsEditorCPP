@@ -14,7 +14,6 @@ import android.os.Environment
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.tools_layout.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,6 +22,25 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        imageButtonPickNew.setOnClickListener {
+            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
+            popupMenu.inflate(R.menu.popup_menu)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when(item.itemId){
+                    R.id.popupPickFromGallery -> {
+                        tryPickFromGallery()
+                        true
+                    }
+                    R.id.popupPickFromCamera -> {
+                        tryPickFromCamera()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popupMenu.show()
+        }
     }
 
     private val idPickFromGallery = 1
@@ -87,19 +105,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.imageButtonAlgorithmAStar -> {
                 goToAStar()
-            }
-            R.id.imageButtonPickNew -> {
-
-                val popupMenu = android.support.v7.widget.PopupMenu(this, imageButtonPickNew)
-                popupMenu.inflate(R.menu.popup_menu)
-                popupMenu.show()
-
-            }
-            R.id.popupPickFromGallery -> {
-                tryPickFromGallery()
-            }
-            R.id.popupPickFromCamera -> {
-                tryPickFromCamera()
             }
             R.id.imageButtonTools -> {
 
