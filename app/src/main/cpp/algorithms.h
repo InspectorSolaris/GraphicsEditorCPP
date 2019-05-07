@@ -20,7 +20,7 @@ pictureTurning();
 // return: color corrected picture
 
 extern "C" JNIEXPORT void JNICALL
-pictureColorcorrection();
+pictureColorcorrection(); // Dasha
 
 // parameters: original pic, scale ratio
 // return: scaled on specified ratio picture
@@ -62,12 +62,12 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT void JNICALL
-drawLines();
+drawLines(); // Asya
 
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
 
 extern "C" JNIEXPORT void JNICALL
-algotihmAStar();
+algotihmAStar(); // Herman
 
 #endif //GRAPHICSEDITORCPP_ALGORITHMS_H

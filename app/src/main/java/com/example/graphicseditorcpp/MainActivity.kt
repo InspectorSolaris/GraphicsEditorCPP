@@ -23,33 +23,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        imageButtonTools.setOnClickListener {
-            val dialog = BottomSheetDialog(this)
-            val view = layoutInflater.inflate(R.layout.tools_layout, null)
-            dialog.setContentView(view)
-            dialog.show()
-        }
-        imageButtonPickNew.setOnClickListener {
-            val popupMenu = android.support.v7.widget.PopupMenu(this, it)
-            popupMenu.inflate(R.menu.popup_menu)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
-                    R.id.galleryItem -> {
-                        tryPickFromGallery()
-                        //Toast.makeText(this, "GALLERY", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    R.id.cameraItem -> {
-                        tryPickFromCamera()
-                        //Toast.makeText(this, "CAMERA", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popupMenu.show()
-        }
     }
 
     private val idPickFromGallery = 1
@@ -106,17 +79,34 @@ class MainActivity : AppCompatActivity() {
 
     fun processButtonPressing(view: View) {
         when(view.id) {
-            imageButtonPickFromGallery.id -> {
+            R.id.imageButtonPickFromGallery -> {
                 tryPickFromGallery()
             }
-            imageButtonPickFromCamera.id -> {
+            R.id.imageButtonPickFromCamera -> {
                 tryPickFromCamera()
             }
-            imageButtonAlgorithmAStar.id -> {
+            R.id.imageButtonAlgorithmAStar -> {
                 goToAStar()
             }
-            buttonRotate0.id -> {
-            Toast.makeText(this, "You tried to rotate", Toast.LENGTH_SHORT).show()
+            R.id.imageButtonPickNew -> {
+
+                val popupMenu = android.support.v7.widget.PopupMenu(this, imageButtonPickNew)
+                popupMenu.inflate(R.menu.popup_menu)
+                popupMenu.show()
+
+            }
+            R.id.popupPickFromGallery -> {
+                tryPickFromGallery()
+            }
+            R.id.popupPickFromCamera -> {
+                tryPickFromCamera()
+            }
+            R.id.imageButtonTools -> {
+
+                val dialog = BottomSheetDialog(this)
+                dialog.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
+                dialog.show()
+
             }
         }
     }
@@ -204,6 +194,9 @@ class MainActivity : AppCompatActivity() {
             imageForProcessing.setImageURI(imageUri)
 
             imageForProcessingPath = imageUri.toString()
+        }
+        else {
+            Toast.makeText(this, "Unexpected error", Toast.LENGTH_LONG).show()
         }
     }
 }
