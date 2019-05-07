@@ -15,6 +15,7 @@
     <string name="astar_activity_button_runastar_text">Run</string>
     <string name="astar_activity_imagebutton_astarsettings">Settings for AStar algorithm</string>
     <string name="astar_activity_imagebutton_back">Back to previous activity</string>
+    <string name="astar_activity_imageview_astarmap">AStar Map</string>
     <string name="astar_activity_button_setstart">Set start for AStar</string>
     <string name="astar_activity_button_setfinish">Set finish for AStar</string>
     <string name="astar_activity_button_setwall">Set wall for AStar</string>

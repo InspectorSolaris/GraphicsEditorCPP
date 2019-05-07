@@ -1,5 +1,6 @@
 package com.example.graphicseditorcpp
 
+import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,9 +9,16 @@ import kotlinx.android.synthetic.main.activity_astar.*
 
 class AStarActivity : AppCompatActivity() {
 
+    private var nSize = 10
+    private var mSize = 10
+    private var aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
+
+        aStarMap.eraseColor(android.graphics.Color.WHITE)
+        imageViewAStarMap.setImageBitmap(aStarMap)
 
         imageButtonAStarSettings.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)

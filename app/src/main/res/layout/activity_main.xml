@@ -54,11 +54,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:srcCompat="@color/colorPrimaryDark"
             android:id="@+id/imageForProcessing"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             android:contentDescription="@string/main_activity_image_for_processing"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"/>
+            android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
+            android:layout_marginBottom="32dp" app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"
+    />
     <ImageButton
             android:layout_width="0dp"
             android:layout_height="0dp" app:srcCompat="@drawable/ic_photo_library"
