@@ -162,6 +162,7 @@ class MainActivity : AppCompatActivity() {
     private fun pickFromGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK)
         galleryIntent.type = "image/*"
+        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
         startActivityForResult(galleryIntent, idPickFromGallery)
     }
 
@@ -180,11 +181,8 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val imageUri : Uri? = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
+        val imageUri : Uri? = if(resultCode == Activity.RESULT_OK) {
             data?.data
-        }
-        else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-            Uri.fromFile(File(imageForProcessingPath))
         }
         else {
             null
