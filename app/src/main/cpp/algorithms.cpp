@@ -159,8 +159,8 @@ algorithmAStar(
             }
 
             if(0 > u[0] || u[0] >= n ||
-               0 > u[1] || u[1] >= m ||
-               g[u[0]][u[1]] == -1) { continue; }
+               0 > u[1] || u[1] >= m
+               /*g[u[0]][u[1]] == -1*/) { continue; }
 
             if(u_d < d[arrInd(m, u)])
             {
@@ -186,7 +186,7 @@ algorithmAStar(
         reverse(res.begin(), res.end());
     }
 
-
-
     AndroidBitmap_unlockPixels(env, bitmap);
+
+    return;
 }

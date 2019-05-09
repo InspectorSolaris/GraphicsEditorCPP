@@ -83,7 +83,6 @@ algorithmAStar(
         jint finish_x,
         jint finish_y,
         jint empirics,
-        jboolean all_directional,
-        jboolean check_directional); // Herman
+        jint directions); // Herman
 
 #endif //GRAPHICSEDITORCPP_ALGORITHMS_H
