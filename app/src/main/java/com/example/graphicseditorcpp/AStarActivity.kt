@@ -25,6 +25,8 @@ class AStarActivity : AppCompatActivity() {
     private var finishX = -1
     private var finishY = -1
 
+    private var path : Array<Int>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
@@ -186,8 +188,11 @@ class AStarActivity : AppCompatActivity() {
         finish_x: Int,
         finish_y: Int,
         empirics: Int,
-        directions: Int
-    )
+        directions: Int,
+        pixel_size: Int,
+        map_x: Int,
+        map_y: Int
+    ) : Array<Int>
 
     fun processButtonPressing(view: View) {
         when(view.id) {
@@ -206,7 +211,17 @@ class AStarActivity : AppCompatActivity() {
             R.id.buttonRunAStar -> {
                 if(startX != -1 && startY != -1 &&
                         finishX != -1 && finishY != -1) {
-                    algorithmAStar(aStarMap, startX, startY, finishX, finishY, empirics, directions)
+                    path = algorithmAStar(
+                        aStarMap,
+                        startX / pixelSize,
+                        startY / pixelSize,
+                        finishX / pixelSize,
+                        finishY / pixelSize,
+                        empirics,
+                        directions,
+                        pixelSize,
+                        nSize / pixelSize,
+                        mSize / pixelSize)
                 }
                 else {
                     Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()

@@ -73,7 +73,7 @@ drawLines(); // Asya
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jintArray JNICALL
 algorithmAStar(
         JNIEnv *env,
         jobject obj,
@@ -83,6 +83,9 @@ algorithmAStar(
         jint finish_x,
         jint finish_y,
         jint empirics,
-        jint directions); // Herman
+        jint directions,
+        jint pixel_size,
+        jint map_x,
+        jint map_y); // Herman
 
 #endif //GRAPHICSEDITORCPP_ALGORITHMS_H

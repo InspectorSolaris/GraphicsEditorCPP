@@ -85,7 +85,7 @@ inline int arrInd(const int & m, const std::pair<int, int> & x)
     return m * x.first + x.second;
 }
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jintArray JNICALL
 algorithmAStar(
         JNIEnv *env,
         jobject obj,
@@ -95,19 +95,24 @@ algorithmAStar(
         jint finish_x,
         jint finish_y,
         jint empirics,
-        jint directions) {
+        jint directions,
+        jint pixel_size,
+        jint map_x,
+        jint map_y) {
+
+    // for bitmap x is x and y is y
+    // for graph x is y and y is x
 
     AndroidBitmapInfo  mapInfo;
-    void             **ptr = nullptr;
-    int                ret = 0;
+    void             * ptr = nullptr;
 
     using namespace std;
 
     AndroidBitmap_getInfo(env, bitmap, &mapInfo);
-    ret = AndroidBitmap_lockPixels(env, bitmap, ptr);
+    AndroidBitmap_lockPixels(env, bitmap, &ptr);
 
-    int n = mapInfo.height;
-    int m = mapInfo.width;
+    int n = map_y;
+    int m = map_x;
     int x[2] = {start_y, start_x};
     int y[2] = {finish_y, finish_x};
 
@@ -116,8 +121,27 @@ algorithmAStar(
                     vector<pair<pair<int, int>, pair<int, int>>>,
                             greater<>
                             > pq;
+
+    vector<vector<bool>> g((unsigned int)n, vector<bool>((unsigned int)m, false));
     vector<int> p((unsigned int)n * m, (INT_MAX));
     vector<int> d((unsigned int)n * m, (INT_MAX));
+
+    auto * src = (uint32_t*)ptr;
+
+    for(unsigned int i = 0 + 1; i < map_x - 1; i += pixel_size)
+    {
+        for(unsigned int j = 0 + 1; j < map_y - 1; j += pixel_size)
+        {
+            int color = src[i + j * map_x] & 0xFFFFFF00;
+
+            if(color == 0x00000000)
+            {
+                g[j / pixel_size][i / pixel_size] = true;
+            }
+        }
+    }
+
+    AndroidBitmap_unlockPixels(env, bitmap);
 
     pq.push({{distanceEmp(x, y, empirics), 0}, {x[0], x[1]}});
     p[arrInd(m, x)] = -1;
@@ -141,26 +165,29 @@ algorithmAStar(
             if(i == 0) { ++u[0]; } else
             if(i == 1) { --u[0]; } else
             if(i == 2) { ++u[1]; } else
-            if(i == 3) { --u[1]; } else
-            if(i == 4 && directions > 1) {
+            if(i == 3) { --u[1]; }
+            else if(i == 4 && directions > 1) {
+                --u[0];
                 --u[1];
             }
-            else
-            if(i == 5 && directions > 1) {
+            else if(i == 5 && directions > 1) {
+                ++u[0];
                 --u[1];
             }
-            else
-            if(i == 6 && directions > 1) {
-                --u[1];
+            else if(i == 6 && directions > 1) {
+                --u[0];
+                ++u[1];
             }
-            else
-            if(i == 7 && directions > 1) {
-                --u[1];
+            else if(i == 7 && directions > 1) {
+                ++u[0];
+                ++u[1];
             }
 
             if(0 > u[0] || u[0] >= n ||
-               0 > u[1] || u[1] >= m
-               /*g[u[0]][u[1]] == -1*/) { continue; }
+               0 > u[1] || u[1] >= m ||
+               g[u[0]][u[1]] ||
+               i > 3 && directions < 1 ||
+               i > 3 && directions < 2 && (g[v[0]][u[1]] || g[u[0]][v[1]])) { continue; }
 
             if(u_d < d[arrInd(m, u)])
             {
@@ -186,5 +213,13 @@ algorithmAStar(
         reverse(res.begin(), res.end());
     }
 
-    AndroidBitmap_unlockPixels(env, bitmap);
+    jintArray objarray = env->NewIntArray((jsize)res.size());
+
+    for(unsigned long long i = 0; i < res.size(); ++i)
+    {
+        jint elem = map_x * res[i].first + res[i].second;
+        env->SetIntArrayRegion(objarray, (jsize)i, 1, &elem);
+    }
+
+    return objarray;
 }
