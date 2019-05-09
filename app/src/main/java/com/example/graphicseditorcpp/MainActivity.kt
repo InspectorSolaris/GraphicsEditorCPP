@@ -181,12 +181,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val imageUri : Uri? = if(resultCode == Activity.RESULT_OK) {
-            data?.data
-        }
-        else {
-            null
-        }
+        val imageUri = data?.data
 
         if(imageUri != null) {
             imageButtonPickFromGallery.visibility = View.GONE

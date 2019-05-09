@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/popupResizeMap"
-          android:title="@string/astar_activity_popup_resizemap"
-    />
     <item android:id="@+id/EmpiricsItem"
           android:title="@string/astar_activity_popup_empirics">
         <menu>

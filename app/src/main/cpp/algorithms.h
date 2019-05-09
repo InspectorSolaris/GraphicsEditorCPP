@@ -13,6 +13,12 @@
 #include <jni.h>
 #include <android/bitmap.h>
 
+#include <cmath>
+#include <vector>
+#include <queue>
+#include <tuple>
+#include <climits>
+
 extern "C" JNIEXPORT void JNICALL
 pictureTurning();
 
@@ -68,6 +74,16 @@ drawLines(); // Asya
 // return: shortest way by A-Star
 
 extern "C" JNIEXPORT void JNICALL
-algotihmAStar(); // Herman
+algorithmAStar(
+        JNIEnv *env,
+        jobject obj,
+        jobject bitmap,
+        jint start_x,
+        jint start_y,
+        jint finish_x,
+        jint finish_y,
+        jint empirics,
+        jboolean all_directional,
+        jboolean check_directional); // Herman
 
 #endif //GRAPHICSEDITORCPP_ALGORITHMS_H
