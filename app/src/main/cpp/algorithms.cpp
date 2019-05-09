@@ -114,16 +114,16 @@ algorithmAStar(
     priority_queue<
             pair<pair<int, int>, pair<int, int>>,
                     vector<pair<pair<int, int>, pair<int, int>>>,
-                            greater<pair<pair<int, int>, pair<int, int>>>
+                            greater<>
                             > pq;
-    vector<int> p(n * m, (INT_MAX));
-    vector<int> d(n * m, (INT_MAX));
+    vector<int> p((unsigned int)n * m, (INT_MAX));
+    vector<int> d((unsigned int)n * m, (INT_MAX));
 
     pq.push({{distanceEmp(x, y, empirics), 0}, {x[0], x[1]}});
     p[arrInd(m, x)] = -1;
     d[arrInd(m, x)] = 0;
 
-    while(pq.size())
+    while(!pq.empty())
     {
         int v[2] = {pq.top().second.first, pq.top().second.second};
         int v_d = pq.top().first.second;
@@ -175,18 +175,16 @@ algorithmAStar(
 
     if(p[arrInd(m, {y[0], y[1]})] != (INT_MAX))
     {
-        res.push_back({y[0], y[1]});
+        res.emplace_back({y[0], y[1]});
 
         for(int i = 0; p[arrInd(m, res[i])] != -1; ++i)
         {
             int s = p[arrInd(m, res[i])];
-            res.push_back({s / m, s % m});
+            res.emplace_back({s / m, s % m});
         }
 
         reverse(res.begin(), res.end());
     }
 
     AndroidBitmap_unlockPixels(env, bitmap);
-
-    return;
 }
