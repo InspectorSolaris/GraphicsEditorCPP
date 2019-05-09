@@ -10,9 +10,9 @@ import kotlinx.android.synthetic.main.activity_astar.*
 
 class AStarActivity : AppCompatActivity() {
 
-    private val pixelSize = 50
     private val nSize = 1000
     private val mSize = 1000
+    private val pixelSize = 50
     private val aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
 
     private var empirics = 1
@@ -204,7 +204,13 @@ class AStarActivity : AppCompatActivity() {
                 inputState = 3
             }
             R.id.buttonRunAStar -> {
-                algorithmAStar(aStarMap, startX, startY, finishX, finishY, empirics, directions)
+                if(startX != -1 && startY != -1 &&
+                        finishX != -1 && finishY != -1) {
+                    algorithmAStar(aStarMap, startX, startY, finishX, finishY, empirics, directions)
+                }
+                else {
+                    Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
