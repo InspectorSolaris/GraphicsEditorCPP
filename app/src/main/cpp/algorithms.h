@@ -13,6 +13,8 @@
 #include <jni.h>
 #include <android/bitmap.h>
 
+#include <string>
+#include <iostream>
 #include <cmath>
 #include <vector>
 #include <queue>
@@ -73,7 +75,7 @@ drawLines(); // Asya
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
 
-extern "C" JNIEXPORT jintArray JNICALL
+extern "C" JNIEXPORT jobjectArray JNICALL
 algorithmAStar(
         JNIEnv *env,
         jobject obj,

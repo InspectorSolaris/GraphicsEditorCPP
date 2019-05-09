@@ -2,6 +2,7 @@
 // Created by herman on 26.04.19.
 //
 
+
 #include "algorithms.h"
 
 // parameters: original pic, angle of rotation
@@ -63,15 +64,18 @@ drawLines();
 
 inline double distanceEmp(const int a[2], const int b[2], const int emp)
 {
+    // manhattan Dist
     if(emp == 1)
     {
         return abs(a[0] - b[0]) + abs(a[1] - b[1]);
     }
+    // euclid Dist
     else if(emp == 2)
     {
         return sqrt((a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]));
     }
 
+    // INT_MAX Dist
     return (INT_MAX);
 }
 
@@ -85,8 +89,8 @@ inline int arrInd(const int & m, const std::pair<int, int> & x)
     return m * x.first + x.second;
 }
 
-extern "C" JNIEXPORT jintArray JNICALL
-algorithmAStar(
+extern "C" JNIEXPORT jobjectArray JNICALL
+Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
         jobject obj,
         jobject bitmap,
@@ -128,15 +132,17 @@ algorithmAStar(
 
     auto * src = (uint32_t*)ptr;
 
-    for(unsigned int i = 0 + 1; i < map_x - 1; i += pixel_size)
+    for(unsigned int i = 0; i < map_x; ++i)
     {
-        for(unsigned int j = 0 + 1; j < map_y - 1; j += pixel_size)
+        for(unsigned int j = 0; j < map_y; ++j)
         {
-            int color = src[i + j * map_x] & 0xFFFFFF00;
+            int ind = mapInfo.width + 1 + i * pixel_size + j * pixel_size * pixel_size * map_x;
+            int clr = src[ind];
+            int color = (unsigned)clr & 0x00FFFFFF;
 
             if(color == 0x00000000)
             {
-                g[j / pixel_size][i / pixel_size] = true;
+                g[j][i] = true;
             }
         }
     }
@@ -186,8 +192,11 @@ algorithmAStar(
             if(0 > u[0] || u[0] >= n ||
                0 > u[1] || u[1] >= m ||
                g[u[0]][u[1]] ||
-               i > 3 && directions < 1 ||
-               i > 3 && directions < 2 && (g[v[0]][u[1]] || g[u[0]][v[1]])) { continue; }
+               (i > 3 && directions == 1) ||
+               (i > 3 && directions == 3 && (g[v[0]][u[1]] || g[u[0]][v[1]]))) { continue; }
+
+            bool a = g[v[0]][u[1]];
+            bool b = g[u[0]][v[1]];
 
             if(u_d < d[arrInd(m, u)])
             {
@@ -202,24 +211,26 @@ algorithmAStar(
 
     if(p[arrInd(m, {y[0], y[1]})] != (INT_MAX))
     {
-        res.emplace_back({y[0], y[1]});
+        res.push_back({y[0], y[1]});
 
         for(int i = 0; p[arrInd(m, res[i])] != -1; ++i)
         {
             int s = p[arrInd(m, res[i])];
-            res.emplace_back({s / m, s % m});
+            res.push_back({s / m, s % m});
         }
 
         reverse(res.begin(), res.end());
     }
 
-    jintArray objarray = env->NewIntArray((jsize)res.size());
+    jclass jstring = env->FindClass("java/lang/String");
+    jobjectArray result = env->NewObjectArray((jsize)res.size(), jstring, 0);
+    jint buf[res.size()];
 
     for(unsigned long long i = 0; i < res.size(); ++i)
     {
-        jint elem = map_x * res[i].first + res[i].second;
-        env->SetIntArrayRegion(objarray, (jsize)i, 1, &elem);
+        buf[i] = map_x * res[i].first + res[i].second;
+        env->SetObjectArrayElement(result, (jsize)i, env->NewStringUTF(to_string(buf[i]).c_str()));
     }
 
-    return objarray;
+    return result;
 }

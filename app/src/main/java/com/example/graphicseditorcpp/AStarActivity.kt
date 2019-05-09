@@ -25,7 +25,8 @@ class AStarActivity : AppCompatActivity() {
     private var finishX = -1
     private var finishY = -1
 
-    private var path : Array<Int>? = null
+    private var pathStr : Array<String> = arrayOf("0")
+    private var pathInt : ArrayList<Pair<Int, Int>> = arrayListOf(Pair(-1, -1))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -192,7 +193,7 @@ class AStarActivity : AppCompatActivity() {
         pixel_size: Int,
         map_x: Int,
         map_y: Int
-    ) : Array<Int>
+    ) : Array<String>
 
     fun processButtonPressing(view: View) {
         when(view.id) {
@@ -209,9 +210,10 @@ class AStarActivity : AppCompatActivity() {
                 inputState = 3
             }
             R.id.buttonRunAStar -> {
-                if(startX != -1 && startY != -1 &&
+                if(startX != -1 && startY != -1 ||
                         finishX != -1 && finishY != -1) {
-                    path = algorithmAStar(
+
+                    pathStr = algorithmAStar(
                         aStarMap,
                         startX / pixelSize,
                         startY / pixelSize,
@@ -221,7 +223,19 @@ class AStarActivity : AppCompatActivity() {
                         directions,
                         pixelSize,
                         nSize / pixelSize,
-                        mSize / pixelSize)
+                        mSize / pixelSize
+                    )
+
+                    pathInt.clear()
+                    for(str in pathStr) {
+                        pathInt.add(Pair(str.toInt() % (nSize / pixelSize), str.toInt() / (nSize / pixelSize)))
+                    }
+                    for(i in pathInt) {
+                        colorizeSquare(aStarMap, pixelSize * i.first, pixelSize * i.second, Color.BLUE, pixelSize)
+                    }
+
+                    colorizeSquare(aStarMap, startX, startY, Color.GREEN, pixelSize)
+                    colorizeSquare(aStarMap, finishX, finishY, Color.RED, pixelSize)
                 }
                 else {
                     Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()
