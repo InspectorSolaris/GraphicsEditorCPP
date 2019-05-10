@@ -57,7 +57,7 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_graphicseditorcpp_drawLines(
+Java_com_example_graphicseditorcpp_AStarActivity_drawLines(
         jint n) {
     // algorithm from https://www.particleincell.com/2012/bezier-splines/
 
@@ -139,7 +139,7 @@ inline int arrInd(const int & m, const std::pair<int, int> & x)
     return m * x.first + x.second;
 }
 
-extern "C" JNIEXPORT jobjectArray JNICALL
+extern "C" JNIEXPORT jintArray JNICALL
 Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
         jobject obj,
@@ -272,15 +272,15 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         reverse(res.begin(), res.end());
     }
 
-    jclass jstring = env->FindClass("java/lang/String");
-    jobjectArray result = env->NewObjectArray((jsize)res.size(), jstring, 0);
     jint buf[res.size()];
-
-    for(unsigned long long i = 0; i < res.size(); ++i)
+    for(unsigned int i = 0; i < res.size(); ++i)
     {
         buf[i] = map_x * res[i].first + res[i].second;
-        env->SetObjectArrayElement(result, (jsize)i, env->NewStringUTF(to_string(buf[i]).c_str()));
     }
+
+    jintArray result;
+    env->NewIntArray(res.size());
+    env->SetIntArrayRegion(result, 0, res.size(), buf);
 
     return result;
 }
