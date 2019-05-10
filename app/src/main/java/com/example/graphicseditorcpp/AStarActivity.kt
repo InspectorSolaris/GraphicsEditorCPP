@@ -2,6 +2,7 @@ package com.example.graphicseditorcpp
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.ColorSpace
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,6 +12,13 @@ import java.lang.Math.max
 import java.lang.Math.min
 
 class AStarActivity : AppCompatActivity() {
+
+    private val colorGrid = Color.BLACK
+    private val colorEmpty = Color.WHITE
+    private val colorWall = Color.BLACK
+    private val colorStart = Color.GREEN
+    private val colorFinish = Color.RED
+    private val colorPath = Color.BLUE
 
     private val nSize = 1200
     private val mSize = 1500
@@ -34,19 +42,8 @@ class AStarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
-        aStarMap.eraseColor(Color.WHITE)
-
-        for(i in pixelSize..(nSize - 1) step pixelSize) {
-            for(j in 0..(mSize - 1)) {
-                aStarMap.setPixel(i, j, Color.GRAY)
-            }
-        }
-
-        for(i in pixelSize..(mSize - 1) step pixelSize) {
-            for(j in 0..(nSize - 1)) {
-                aStarMap.setPixel(j, i, Color.GRAY)
-            }
-        }
+        aStarMap.eraseColor(colorEmpty)
+        drawGrid()
 
         imageViewAStarMap.layoutParams.width = aStarMap.width
         imageViewAStarMap.layoutParams.height = aStarMap.height
@@ -61,7 +58,7 @@ class AStarActivity : AppCompatActivity() {
             coordX = max(coordX, 0)
             coordY = max(coordY, 0)
 
-            val color = when(inputState)
+            val resultingColor = when(inputState)
             {
                 // trying to set start point
                 1 -> {
@@ -69,11 +66,11 @@ class AStarActivity : AppCompatActivity() {
                     if(coordX != finishX || coordY != finishY) {
                         // point already exist
                         if(startX != -1 && startY != -1) {
-                            colorizeSquare(aStarMap, startX, startY, Color.WHITE, pixelSize)
+                            colorizeSquare(startX, startY, colorEmpty)
                         }
                         startX = coordX
                         startY = coordY
-                        Color.GREEN
+                        colorStart
                     }
                     else {
                         null
@@ -85,11 +82,11 @@ class AStarActivity : AppCompatActivity() {
                     if(coordX != startX || coordY != startY) {
                         // point already exist
                         if(finishX != -1 && finishY != -1) {
-                            colorizeSquare(aStarMap, finishX, finishY, Color.WHITE, pixelSize)
+                            colorizeSquare(finishX, finishY, colorEmpty)
                         }
                         finishX = coordX
                         finishY = coordY
-                        Color.RED
+                        colorFinish
                     }
                     else {
                         null
@@ -107,7 +104,7 @@ class AStarActivity : AppCompatActivity() {
                         finishX = -1
                         finishY = -1
                     }
-                    Color.BLACK
+                    colorWall
                 }
                 // erase point
                 4 -> {
@@ -121,7 +118,7 @@ class AStarActivity : AppCompatActivity() {
                         finishX = -1
                         finishY = -1
                     }
-                    Color.WHITE
+                    colorEmpty
                 }
                 // unexpected error
                 else -> {
@@ -130,8 +127,8 @@ class AStarActivity : AppCompatActivity() {
                 }
             }
 
-            if(color != null) {
-                colorizeSquare(aStarMap, coordX, coordY, color, pixelSize)
+            if(resultingColor != null) {
+                colorizeSquare(coordX, coordY, resultingColor)
             }
 
             imageViewAStarMap.setImageBitmap(aStarMap)
@@ -176,12 +173,24 @@ class AStarActivity : AppCompatActivity() {
         }
     }
 
+    private fun drawGrid() {
+        for(i in pixelSize..(nSize - 1) step pixelSize) {
+            for(j in 0..(mSize - 1)) {
+                aStarMap.setPixel(i, j, colorGrid)
+            }
+        }
+
+        for(i in pixelSize..(mSize - 1) step pixelSize) {
+            for(j in 0..(nSize - 1)) {
+                aStarMap.setPixel(j, i, colorGrid)
+            }
+        }
+    }
+
     private fun colorizeSquare(
-        aStarMap: Bitmap,
         coordX: Int,
         coordY: Int,
-        color: Int,
-        pixelSize: Int) {
+        color: Int) {
         for (i in 1..(pixelSize - 1)) {
             for (j in 1..(pixelSize - 1)) {
                 aStarMap.setPixel(coordX + i, coordY + j, color)
@@ -216,6 +225,9 @@ class AStarActivity : AppCompatActivity() {
             R.id.buttonSetWall -> {
                 inputState = 3
             }
+            R.id.buttonErase -> {
+                inputState = 4
+            }
             R.id.buttonRunAStar -> {
                 if(startX != -1 && startY != -1 &&
                         finishX != -1 && finishY != -1) {
@@ -238,11 +250,11 @@ class AStarActivity : AppCompatActivity() {
                         pathInt.add(Pair(str.toInt() % (nSize / pixelSize), str.toInt() / (nSize / pixelSize)))
                     }
                     for(i in pathInt) {
-                        colorizeSquare(aStarMap, pixelSize * i.first, pixelSize * i.second, Color.BLUE, pixelSize)
+                        colorizeSquare(pixelSize * i.first, pixelSize * i.second, colorPath)
                     }
 
-                    colorizeSquare(aStarMap, startX, startY, Color.GREEN, pixelSize)
-                    colorizeSquare(aStarMap, finishX, finishY, Color.RED, pixelSize)
+                    colorizeSquare(startX, startY, colorStart)
+                    colorizeSquare(finishX, finishY, colorFinish)
                 }
                 else {
                     Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()

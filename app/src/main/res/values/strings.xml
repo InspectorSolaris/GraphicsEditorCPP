@@ -12,6 +12,7 @@
     <string name="astar_activity_button_setstart_text">Start</string>
     <string name="astar_activity_button_setfinish_text">Finish</string>
     <string name="astar_activity_button_setwall_text">Wall</string>
+    <string name="astar_activity_button_erase_text">Erase</string>
     <string name="astar_activity_button_runastar_text">Run</string>
     <string name="astar_activity_imagebutton_astarsettings">Settings for AStar algorithm</string>
     <string name="astar_activity_imagebutton_back">Back to previous activity</string>
@@ -19,6 +20,7 @@
     <string name="astar_activity_button_setstart">Set start for AStar</string>
     <string name="astar_activity_button_setfinish">Set finish for AStar</string>
     <string name="astar_activity_button_setwall">Set wall for AStar</string>
+    <string name="astar_activity_button_erase">Erase point from AStar map</string>
     <string name="astar_activity_button_runastar">Run AStar algorithm</string>
     <string name="main_activity_popup_pickfromgallery">Pick from Gallery</string>
     <string name="main_activity_popup_pickfromcamera">Pick from Camera</string>

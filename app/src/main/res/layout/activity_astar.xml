@@ -80,6 +80,14 @@
                 android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
                 android:layout_weight="1" android:onClick="processButtonPressing"
                 android:contentDescription="@string/astar_activity_button_setwall"/>
+        <Button style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/astar_activity_button_erase_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonErase"
+                android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                android:layout_weight="1" android:onClick="processButtonPressing"
+                android:contentDescription="@string/astar_activity_button_erase"/>
     </LinearLayout>
     <Button
             android:text="@string/astar_activity_button_runastar_text"
