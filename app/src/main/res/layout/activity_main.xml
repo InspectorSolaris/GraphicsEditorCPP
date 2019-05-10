@@ -8,7 +8,7 @@
         tools:context=".MainActivity"
         android:background="@color/colorPrimary"
 >
-    <include layout="@layout/tools_layout" android:visibility="invisible"/>
+    <include layout="@layout/tools_layout" android:visibility="invisible" android:id="@+id/include"/>
 
     <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,7 +39,8 @@
                 android:background="#00FFFFFF" android:scaleType="centerInside"
                 app:layout_constraintVertical_bias="0.0"
                 app:layout_constraintEnd_toStartOf="@+id/imageButtonPickNew"
-                android:onClick="processButtonPressing" android:contentDescription="@string/main_activity_imagebutton_redu"/>
+                android:onClick="processButtonPressing"
+                android:contentDescription="@string/main_activity_imagebutton_redu"/>
         <ImageButton
                 android:layout_width="54dp"
                 android:layout_height="54dp"
@@ -57,9 +58,8 @@
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             android:contentDescription="@string/main_activity_image_for_processing"
-            android:layout_marginTop="32dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
-            android:layout_marginBottom="32dp" app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"
-    />
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools" android:layout_marginTop="32dp"
+            app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromGallery" android:layout_marginBottom="32dp"/>
     <ImageButton
             android:layout_width="0dp"
             android:layout_height="0dp" app:srcCompat="@drawable/ic_photo_library"

@@ -1,9 +1,11 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
@@ -157,6 +159,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun goToAStar(){
+        val aStarIntent = Intent(this, AStarActivity::class.java)
+        startActivity(aStarIntent)
+    }
+
     private fun pickFromGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK)
         galleryIntent.type = "image/*"
@@ -171,15 +178,18 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
-    private fun goToAStar(){
-        val aStarIntent = Intent(this, AStarActivity::class.java)
-        startActivity(aStarIntent)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val imageUri = data?.data
+        val imageUri : Uri? = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
+            data?.data
+        }
+        else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
+            Uri.fromFile(File(imageForProcessingPath))
+        }
+        else {
+            null
+        }
 
         if(imageUri != null) {
             imageButtonPickFromGallery.visibility = View.GONE
@@ -192,7 +202,7 @@ class MainActivity : AppCompatActivity() {
             imageForProcessingPath = imageUri.toString()
         }
         else {
-            Toast.makeText(this, "Unexpected error", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Unexpected error. onActivityResult. Image pick", Toast.LENGTH_LONG).show()
         }
     }
 }

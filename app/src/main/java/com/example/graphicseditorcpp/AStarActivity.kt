@@ -7,11 +7,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_astar.*
+import java.lang.Math.max
+import java.lang.Math.min
 
 class AStarActivity : AppCompatActivity() {
 
-    private val nSize = 1000
-    private val mSize = 1000
+    private val nSize = 1200
+    private val mSize = 1500
     private val pixelSize = 50
     private val aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
 
@@ -51,8 +53,13 @@ class AStarActivity : AppCompatActivity() {
         imageViewAStarMap.setImageBitmap(aStarMap)
 
         imageViewAStarMap.setOnTouchListener { _, motionEvent ->
-            val coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
-            val coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
+            var coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
+            var coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
+
+            coordX = min(coordX, nSize - pixelSize)
+            coordY = min(coordY, mSize - pixelSize)
+            coordX = max(coordX, 0)
+            coordY = max(coordY, 0)
 
             val color = when(inputState)
             {
@@ -210,7 +217,7 @@ class AStarActivity : AppCompatActivity() {
                 inputState = 3
             }
             R.id.buttonRunAStar -> {
-                if(startX != -1 && startY != -1 ||
+                if(startX != -1 && startY != -1 &&
                         finishX != -1 && finishY != -1) {
 
                     pathStr = algorithmAStar(
