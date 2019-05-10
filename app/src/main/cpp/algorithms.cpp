@@ -57,7 +57,57 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT void JNICALL
-drawLines();
+Java_com_example_graphicseditorcpp_drawLines(
+        jint n) {
+    // algorithm from https://www.particleincell.com/2012/bezier-splines/
+
+    using namespace std;
+    vector<pair<double, double>> p1;
+    vector<pair<double, double>> p2;
+    vector<pair<double, double>> points;
+    vector<pair<double, double>> d;
+    double x, y;
+
+    for (int i = 0; i < n; i++){
+        cin >> x >> y;
+        points.push_back(make_pair(x, y));
+    }
+    n--;
+    p1.resize(n);
+
+    double a[1000], b[1000], c[1000];
+    a[0] = 0;
+    b[0] = 2;
+    c[0] = 1;
+    d.push_back(make_pair(points[0].first+2*points[1].first, points[0].second+2*points[1].second));
+
+    for (int i = 1; i < n - 1; i++){
+        a[i]=1;
+        b[i]=4;
+        c[i]=1;
+        d.push_back(make_pair(points[i].first+2*points[i+1].first, points[i].second+2*points[i+1].second));
+    }
+
+    a[n-1]=2;
+    b[n-1]=7;
+    c[n-1]=0;
+    d.push_back(make_pair(8*points[n-1].first+points[n].first, 8*points[n-1].second+points[n].second));
+
+    for (int i = 1; i < n; i++){
+        double w = a[i] / b[i-1];
+        b[i] = b[i] - w * c[i-1];
+        d[i].first = d[i].first - w * d[i-1].first;
+        d[i].second = d[i].second - w * d[i-1].second;
+    }
+    p1[n-1] = make_pair(d[n-1].first / b[n-1], d[n-1].second / b[n-1]);
+    for (int i = n-2; i >= 0; i--){
+        p1[i] = make_pair((d[i].first - c[i] * p1[i+1].first) / b[i], (d[i].second - c[i] * p1[n-2-i].second) / b[i]);
+    }
+    for (int i = 0; i < n-1; i++){
+        p2.push_back(make_pair(2 * points[i+1].first - p1[i+1].first, 2 * points[i+1].second - p1[i+1].second));
+    }
+    p2.push_back(make_pair(0.5 * (points[n].first+p1[n-1].first), 0.5 * (points[n].second+p1[n-1].second)));
+}
 
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
