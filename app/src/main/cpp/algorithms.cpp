@@ -100,8 +100,8 @@ Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
     d[n - 1] = (make_pair(8 * points[n - 1].first + points[n].first, 8 * points[n - 1].second + points[n].second));
 
     for (int i = 1; i < n; i++){
-        double w = a[i] / b[i-1];
-        b[i] = b[i] - w * c[i-1];
+        double w = a[i] / b[i - 1];
+        b[i] = b[i] - w * c[i - 1];
         d[i].first = d[i].first - w * d[i - 1].first;
         d[i].second = d[i].second - w * d[i - 1].second;
     }
@@ -125,7 +125,7 @@ inline double distanceEmp(const int a[2], const int b[2], const int emp)
     {
         return abs(a[0] - b[0]) + abs(a[1] - b[1]);
     }
-    // euclid Dist
+        // euclid Dist
     else if(emp == 2)
     {
         return sqrt((a[0] - b[0]) * (a[0] - b[0]) + (a[1] - b[1]) * (a[1] - b[1]));
@@ -178,9 +178,9 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
 
     priority_queue<
             pair<pair<int, int>, pair<int, int>>,
-                    vector<pair<pair<int, int>, pair<int, int>>>,
-                            greater<>
-                            > pq;
+            vector<pair<pair<int, int>, pair<int, int>>>,
+            greater<>
+    > pq;
 
     vector<vector<bool>> g((unsigned int)n, vector<bool>((unsigned int)m, false));
     vector<int> p((unsigned int)n * m, (INT_MAX));
@@ -194,7 +194,7 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         {
             int ind = mapInfo.width + 1 + i * pixel_size + j * pixel_size * pixel_size * map_x;
             int clr = src[ind];
-            int color = (unsigned int)clr & 0x00FFFFFF;
+            int color = (unsigned)clr & 0x00FFFFFF;
 
             if(color == 0x00000000)
             {

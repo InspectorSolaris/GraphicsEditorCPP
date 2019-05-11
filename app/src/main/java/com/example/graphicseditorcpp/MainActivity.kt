@@ -19,6 +19,34 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val idPickFromGallery = 1
+    private val idPickFromCamera = 2
+
+    private val permissionGallery = 1
+    private val permissionCamera = 2
+
+    private var imageForProcessingPath : String? = null
+
+    companion object {
+        init {
+            System.loadLibrary("native-lib")
+        }
+    }
+
+    private fun createImageFile() : File {
+        val imageFileName = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
+        val imageFileExt = ".png"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageForProcessingPath = absolutePath
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,28 +69,6 @@ class MainActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
-    }
-
-    private val idPickFromGallery = 1
-    private val idPickFromCamera = 2
-
-    private val permissionGallery = 1
-    private val permissionCamera = 2
-
-    private var imageForProcessingPath : String? = null
-
-    /**
-     * A native method that is implemented by the 'native-lib' native library,
-     * which is packaged with this application.
-     */
-
-    companion object {
-
-        // Used to load the 'native-lib' library on application startup.
-        init {
-            System.loadLibrary("native-lib")
-        }
-
     }
 
     private fun tryPickFromGallery() {
@@ -93,6 +99,20 @@ class MainActivity : AppCompatActivity() {
         } else {
             pickFromCamera()
         }
+    }
+
+    private fun pickFromGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK)
+        galleryIntent.type = "image/*"
+        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
+        startActivityForResult(galleryIntent, idPickFromGallery)
+    }
+
+    private fun pickFromCamera() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
+        startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
     fun processButtonPressing(view: View) {
@@ -148,34 +168,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-    }
-
-    private fun createImageFile() : File {
-        val imageFileName = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
-        val imageFileExt = ".png"
-        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        return File.createTempFile(
-            imageFileName,
-            imageFileExt,
-            imageFileDir
-        ).apply {
-            imageForProcessingPath = absolutePath
-        }
-    }
-
-    private fun pickFromGallery() {
-        val galleryIntent = Intent(Intent.ACTION_PICK)
-        galleryIntent.type = "image/*"
-        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
-        startActivityForResult(galleryIntent, idPickFromGallery)
-    }
-
-    private fun pickFromCamera() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
-        startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

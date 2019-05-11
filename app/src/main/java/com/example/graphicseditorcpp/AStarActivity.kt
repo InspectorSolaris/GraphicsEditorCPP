@@ -1,9 +1,9 @@
 package com.example.graphicseditorcpp
 
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_astar.*
@@ -12,16 +12,9 @@ import java.lang.Math.min
 
 class AStarActivity : AppCompatActivity() {
 
-    private val colorGrid = Color.BLACK
-    private val colorEmpty = Color.WHITE
-    private val colorWall = Color.BLACK
-    private val colorStart = Color.GREEN
-    private val colorFinish = Color.RED
-    private val colorPath = Color.BLUE
-
+    private val pixelSize = 50
     private val nSize = 1200
     private val mSize = 1500
-    private val pixelSize = 50
     private val aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
 
     private var empirics = 1
@@ -40,14 +33,14 @@ class AStarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
-        aStarMap.eraseColor(colorEmpty)
+        aStarMap.eraseColor(ContextCompat.getColor(this, R.color.aStarColorEmpty))
         drawGrid()
 
-        imageViewSplines.layoutParams.width = aStarMap.width
-        imageViewSplines.layoutParams.height = aStarMap.height
-        imageViewSplines.setImageBitmap(aStarMap)
+        imageViewAStarMap.layoutParams.width = aStarMap.width
+        imageViewAStarMap.layoutParams.height = aStarMap.height
+        imageViewAStarMap.setImageBitmap(aStarMap)
 
-        imageViewSplines.setOnTouchListener { _, motionEvent ->
+        imageViewAStarMap.setOnTouchListener { _, motionEvent ->
             var coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
             var coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
 
@@ -64,11 +57,11 @@ class AStarActivity : AppCompatActivity() {
                     if(coordX != finishX || coordY != finishY) {
                         // point already exist
                         if(startX != -1 && startY != -1) {
-                            colorizeSquare(startX, startY, colorEmpty)
+                            colorizeSquare(startX, startY, ContextCompat.getColor(this, R.color.aStarColorEmpty))
                         }
                         startX = coordX
                         startY = coordY
-                        colorStart
+                        ContextCompat.getColor(this, R.color.aStarColorStart)
                     }
                     else {
                         null
@@ -80,11 +73,11 @@ class AStarActivity : AppCompatActivity() {
                     if(coordX != startX || coordY != startY) {
                         // point already exist
                         if(finishX != -1 && finishY != -1) {
-                            colorizeSquare(finishX, finishY, colorEmpty)
+                            colorizeSquare(finishX, finishY, ContextCompat.getColor(this, R.color.aStarColorEmpty))
                         }
                         finishX = coordX
                         finishY = coordY
-                        colorFinish
+                        ContextCompat.getColor(this, R.color.aStarColorFinish)
                     }
                     else {
                         null
@@ -102,7 +95,7 @@ class AStarActivity : AppCompatActivity() {
                         finishX = -1
                         finishY = -1
                     }
-                    colorWall
+                    ContextCompat.getColor(this, R.color.aStarColorWall)
                 }
                 // erase point
                 4 -> {
@@ -116,7 +109,7 @@ class AStarActivity : AppCompatActivity() {
                         finishX = -1
                         finishY = -1
                     }
-                    colorEmpty
+                    ContextCompat.getColor(this, R.color.aStarColorEmpty)
                 }
                 // unexpected error
                 else -> {
@@ -129,7 +122,7 @@ class AStarActivity : AppCompatActivity() {
                 colorizeSquare(coordX, coordY, resultingColor)
             }
 
-            imageViewSplines.setImageBitmap(aStarMap)
+            imageViewAStarMap.setImageBitmap(aStarMap)
 
             true
         }
@@ -174,13 +167,13 @@ class AStarActivity : AppCompatActivity() {
     private fun drawGrid() {
         for(i in pixelSize..(nSize - 1) step pixelSize) {
             for(j in 0..(mSize - 1)) {
-                aStarMap.setPixel(i, j, colorGrid)
+                aStarMap.setPixel(i, j, ContextCompat.getColor(this, R.color.aStarColorGrid))
             }
         }
 
         for(i in pixelSize..(mSize - 1) step pixelSize) {
             for(j in 0..(nSize - 1)) {
-                aStarMap.setPixel(j, i, colorGrid)
+                aStarMap.setPixel(j, i, ContextCompat.getColor(this, R.color.aStarColorGrid))
             }
         }
     }
@@ -226,7 +219,7 @@ class AStarActivity : AppCompatActivity() {
             R.id.buttonErase -> {
                 inputState = 4
             }
-            R.id.buttonDrawSplines -> {
+            R.id.buttonRunAStar -> {
                 if(startX != -1 && startY != -1 &&
                         finishX != -1 && finishY != -1) {
 
@@ -247,8 +240,8 @@ class AStarActivity : AppCompatActivity() {
                         colorizeSquare(pixelSize * (i  % (nSize / pixelSize)), pixelSize * (i / (nSize / pixelSize)), colorPath)
                     }
 
-                    colorizeSquare(startX, startY, colorStart)
-                    colorizeSquare(finishX, finishY, colorFinish)
+                    colorizeSquare(startX, startY, ContextCompat.getColor(this, R.color.aStarColorStart))
+                    colorizeSquare(finishX, finishY, ContextCompat.getColor(this, R.color.aStarColorFinish))
                 }
                 else {
                     Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()
