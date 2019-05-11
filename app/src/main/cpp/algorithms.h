@@ -70,13 +70,13 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT void JNICALL
-drawLines(); // Asya
+Java_com_example_graphicseditorcpp_AStarActivity_drawLines(); // Asya
 
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
 
 extern "C" JNIEXPORT jobjectArray JNICALL
-algorithmAStar(
+Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
         jobject obj,
         jobject bitmap,
