@@ -121,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     app:srcCompat="@drawable/ic_rotate_left_black_24dp"
-                    android:id="@+id/buttonDrawLines"
+                    android:id="@+id/buttonSplines"
                     android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
                     android:onClick="processButtonPressing"
                     android:layout_weight="1" android:text="@string/draw_lines" android:textColor="@color/buttonColor"

@@ -57,7 +57,9 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_graphicseditorcpp_AStarActivity_drawLines(
+Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
+        JNIEnv *env,
+        jobject obj,
         jint n,
         jintArray x_points,
         jintArray y_points) {
@@ -69,8 +71,13 @@ Java_com_example_graphicseditorcpp_AStarActivity_drawLines(
     vector<pair<double, double>> points(n);
     vector<pair<double, double>> d(n);
 
+    jint pxs[n];
+    jint pys[n];
+    env->GetIntArrayRegion(x_points, 0, n, pxs);
+    env->GetIntArrayRegion(y_points, 0, n, pys);
+
     for (int i = 0; i < n; i++){
-        points[i] = {x_points[i], y_points[i]};
+        points[i] = make_pair(pxs[i], pys[i]);
     }
     n--;
 

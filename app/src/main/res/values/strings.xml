@@ -32,6 +32,9 @@
     <string name="astar_activity_popup_4directional">4 directional</string>
     <string name="astar_activity_popup_8directional">8 directional</string>
     <string name="astar_activity_popup_8directionalcheck">8 directional (check)</string>
+    <string name="splines_activity_imagebutton_back">Back to previous activity</string>
+    <string name="splines_activitu_button_drawsplines_text">Draw</string>
+    <string name="splines_activity_button_drawsplines">Draw splines</string>
     <string name="rotate">ROTATE</string>
     <string name="filters">FILTERS</string>
     <string name="scaling">SCALING</string>
@@ -40,7 +43,7 @@
     <string name="masking">MASKING</string>
     <string name="_2linear_filt">2LINEAR FILT</string>
     <string name="_3linear_filt">3LINEAR FILT</string>
-    <string name="draw_lines">DRAW LINES</string>
+    <string name="draw_lines">SPLINES</string>
     <string name="just_nothing">just nothing</string>
 
 </resources>

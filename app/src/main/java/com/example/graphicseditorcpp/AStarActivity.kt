@@ -2,7 +2,6 @@ package com.example.graphicseditorcpp
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.ColorSpace
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -45,11 +44,11 @@ class AStarActivity : AppCompatActivity() {
         aStarMap.eraseColor(colorEmpty)
         drawGrid()
 
-        imageViewAStarMap.layoutParams.width = aStarMap.width
-        imageViewAStarMap.layoutParams.height = aStarMap.height
-        imageViewAStarMap.setImageBitmap(aStarMap)
+        imageViewSplines.layoutParams.width = aStarMap.width
+        imageViewSplines.layoutParams.height = aStarMap.height
+        imageViewSplines.setImageBitmap(aStarMap)
 
-        imageViewAStarMap.setOnTouchListener { _, motionEvent ->
+        imageViewSplines.setOnTouchListener { _, motionEvent ->
             var coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
             var coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
 
@@ -131,7 +130,7 @@ class AStarActivity : AppCompatActivity() {
                 colorizeSquare(coordX, coordY, resultingColor)
             }
 
-            imageViewAStarMap.setImageBitmap(aStarMap)
+            imageViewSplines.setImageBitmap(aStarMap)
 
             true
         }
@@ -228,7 +227,7 @@ class AStarActivity : AppCompatActivity() {
             R.id.buttonErase -> {
                 inputState = 4
             }
-            R.id.buttonRunAStar -> {
+            R.id.buttonDrawSplines -> {
                 if(startX != -1 && startY != -1 &&
                         finishX != -1 && finishY != -1) {
 
