@@ -26,7 +26,8 @@ class AStarActivity : AppCompatActivity() {
     private var finishX = -1
     private var finishY = -1
 
-    private var path : IntArray = intArrayOf(0)
+    private var pathStr : Array<String> = arrayOf("0")
+    private var pathInt : ArrayList<Pair<Int, Int>> = arrayListOf(Pair(-1, -1))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -199,7 +200,7 @@ class AStarActivity : AppCompatActivity() {
         pixel_size: Int,
         map_x: Int,
         map_y: Int
-    ) : IntArray
+    ) : Array<String>
 
     fun processButtonPressing(view: View) {
         when(view.id) {
@@ -222,7 +223,7 @@ class AStarActivity : AppCompatActivity() {
                 if(startX != -1 && startY != -1 &&
                         finishX != -1 && finishY != -1) {
 
-                    path = algorithmAStar(
+                    pathStr = algorithmAStar(
                         aStarMap,
                         startX / pixelSize,
                         startY / pixelSize,
@@ -235,8 +236,12 @@ class AStarActivity : AppCompatActivity() {
                         mSize / pixelSize
                     )
 
-                    for(i in path) {
-                        colorizeSquare(pixelSize * (i  % (nSize / pixelSize)), pixelSize * (i / (nSize / pixelSize)), colorPath)
+                    pathInt.clear()
+                    for(str in pathStr) {
+                        pathInt.add(Pair(str.toInt() % (nSize / pixelSize), str.toInt() / (nSize / pixelSize)))
+                    }
+                    for(i in pathInt) {
+                        colorizeSquare(pixelSize * i.first, pixelSize * i.second, getColor(R.color.aStarColorPath))
                     }
 
                     colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
