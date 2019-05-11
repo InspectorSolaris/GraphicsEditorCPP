@@ -12,7 +12,6 @@ import android.widget.Toast
 import java.io.File
 import android.os.Environment
 import android.support.design.widget.BottomSheetDialog
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
