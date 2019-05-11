@@ -48,9 +48,10 @@
     <string name="tools_segmentation">Segmentation</string>
     <string name="tools_retouching">Retouching</string>
     <string name="tools_masking">Masking</string>
-    <string name="tools_2linear_filtering">2-linear filtering</string>
-    <string name="tools_3linear_filtering">3-linear filtering</string>
+    <string name="tools_2linear_filtering">2-linear flt</string>
+    <string name="tools_3linear_filtering">3-linear flt</string>
     <string name="tools_splines">Splines</string>
+    <string name="tools_freespace">Free space</string>
 
     <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
     <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
