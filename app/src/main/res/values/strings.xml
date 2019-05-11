@@ -1,14 +1,19 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
+
+    <string name="main_activity_imageforprocessingname">processedImg_</string>
+    <string name="main_activity_imageforprocessingext">.png</string>
+
     <string name="main_activity_imagebutton_redu">Redo changes</string>
     <string name="main_activity_imagebutton_picknew">Pick new image</string>
     <string name="main_activity_imagebutton_undo">Undo changes</string>
-    <string name="main_activity_image_for_processing">Image for processing</string>
+    <string name="main_activity_imageview_imageforprocessing">Image for processing</string>
     <string name="main_activity_imagebutton_pickfromgallery">Pick image from gallery</string>
     <string name="main_activity_imagebutton_pickfromcamera">Pick image from camera</string>
     <string name="main_activity_imagebutton_algorithmastar">AStar algorithm</string>
     <string name="main_activity_imagebutton_tools">Image processing tools</string>
     <string name="main_activity_button_export">Export processed image</string>
+
     <string name="astar_activity_button_setstart_text">Start</string>
     <string name="astar_activity_button_setfinish_text">Finish</string>
     <string name="astar_activity_button_setwall_text">Wall</string>
@@ -32,18 +37,23 @@
     <string name="astar_activity_popup_4directional">4 directional</string>
     <string name="astar_activity_popup_8directional">8 directional</string>
     <string name="astar_activity_popup_8directionalcheck">8 directional (check)</string>
+
     <string name="splines_activity_imagebutton_back">Back to previous activity</string>
     <string name="splines_activitu_button_drawsplines_text">Draw</string>
     <string name="splines_activity_button_drawsplines">Draw splines</string>
-    <string name="rotate">ROTATE</string>
-    <string name="filters">FILTERS</string>
-    <string name="scaling">SCALING</string>
-    <string name="segmentate">SEGMENTATE</string>
-    <string name="retouching">RETOUCHING</string>
-    <string name="masking">MASKING</string>
-    <string name="_2linear_filt">2LINEAR FILT</string>
-    <string name="_3linear_filt">3LINEAR FILT</string>
-    <string name="draw_lines">SPLINES</string>
-    <string name="just_nothing">just nothing</string>
+
+    <string name="tools_rotate">Rotate</string>
+    <string name="tools_filters">Filters</string>
+    <string name="tools_scaling">Scaling</string>
+    <string name="tools_segmentation">Segmentation</string>
+    <string name="tools_retouching">Retouching</string>
+    <string name="tools_masking">Masking</string>
+    <string name="tools_2linear_filtering">2-linear filtering</string>
+    <string name="tools_3linear_filtering">3-linear filtering</string>
+    <string name="tools_splines">Splines</string>
+
+    <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
+    <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
+    <string name="error_main_image_pick">Error: Image picking fail</string>
 
 </resources>

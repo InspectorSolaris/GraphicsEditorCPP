@@ -33,7 +33,7 @@ class AStarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
-        aStarMap.eraseColor(ContextCompat.getColor(this, R.color.aStarColorEmpty))
+        aStarMap.eraseColor(getColor(R.color.aStarColorEmpty))
         drawGrid()
 
         imageViewAStarMap.layoutParams.width = aStarMap.width
@@ -57,11 +57,11 @@ class AStarActivity : AppCompatActivity() {
                     if(coordX != finishX || coordY != finishY) {
                         // point already exist
                         if(startX != -1 && startY != -1) {
-                            colorizeSquare(startX, startY, ContextCompat.getColor(this, R.color.aStarColorEmpty))
+                            colorizeSquare(startX, startY, getColor(R.color.aStarColorEmpty))
                         }
                         startX = coordX
                         startY = coordY
-                        ContextCompat.getColor(this, R.color.aStarColorStart)
+                        getColor(R.color.aStarColorStart)
                     }
                     else {
                         null
@@ -73,11 +73,11 @@ class AStarActivity : AppCompatActivity() {
                     if(coordX != startX || coordY != startY) {
                         // point already exist
                         if(finishX != -1 && finishY != -1) {
-                            colorizeSquare(finishX, finishY, ContextCompat.getColor(this, R.color.aStarColorEmpty))
+                            colorizeSquare(finishX, finishY, getColor(R.color.aStarColorEmpty))
                         }
                         finishX = coordX
                         finishY = coordY
-                        ContextCompat.getColor(this, R.color.aStarColorFinish)
+                        getColor(R.color.aStarColorFinish)
                     }
                     else {
                         null
@@ -95,7 +95,7 @@ class AStarActivity : AppCompatActivity() {
                         finishX = -1
                         finishY = -1
                     }
-                    ContextCompat.getColor(this, R.color.aStarColorWall)
+                    getColor(R.color.aStarColorWall)
                 }
                 // erase point
                 4 -> {
@@ -109,7 +109,7 @@ class AStarActivity : AppCompatActivity() {
                         finishX = -1
                         finishY = -1
                     }
-                    ContextCompat.getColor(this, R.color.aStarColorEmpty)
+                    getColor(R.color.aStarColorEmpty)
                 }
                 // unexpected error
                 else -> {
@@ -167,13 +167,13 @@ class AStarActivity : AppCompatActivity() {
     private fun drawGrid() {
         for(i in pixelSize..(nSize - 1) step pixelSize) {
             for(j in 0..(mSize - 1)) {
-                aStarMap.setPixel(i, j, ContextCompat.getColor(this, R.color.aStarColorGrid))
+                aStarMap.setPixel(i, j, getColor(R.color.aStarColorGrid))
             }
         }
 
         for(i in pixelSize..(mSize - 1) step pixelSize) {
             for(j in 0..(nSize - 1)) {
-                aStarMap.setPixel(j, i, ContextCompat.getColor(this, R.color.aStarColorGrid))
+                aStarMap.setPixel(j, i, getColor(R.color.aStarColorGrid))
             }
         }
     }
@@ -240,8 +240,8 @@ class AStarActivity : AppCompatActivity() {
                         colorizeSquare(pixelSize * (i  % (nSize / pixelSize)), pixelSize * (i / (nSize / pixelSize)), colorPath)
                     }
 
-                    colorizeSquare(startX, startY, ContextCompat.getColor(this, R.color.aStarColorStart))
-                    colorizeSquare(finishX, finishY, ContextCompat.getColor(this, R.color.aStarColorFinish))
+                    colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
+                    colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
                 }
                 else {
                     Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()

@@ -24,7 +24,7 @@ class SplinesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splines)
 
-        bitmap.eraseColor(ContextCompat.getColor(this, R.color.splinesColorBackground))
+        bitmap.eraseColor(getColor(R.color.splinesColorBackground))
 
         imageViewSplines.setImageBitmap(bitmap)
         imageViewSplines.layoutParams.width = nSize
@@ -50,7 +50,7 @@ class SplinesActivity : AppCompatActivity() {
                 val px = max(min(x + i, nSize), 0)
                 val py = max(min(y + j, mSize), 0)
 
-                bitmap.setPixel(px, py, ContextCompat.getColor(this, R.color.splinesColorPoint))
+                bitmap.setPixel(px, py, getColor(R.color.splinesColorPoint))
             }
         }
     }

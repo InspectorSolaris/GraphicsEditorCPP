@@ -12,6 +12,7 @@ import android.widget.Toast
 import java.io.File
 import android.os.Environment
 import android.support.design.widget.BottomSheetDialog
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
@@ -34,8 +35,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createImageFile() : File {
-        val imageFileName = "processedImg_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())}"
-        val imageFileExt = ".png"
+        val imageFileName = getString(R.string.main_activity_imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFileExt = getString(R.string.main_activity_imageforprocessingext)
         val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         return File.createTempFile(
@@ -151,7 +152,7 @@ class MainActivity : AppCompatActivity() {
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     tryPickFromGallery()
                 } else {
-                    Toast.makeText(this, "Gallery permission denied", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.error_main_gallery_permissions), Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -162,7 +163,7 @@ class MainActivity : AppCompatActivity() {
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     tryPickFromCamera()
                 } else {
-                    Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.error_main_camera_permissions), Toast.LENGTH_LONG).show()
                 }
 
             }
@@ -194,7 +195,7 @@ class MainActivity : AppCompatActivity() {
             imageForProcessingPath = imageUri.toString()
         }
         else {
-            Toast.makeText(this, "Unexpected error. onActivityResult. Image pick", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
         }
     }
 }
