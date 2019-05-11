@@ -104,7 +104,12 @@ class MainActivity : AppCompatActivity() {
                 tryPickFromCamera()
             }
             R.id.imageButtonAlgorithmAStar -> {
-                goToAStar()
+                val aStarIntent = Intent(this, AStarActivity::class.java)
+                startActivity(aStarIntent)
+            }
+            R.id.buttonSplines -> {
+                val splinesIntent = Intent(this, SplinesActivity::class.java)
+                startActivity(splinesIntent)
             }
             R.id.imageButtonTools -> {
 
@@ -157,11 +162,6 @@ class MainActivity : AppCompatActivity() {
         ).apply {
             imageForProcessingPath = absolutePath
         }
-    }
-
-    private fun goToAStar(){
-        val aStarIntent = Intent(this, AStarActivity::class.java)
-        startActivity(aStarIntent)
     }
 
     private fun pickFromGallery() {

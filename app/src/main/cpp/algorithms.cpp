@@ -57,41 +57,47 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_graphicseditorcpp_AStarActivity_drawLines(
-        jint n) {
+Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
+        JNIEnv *env,
+        jobject obj,
+        jint n,
+        jintArray x_points,
+        jintArray y_points) {
     // algorithm from https://www.particleincell.com/2012/bezier-splines/
 
     using namespace std;
-    vector<pair<double, double>> p1;
-    vector<pair<double, double>> p2;
-    vector<pair<double, double>> points;
-    vector<pair<double, double>> d;
-    double x, y;
+    vector<pair<double, double>> p1(n);
+    vector<pair<double, double>> p2(n);
+    vector<pair<double, double>> points(n);
+    vector<pair<double, double>> d(n);
+
+    jint pxs[n];
+    jint pys[n];
+    env->GetIntArrayRegion(x_points, 0, n, pxs);
+    env->GetIntArrayRegion(y_points, 0, n, pys);
 
     for (int i = 0; i < n; i++){
-        cin >> x >> y;
-        points.push_back(make_pair(x, y));
+        points[i] = make_pair(pxs[i], pys[i]);
     }
     n--;
-    p1.resize(n);
 
     double a[1000], b[1000], c[1000];
     a[0] = 0;
     b[0] = 2;
     c[0] = 1;
-    d.push_back(make_pair(points[0].first + 2 * points[1].first, points[0].second + 2 * points[1].second));
+    d[0] = (make_pair(points[0].first + 2 * points[1].first, points[0].second + 2 * points[1].second));
 
     for (int i = 1; i < n - 1; i++){
         a[i] = 1;
         b[i] = 4;
         c[i] = 1;
-        d.push_back(make_pair(points[i].first + 2 * points[i + 1].first, points[i].second + 2 * points[i + 1].second));
+        d[i] = (make_pair(points[i].first + 2 * points[i + 1].first, points[i].second + 2 * points[i + 1].second));
     }
 
     a[n - 1] = 2;
     b[n - 1] = 7;
     c[n - 1] = 0;
-    d.push_back(make_pair(8 * points[n - 1].first + points[n].first, 8 * points[n - 1].second + points[n].second));
+    d[n - 1] = (make_pair(8 * points[n - 1].first + points[n].first, 8 * points[n - 1].second + points[n].second));
 
     for (int i = 1; i < n; i++){
         double w = a[i] / b[i-1];
@@ -104,9 +110,9 @@ Java_com_example_graphicseditorcpp_AStarActivity_drawLines(
         p1[i] = make_pair((d[i].first - c[i] * p1[i + 1].first) / b[i], (d[i].second - c[i] * p1[n - 2 - i].second) / b[i]);
     }
     for (int i = 0; i < n - 1; i++){
-        p2.push_back(make_pair(2 * points[i + 1].first - p1[i + 1].first, 2 * points[i + 1].second - p1[i + 1].second));
+        p2[i] = (make_pair(2 * points[i + 1].first - p1[i + 1].first, 2 * points[i + 1].second - p1[i + 1].second));
     }
-    p2.push_back(make_pair(0.5 * (points[n].first + p1[n - 1].first), 0.5 * (points[n].second + p1[n - 1].second)));
+    p2[n - 1] = (make_pair(0.5 * (points[n].first + p1[n - 1].first), 0.5 * (points[n].second + p1[n - 1].second)));
 }
 
 // parameters: map, start position, finish position
@@ -139,7 +145,7 @@ inline int arrInd(const int & m, const std::pair<int, int> & x)
     return m * x.first + x.second;
 }
 
-extern "C" JNIEXPORT jintArray JNICALL
+extern "C" JNIEXPORT jobjectArray JNICALL
 Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
         jobject obj,
@@ -272,15 +278,15 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         reverse(res.begin(), res.end());
     }
 
+    jclass jstring = env->FindClass("java/lang/String");
+    jobjectArray result = env->NewObjectArray((jsize)res.size(), jstring, 0);
     jint buf[res.size()];
-    for(unsigned int i = 0; i < res.size(); ++i)
+
+    for(unsigned long long i = 0; i < res.size(); ++i)
     {
         buf[i] = map_x * res[i].first + res[i].second;
+        env->SetObjectArrayElement(result, (jsize)i, env->NewStringUTF(to_string(buf[i]).c_str()));
     }
-
-    jintArray result;
-    env->NewIntArray(res.size());
-    env->SetIntArrayRegion(result, 0, res.size(), buf);
 
     return result;
 }
