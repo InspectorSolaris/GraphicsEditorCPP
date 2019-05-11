@@ -19,7 +19,13 @@ class SplinesActivity : AppCompatActivity() {
     private var pointX : ArrayList<Int> = arrayListOf(-1)
     private var pointY : ArrayList<Int> = arrayListOf(-1)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    external fun calculateSplines(
+        pointsAmount: Int,
+        pointsCoords: IntArray
+    ) : DoubleArray
+
+    override fun onCreate(
+        savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splines)
 
@@ -54,7 +60,8 @@ class SplinesActivity : AppCompatActivity() {
         }
     }
 
-    fun processButtonPressing(view: View) {
+    fun processButtonPressing(
+        view: View) {
         when(view.id) {
             R.id.imageButtonBack -> {
                 finish()

@@ -16,21 +16,32 @@ class AStarActivity : AppCompatActivity() {
     private val mSize = 1500
     private val aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
 
-    private var empirics = 1
-    private var directions = 1
-
-    private var inputState = 3
+    private var empirics = 1    // 1 - manhattan, 2 - euclid
+    private var directions = 1  // 1 - 4-directional, 2 - 8-directional, 3 - 8-directional with check
+    private var inputState = 3  // 1 - set start, 2 - set finish, 3 - set wall, 4 - erase
 
     private var startX = -1
     private var startY = -1
     private var finishX = -1
     private var finishY = -1
 
-    private var pathStr : Array<String> = arrayOf("0")
-    private var pathInt : ArrayList<Pair<Int, Int>> = arrayListOf(Pair(-1, -1))
     private var path : IntArray = intArrayOf(-1)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    external fun algorithmAStar(
+        bitmap: Bitmap,
+        start_x: Int,
+        start_y: Int,
+        finish_x: Int,
+        finish_y: Int,
+        empirics: Int,
+        directions: Int,
+        pixel_size: Int,
+        map_x: Int,
+        map_y: Int
+    ) : IntArray
+
+    override fun onCreate(
+        savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
@@ -190,23 +201,11 @@ class AStarActivity : AppCompatActivity() {
         }
     }
 
-    external fun algorithmAStar(
-        bitmap: Bitmap,
-        start_x: Int,
-        start_y: Int,
-        finish_x: Int,
-        finish_y: Int,
-        empirics: Int,
-        directions: Int,
-        pixel_size: Int,
-        map_x: Int,
-        map_y: Int
-    ) : IntArray
-
-    fun processButtonPressing(view: View) {
+    fun processButtonPressing(
+        view: View) {
         when(view.id) {
             R.id.imageButtonBack -> {
-                backToPreviousActivity()
+                finish()
             }
             R.id.buttonSetStart -> {
                 inputState = 1
@@ -249,9 +248,5 @@ class AStarActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun backToPreviousActivity(){
-        finish()
     }
 }

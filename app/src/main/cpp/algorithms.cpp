@@ -56,63 +56,84 @@ pictureTrilinearFiltration();
 // parameters: original pic (clear pic), positions of points
 // return: interpolated with splines broken line on original pic
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
         JNIEnv *env,
         jobject obj,
         jint n,
-        jintArray x_points,
-        jintArray y_points) {
+        jintArray coords) {
     // algorithm from https://www.particleincell.com/2012/bezier-splines/
 
     using namespace std;
-    vector<pair<double, double>> p1(n);
-    vector<pair<double, double>> p2(n);
-    vector<pair<double, double>> points(n);
-    vector<pair<double, double>> d(n);
+    vector<double> p1((unsigned int)n);
+    vector<double> p2((unsigned int)n);
+    vector<double> points((unsigned int)n);
+    vector<double> d((unsigned int)n);
 
-    jint pxs[n];
-    jint pys[n];
-    env->GetIntArrayRegion(x_points, 0, n, pxs);
-    env->GetIntArrayRegion(y_points, 0, n, pys);
+    jint crds[n];
+    env->GetIntArrayRegion(coords, 0, n, crds);
 
-    for (int i = 0; i < n; i++){
-        points[i] = make_pair(pxs[i], pys[i]);
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        points[i] = crds[i];
     }
-    n--;
 
-    double a[1000], b[1000], c[1000];
+    double a[n];
+    double b[n];
+    double c[n];
+
     a[0] = 0;
     b[0] = 2;
     c[0] = 1;
-    d[0] = (make_pair(points[0].first + 2 * points[1].first, points[0].second + 2 * points[1].second));
+    d[0] = points[0] + 2 * points[1];
 
-    for (int i = 1; i < n - 1; i++){
+    for(unsigned int i = 1; i < n - 1; ++i)
+    {
         a[i] = 1;
         b[i] = 4;
         c[i] = 1;
-        d[i] = (make_pair(points[i].first + 2 * points[i + 1].first, points[i].second + 2 * points[i + 1].second));
+        d[i] = points[i] + 2 * points[i + 1];
     }
 
     a[n - 1] = 2;
     b[n - 1] = 7;
     c[n - 1] = 0;
-    d[n - 1] = (make_pair(8 * points[n - 1].first + points[n].first, 8 * points[n - 1].second + points[n].second));
+    d[n - 1] = 8 * points[n - 1] + points[n];
 
-    for (int i = 1; i < n; i++){
+    for(unsigned int i = 1; i < n; ++i)
+    {
         double w = a[i] / b[i - 1];
         b[i] = b[i] - w * c[i - 1];
-        d[i].first = d[i].first - w * d[i - 1].first;
-        d[i].second = d[i].second - w * d[i - 1].second;
+        d[i] = d[i] - w * d[i - 1];
     }
-    p1[n - 1] = make_pair(d[n - 1].first / b[n - 1], d[n - 1].second / b[n - 1]);
-    for (int i = n - 2; i >= 0; i--){
-        p1[i] = make_pair((d[i].first - c[i] * p1[i + 1].first) / b[i], (d[i].second - c[i] * p1[n - 2 - i].second) / b[i]);
+
+    p1[n - 1] = d[n - 1] / b[n - 1];
+
+    for(unsigned int i = n - 2; i >= 0; --i)
+    {
+        p1[i] = (d[i] - c[i] * p1[i + 1]) / b[i];
     }
-    for (int i = 0; i < n - 1; i++){
-        p2[i] = (make_pair(2 * points[i + 1].first - p1[i + 1].first, 2 * points[i + 1].second - p1[i + 1].second));
+
+    for(unsigned int i = 0; i < n - 1; ++i)
+    {
+        p2[i] = 2 * points[i + 1] - p1[i + 1];
     }
-    p2[n - 1] = (make_pair(0.5 * (points[n].first + p1[n - 1].first), 0.5 * (points[n].second + p1[n - 1].second)));
+
+    p2[n - 1] = 0.5 * (points[n] + p1[n - 1]);
+
+    jdoubleArray result = env->NewDoubleArray(n);
+    jdouble buf[n];
+
+    jdouble coding_number = 1000000000.0;
+
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        buf[i] = coding_number * p1[i] + p2[i];
+    }
+
+    env->SetDoubleArrayRegion(result, 0, n, buf);
+
+    return result;
 }
 
 // parameters: map, start position, finish position
@@ -285,8 +306,8 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         buf[i] = map_x * res[i].first + res[i].second;
     }
 
-    jintArray int_result = env->NewIntArray(res.size());
-    env->SetIntArrayRegion(int_result, 0, res.size(), buf);
+    jintArray result = env->NewIntArray(res.size());
+    env->SetIntArrayRegion(result, 0, res.size(), buf);
 
-    return int_result;
+    return result;
 }

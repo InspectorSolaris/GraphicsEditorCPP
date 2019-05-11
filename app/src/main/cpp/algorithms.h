@@ -22,7 +22,7 @@
 #include <climits>
 
 extern "C" JNIEXPORT void JNICALL
-pictureTurning();
+pictureTurning(); // Asya
 
 // parameters: original pic, ...
 // return: color corrected picture
@@ -46,7 +46,7 @@ pictureSegmentation();
 // return: retouched pic
 
 extern "C" JNIEXPORT void JNICALL
-pictureRetouching();
+pictureRetouching(); // Danil
 
 // parameters: original pic, retouching parameters
 // return: masked pic
@@ -58,24 +58,23 @@ pictureUnsharpMasking();
 // return: processed pic
 
 extern "C" JNIEXPORT void JNICALL
-pictureBilinearFiltration();
+pictureBilinearFiltration(); // Herman
 
 // parameters: original pic, trilinear algorithm parameters
 // return: processed pic
 
 extern "C" JNIEXPORT void JNICALL
-pictureTrilinearFiltration();
+pictureTrilinearFiltration(); // Herman
 
 // parameters: original pic (clear pic), positions of points
 // return: interpolated with splines broken line on original pic
 
-extern "C" JNIEXPORT void JNICALL
+extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
         JNIEnv *env,
         jobject obj,
         jint n,
-        jintArray x_points,
-        jintArray y_points);
+        jintArray coords); // Asya
 
 // parameters: map, start position, finish position
 // return: shortest way by A-Star

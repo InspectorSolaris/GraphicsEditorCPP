@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(
+        savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -115,7 +116,8 @@ class MainActivity : AppCompatActivity() {
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
-    fun processButtonPressing(view: View) {
+    fun processButtonPressing(
+        view: View) {
         when(view.id) {
             R.id.imageButtonPickFromGallery -> {
                 tryPickFromGallery()
@@ -141,7 +143,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode) {
             permissionGallery -> {
@@ -170,7 +175,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         val imageUri : Uri? = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
