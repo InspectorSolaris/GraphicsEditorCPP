@@ -80,7 +80,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
 // parameters: map, start position, finish position
 // return: shortest way by A-Star
 
-extern "C" JNIEXPORT jobjectArray JNICALL
+extern "C" JNIEXPORT jintArray JNICALL
 Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
         jobject obj,

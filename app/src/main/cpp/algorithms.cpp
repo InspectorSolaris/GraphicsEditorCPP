@@ -145,7 +145,7 @@ inline int arrInd(const int & m, const std::pair<int, int> & x)
     return m * x.first + x.second;
 }
 
-extern "C" JNIEXPORT jobjectArray JNICALL
+extern "C" JNIEXPORT jintArray JNICALL
 Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
         jobject obj,
@@ -194,7 +194,7 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         {
             int ind = mapInfo.width + 1 + i * pixel_size + j * pixel_size * pixel_size * map_x;
             int clr = src[ind];
-            int color = (unsigned)clr & 0x00FFFFFF;
+            int color = (unsigned int)clr & 0x00FFFFFF;
 
             if(color == 0x00000000)
             {
@@ -278,15 +278,15 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         reverse(res.begin(), res.end());
     }
 
-    jclass jstring = env->FindClass("java/lang/String");
-    jobjectArray result = env->NewObjectArray((jsize)res.size(), jstring, 0);
     jint buf[res.size()];
 
     for(unsigned long long i = 0; i < res.size(); ++i)
     {
         buf[i] = map_x * res[i].first + res[i].second;
-        env->SetObjectArrayElement(result, (jsize)i, env->NewStringUTF(to_string(buf[i]).c_str()));
     }
 
-    return result;
+    jintArray int_result = env->NewIntArray(res.size());
+    env->SetIntArrayRegion(int_result, 0, res.size(), buf);
+
+    return int_result;
 }
