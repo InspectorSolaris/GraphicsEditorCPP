@@ -10,7 +10,7 @@
     <color name="aStarColorWall">#000000</color>
     <color name="aStarColorStart">#4CAF50</color>
     <color name="aStarColorFinish">#FF5722</color>
-    <color name="aStarColorPath">#2196F3</color>
+    <color name="aStarColorPath">#0092FF</color>
 
     <color name="splinesColorBackground">#FFFFFF</color>
     <color name="splinesColorPoint">#000000</color>

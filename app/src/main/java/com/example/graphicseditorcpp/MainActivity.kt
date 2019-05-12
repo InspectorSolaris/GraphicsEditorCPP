@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
@@ -217,3 +218,54 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
+fun grayscale(imageBitmap: Bitmap?):Bitmap? {
+    var newBitmap: Bitmap? = null
+    If (imageBitmap !=null) {
+        val width = imageBitmap.width
+        val height = imageBitmap.height
+        newBitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
+
+        val srcPixels = IntArray(width*height)
+        val newPixels = IntArray(width*height)
+        imageBitmap.getPixels(srcPixels,0,width,0,0,width,height)
+
+        for (i in 0 until srcPixels.size) {
+            val p: Long = srcPixels[i].toLong()
+            val r: Double = ((p and 0x00FF0000) shr 16).toDouble()
+            val g: Double = ((p and 0x0000FF00) shr 8).toDouble()
+            val b: Double = (p and 0x000000FF).toDouble()
+
+            val color = (r+g+b)/3
+            val newPixel = 0xFF000000 or (color.toLong() shl 16) or (color.toLong() shl 8) or color.toLong()
+        }
+        newBitmap.setPixels(newPixels,0,width,0,0,width, height)
+    }
+    return newBitmap
+}
+
+fun grayscale(imageBitmap: Bitmap?):Bitmap? {
+    var newBitmap: Bitmap? = null
+    If (imageBitmap !=null) {
+        val width = imageBitmap.width
+        val height = imageBitmap.height
+        newBitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
+
+        val srcPixels = IntArray(width*height)
+        val newPixels = IntArray(width*height)
+        imageBitmap.getPixels(srcPixels,0,width,0,0,width,height)
+
+        for (i in 0 until srcPixels.size) {
+            val p: Long = srcPixels[i].toLong()
+            val r: Double = ((p and 0x00FF0000) shr 16).toDouble()
+            val g: Double = ((p and 0x0000FF00) shr 8).toDouble()
+            val b: Double = (p and 0x000000FF).toDouble()
+
+            val color = (r+g+b)/3
+            val newPixel = 0xFF000000 or (color.toLong() shl 16) or (color.toLong() shl 8) or color.toLong()
+        }
+        newBitmap.setPixels(newPixels,0,width,0,0,width, height)
+    }
+    return newBitmap
+}
+
+
