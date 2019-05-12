@@ -19,6 +19,8 @@
             android:supportsRtl="true"
             android:theme="@style/DarkAppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ScalingActivity">
+        </activity>
         <activity android:name=".SplinesActivity">
         </activity>
         <activity android:name=".AStarActivity">

@@ -16,6 +16,9 @@ import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.graphics.Bitmap
+import java.io.ByteArrayOutputStream
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,8 +29,9 @@ class MainActivity : AppCompatActivity() {
     private val permissionCamera = 2
 
     private var imageForProcessingPath : String? = null
+    private var bitmap : Bitmap = Bitmap.createBitmap(800, 1000, Bitmap.Config.ARGB_8888)
 
-    companion object {
+        companion object {
         init {
             System.loadLibrary("native-lib")
         }
@@ -138,7 +142,14 @@ class MainActivity : AppCompatActivity() {
                 val dialog = BottomSheetDialog(this)
                 dialog.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
                 dialog.show()
-
+            }
+            R.id.buttonPictureScaling -> {
+                val scaleIntent = Intent(this, ScalingActivity::class.java)
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                val temp : ByteArray = stream.toByteArray()
+                scaleIntent.putExtra("picture", temp)
+                startActivity(scaleIntent)
             }
         }
     }
@@ -198,7 +209,7 @@ class MainActivity : AppCompatActivity() {
             imageButtonPickFromCamera.isEnabled = false
 
             imageForProcessing.setImageURI(imageUri)
-
+            bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             imageForProcessingPath = imageUri.toString()
         }
         else {
