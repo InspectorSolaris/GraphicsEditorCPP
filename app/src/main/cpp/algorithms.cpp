@@ -57,7 +57,7 @@ pictureTrilinearFiltration();
 // return: interpolated with splines broken line on original pic
 
 extern "C" JNIEXPORT jdoubleArray JNICALL
-Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
+Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
         JNIEnv *env,
         jobject obj,
         jint n,
@@ -65,10 +65,10 @@ Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
     // algorithm from https://www.particleincell.com/2012/bezier-splines/
 
     using namespace std;
-    vector<double> p1((unsigned int)n);
-    vector<double> p2((unsigned int)n);
     vector<double> points((unsigned int)n);
-    vector<double> d((unsigned int)n);
+    vector<double> p1((unsigned int)n - 1);
+    vector<double> p2((unsigned int)n - 1);
+    vector<double> d((unsigned int)n - 1);
 
     jint crds[n];
     env->GetIntArrayRegion(coords, 0, n, crds);
@@ -77,6 +77,8 @@ Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
     {
         points[i] = crds[i];
     }
+
+    --n;
 
     double a[n];
     double b[n];
@@ -124,11 +126,89 @@ Java_com_example_graphicseditorcpp_SplinesActivity_drawLines(
     jdoubleArray result = env->NewDoubleArray(n);
     jdouble buf[n];
 
-    jdouble coding_number = 1000000000.0;
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        buf[i] = p1[i];
+    }
+
+    env->SetDoubleArrayRegion(result, 0, n, buf);
+
+    return result;
+}
+
+extern "C" JNIEXPORT jdoubleArray JNICALL
+Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
+        JNIEnv *env,
+        jobject obj,
+        jint n,
+        jintArray coords) {
+    // algorithm from https://www.particleincell.com/2012/bezier-splines/
+
+    using namespace std;
+    vector<double> points((unsigned int)n);
+    vector<double> p1((unsigned int)n - 1);
+    vector<double> p2((unsigned int)n - 1);
+    vector<double> d((unsigned int)n - 1);
+
+    jint crds[n];
+    env->GetIntArrayRegion(coords, 0, n, crds);
 
     for(unsigned int i = 0; i < n; ++i)
     {
-        buf[i] = coding_number * p1[i] + p2[i];
+        points[i] = crds[i];
+    }
+
+    --n;
+
+    double a[n];
+    double b[n];
+    double c[n];
+
+    a[0] = 0;
+    b[0] = 2;
+    c[0] = 1;
+    d[0] = points[0] + 2 * points[1];
+
+    for(unsigned int i = 1; i < n - 1; ++i)
+    {
+        a[i] = 1;
+        b[i] = 4;
+        c[i] = 1;
+        d[i] = points[i] + 2 * points[i + 1];
+    }
+
+    a[n - 1] = 2;
+    b[n - 1] = 7;
+    c[n - 1] = 0;
+    d[n - 1] = 8 * points[n - 1] + points[n];
+
+    for(unsigned int i = 1; i < n; ++i)
+    {
+        double w = a[i] / b[i - 1];
+        b[i] = b[i] - w * c[i - 1];
+        d[i] = d[i] - w * d[i - 1];
+    }
+
+    p1[n - 1] = d[n - 1] / b[n - 1];
+
+    for(unsigned int i = n - 2; i >= 0; --i)
+    {
+        p1[i] = (d[i] - c[i] * p1[i + 1]) / b[i];
+    }
+
+    for(unsigned int i = 0; i < n - 1; ++i)
+    {
+        p2[i] = 2 * points[i + 1] - p1[i + 1];
+    }
+
+    p2[n - 1] = 0.5 * (points[n] + p1[n - 1]);
+
+    jdoubleArray result = env->NewDoubleArray(n);
+    jdouble buf[n];
+
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        buf[i] = p2[i];
     }
 
     env->SetDoubleArrayRegion(result, 0, n, buf);
