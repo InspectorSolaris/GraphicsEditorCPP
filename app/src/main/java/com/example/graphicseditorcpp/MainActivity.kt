@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     private var imageForProcessingPath : String? = null
     private var bitmap : Bitmap = Bitmap.createBitmap(800, 1000, Bitmap.Config.ARGB_8888)
 
-        companion object {
+    companion object {
         init {
             System.loadLibrary("native-lib")
         }
@@ -138,7 +138,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(splinesIntent)
             }
             R.id.imageButtonTools -> {
-
                 val dialog = BottomSheetDialog(this)
                 dialog.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
                 dialog.show()
