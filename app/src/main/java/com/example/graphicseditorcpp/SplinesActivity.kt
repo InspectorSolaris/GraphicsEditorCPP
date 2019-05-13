@@ -22,6 +22,8 @@ class SplinesActivity : AppCompatActivity() {
     private var pointX : ArrayList<Int> = arrayListOf(-1)
     private var pointY : ArrayList<Int> = arrayListOf(-1)
 
+    private var timeCounter = System.currentTimeMillis()
+    private var timeDelay = 200
     private var drawn = false
 
     external fun calculateSplinesP1(
@@ -47,10 +49,11 @@ class SplinesActivity : AppCompatActivity() {
 
         imageViewSplines.setOnTouchListener { _, motionEvent ->
 
-            if(!drawn) {
+            if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
                 drawSquare(motionEvent.x.toInt(), motionEvent.y.toInt())
                 pointX.add(motionEvent.x.toInt())
                 pointY.add(motionEvent.y.toInt())
+                timeCounter = System.currentTimeMillis()
 
                 imageViewSplines.setImageBitmap(bitmap)
             }
@@ -83,9 +86,9 @@ class SplinesActivity : AppCompatActivity() {
                 val xArray = IntArray(pointX.size - 1)
                 val yArray = IntArray(pointY.size - 1)
 
-                for(i in 1..pointX.size) {
-                    xArray[i] = pointX[i]
-                    yArray[i] = pointY[i]
+                for(i in 1..(pointX.size - 1)) {
+                    xArray[i - 1] = pointX[i]
+                    yArray[i - 1] = pointY[i]
                 }
 
                 val p1x = calculateSplinesP1(xArray.size, xArray)

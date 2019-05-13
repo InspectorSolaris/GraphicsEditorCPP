@@ -111,9 +111,9 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
 
     p1[n - 1] = d[n - 1] / b[n - 1];
 
-    for(unsigned int i = n - 2; i >= 0; --i)
+    for(unsigned int i = 0; i < n - 1; ++i)
     {
-        p1[i] = (d[i] - c[i] * p1[i + 1]) / b[i];
+        p1[n - 2 - i] = (d[n - 2 - i] - c[n - 2 - i] * p1[n - 2 - i + 1]) / b[n - 2 - i];
     }
 
     for(unsigned int i = 0; i < n - 1; ++i)
@@ -191,9 +191,9 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
 
     p1[n - 1] = d[n - 1] / b[n - 1];
 
-    for(unsigned int i = n - 2; i >= 0; --i)
+    for(unsigned int i = 0; i < n - 1; ++i)
     {
-        p1[i] = (d[i] - c[i] * p1[i + 1]) / b[i];
+        p1[n - 2 - i] = (d[n - 2 - i] - c[n - 2 - i] * p1[n - 2 - i + 1]) / b[n - 2 - i];
     }
 
     for(unsigned int i = 0; i < n - 1; ++i)
