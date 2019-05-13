@@ -22,6 +22,9 @@ class SplinesActivity : AppCompatActivity() {
     private var pointX: ArrayList<Int> = arrayListOf(-1)
     private var pointY: ArrayList<Int> = arrayListOf(-1)
 
+    private val circleRadius = 1.6F
+    private val splineLen = 500
+
     private var timeCounter = System.currentTimeMillis()
     private var timeDelay = 200
     private var drawn = false
@@ -75,6 +78,43 @@ class SplinesActivity : AppCompatActivity() {
         }
     }
 
+    private fun drawSpline(
+        xCoords: IntArray,
+        yCoords: IntArray,
+        p1x: DoubleArray,
+        p1y: DoubleArray,
+        p2x: DoubleArray,
+        p2y: DoubleArray) {
+        val paint = Paint()
+        val canvas = Canvas(bitmap)
+
+        paint.color = getColor(R.color.splinesColorSpline)
+        paint.strokeWidth = 2.5F
+
+        for(i in 0..(xCoords.size - 2)) {
+            for(j in 0..splineLen) {
+
+                val t: Double = j.toDouble() / splineLen.toDouble()
+
+                val a = (1 - t) * (1 - t) * (1 - t)
+                val b = (1 - t) * (1 - t) * t
+                val c = (1 - t) * t * t
+                val d = t * t * t
+
+                val x: Float = (a * xCoords[i] + b * 3 * p1x[i] + c * 3 * p2x[i] + d * xCoords[i + 1]).toFloat()
+                val y: Float = (a * yCoords[i] + b * 3 * p1y[i] + c * 3 * p2y[i] + d * yCoords[i + 1]).toFloat()
+
+                if (0 <= x && x < nSize &&
+                    0 <= y && y < mSize
+                ) {
+                    canvas.drawCircle(x, y, circleRadius, paint)
+                }
+            }
+        }
+
+        canvas.drawBitmap(bitmap, 0.0F, 0.0F, paint)
+    }
+
     fun processButtonPressing(
         view: View) {
         when(view.id) {
@@ -96,24 +136,7 @@ class SplinesActivity : AppCompatActivity() {
                 val p2x = calculateSplinesP2(xArray.size, xArray)
                 val p2y = calculateSplinesP2(yArray.size, yArray)
 
-                val path = Path()
-                val paint = Paint()
-                val canvas = Canvas(bitmap)
-
-                paint.color = getColor(R.color.splinesColorSpline)
-                paint.strokeWidth = 2.5F
-
-                path.reset()
-                for(i in 0..(xArray.size - 2)) {
-                    path.reset()
-                    path.moveTo(xArray[i].toFloat(), yArray[i].toFloat())
-                    path.cubicTo(p1x[i].toFloat(), p1y[i].toFloat(), p2x[i].toFloat(), p2y[i].toFloat(), xArray[i + 1].toFloat(), yArray[i + 1].toFloat())
-                    path.close()
-
-                    canvas.drawPath(path, paint)
-                }
-
-                canvas.drawBitmap(bitmap, 0.0F, 0.0F, paint)
+                drawSpline(xArray, yArray, p1x, p1y, p2x, p2y)
 
                 imageViewSplines.setImageBitmap(bitmap)
                 drawn = true
