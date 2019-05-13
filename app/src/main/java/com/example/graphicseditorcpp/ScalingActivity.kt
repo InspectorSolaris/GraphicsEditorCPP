@@ -8,10 +8,6 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_splines.*
 import android.graphics.BitmapFactory
 
-
-
-
-
 class ScalingActivity : AppCompatActivity() {
 
 

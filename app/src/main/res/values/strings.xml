@@ -42,6 +42,9 @@
     <string name="splines_activitu_button_drawsplines_text">Draw</string>
     <string name="splines_activity_button_drawsplines">Draw splines</string>
 
+    <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
+    <string name="scaling_activity_button_buttonscale_text">Scale</string>
+
     <string name="tools_rotate">Rotate</string>
     <string name="tools_filters">Filters</string>
     <string name="tools_scaling">Scaling</string>
