@@ -9,7 +9,6 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
-import java.io.File
 import android.os.Environment
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.content.FileProvider
@@ -18,6 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import java.io.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -111,8 +111,6 @@ class MainActivity : AppCompatActivity() {
         val galleryIntent = Intent(Intent.ACTION_PICK)
 
         galleryIntent.type = "image/*"
-        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
-            createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))))
 
         startActivityForResult(galleryIntent, idPickFromGallery)
     }
@@ -120,7 +118,6 @@ class MainActivity : AppCompatActivity() {
     private fun pickFromCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-        cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
             createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))))
 
@@ -158,6 +155,9 @@ class MainActivity : AppCompatActivity() {
                 else {
                     Toast.makeText(this, getString(R.string.main_activity_scalingbutton_nophoto), Toast.LENGTH_LONG).show()
                 }
+            }
+            R.id.buttonExport -> {
+                exportPicture()
             }
         }
     }
@@ -200,7 +200,7 @@ class MainActivity : AppCompatActivity() {
         data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val imageUri : Uri? = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
+        val imageUri = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
             data?.data
         }
         else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
@@ -217,7 +217,7 @@ class MainActivity : AppCompatActivity() {
             imageButtonPickFromCamera.isEnabled = false
 
             imageForProcessing.setImageURI(imageUri)
-            imageForProcessingPath = imageUri.toString()
+            imageForProcessingPath = imageUri.path
         }
         else {
             Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
@@ -250,5 +250,13 @@ class MainActivity : AppCompatActivity() {
         return newBitmap
     }
 
+    private fun exportPicture() {
+        MediaStore.Images.Media.insertImage(
+            contentResolver,
+            BitmapFactory.decodeStream(FileInputStream(imageForProcessingPath)),
+            getString(R.string.main_activity_imageforprocessingname),
+            getString(R.string.main_activity_imageforprocessingname)
+        )
+    }
 }
 
