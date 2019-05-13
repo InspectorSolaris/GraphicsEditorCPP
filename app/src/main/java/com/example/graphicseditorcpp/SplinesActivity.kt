@@ -101,16 +101,18 @@ class SplinesActivity : AppCompatActivity() {
                 val canvas = Canvas(bitmap)
 
                 paint.color = getColor(R.color.splinesColorSpline)
+                paint.strokeWidth = 2.5F
 
                 path.reset()
                 for(i in 0..(xArray.size - 2)) {
+                    path.reset()
                     path.moveTo(xArray[i].toFloat(), yArray[i].toFloat())
-                    path.quadTo(p1x[i].toFloat(), p1y[i].toFloat(), p2x[i].toFloat(), p2y[i].toFloat())
-                    path.moveTo(xArray[i + 1].toFloat(), yArray[i + 1].toFloat())
-                }
-                path.close()
+                    path.cubicTo(p1x[i].toFloat(), p1y[i].toFloat(), p2x[i].toFloat(), p2y[i].toFloat(), xArray[i + 1].toFloat(), yArray[i + 1].toFloat())
+                    path.close()
 
-                canvas.drawPath(path, paint)
+                    canvas.drawPath(path, paint)
+                }
+
                 canvas.drawBitmap(bitmap, 0.0F, 0.0F, paint)
 
                 imageViewSplines.setImageBitmap(bitmap)
