@@ -26,8 +26,7 @@ class ScalingActivity : AppCompatActivity() {
         view: View) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                val finishScalingIntent = Intent(this, MainActivity::class.java)
-                startActivity(finishScalingIntent)
+                finish()
             }
         }
     }
