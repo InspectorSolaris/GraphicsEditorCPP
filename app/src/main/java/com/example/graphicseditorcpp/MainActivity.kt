@@ -206,55 +206,31 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
         }
     }
-}
-fun grayscale(imageBitmap: Bitmap?):Bitmap? {
-    var newBitmap: Bitmap? = null
-    If (imageBitmap !=null) {
-        val width = imageBitmap.width
-        val height = imageBitmap.height
-        newBitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
 
-        val srcPixels = IntArray(width*height)
-        val newPixels = IntArray(width*height)
-        imageBitmap.getPixels(srcPixels,0,width,0,0,width,height)
+    fun grayscale(imageBitmap: Bitmap?):Bitmap? {
+        var newBitmap: Bitmap? = null
+        if(imageBitmap != null) {
+            val width = imageBitmap.width
+            val height = imageBitmap.height
+            newBitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
 
-        for (i in 0 until srcPixels.size) {
-            val p: Long = srcPixels[i].toLong()
-            val r: Double = ((p and 0x00FF0000) shr 16).toDouble()
-            val g: Double = ((p and 0x0000FF00) shr 8).toDouble()
-            val b: Double = (p and 0x000000FF).toDouble()
+            val srcPixels = IntArray(width*height)
+            val newPixels = IntArray(width*height)
+            imageBitmap.getPixels(srcPixels,0,width,0,0,width,height)
 
-            val color = (r+g+b)/3
-            val newPixel = 0xFF000000 or (color.toLong() shl 16) or (color.toLong() shl 8) or color.toLong()
+            for (i in 0 until srcPixels.size) {
+                val p: Long = srcPixels[i].toLong()
+                val r: Double = ((p and 0x00FF0000) shr 16).toDouble()
+                val g: Double = ((p and 0x0000FF00) shr 8).toDouble()
+                val b: Double = (p and 0x000000FF).toDouble()
+
+                val color = (r+g+b)/3
+                val newPixel = 0xFF000000 or (color.toLong() shl 16) or (color.toLong() shl 8) or color.toLong()
+            }
+            newBitmap.setPixels(newPixels,0,width,0,0,width, height)
         }
-        newBitmap.setPixels(newPixels,0,width,0,0,width, height)
+        return newBitmap
     }
-    return newBitmap
+
 }
-
-fun grayscale(imageBitmap: Bitmap?):Bitmap? {
-    var newBitmap: Bitmap? = null
-    If (imageBitmap !=null) {
-        val width = imageBitmap.width
-        val height = imageBitmap.height
-        newBitmap = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888)
-
-        val srcPixels = IntArray(width*height)
-        val newPixels = IntArray(width*height)
-        imageBitmap.getPixels(srcPixels,0,width,0,0,width,height)
-
-        for (i in 0 until srcPixels.size) {
-            val p: Long = srcPixels[i].toLong()
-            val r: Double = ((p and 0x00FF0000) shr 16).toDouble()
-            val g: Double = ((p and 0x0000FF00) shr 8).toDouble()
-            val b: Double = (p and 0x000000FF).toDouble()
-
-            val color = (r+g+b)/3
-            val newPixel = 0xFF000000 or (color.toLong() shl 16) or (color.toLong() shl 8) or color.toLong()
-        }
-        newBitmap.setPixels(newPixels,0,width,0,0,width, height)
-    }
-    return newBitmap
-}
-
 
