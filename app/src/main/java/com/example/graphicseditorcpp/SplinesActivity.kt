@@ -17,10 +17,10 @@ class SplinesActivity : AppCompatActivity() {
 
     private var nSize = 1200
     private var mSize = 1500
-    private val bitmap : Bitmap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
+    private val bitmap: Bitmap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
 
-    private var pointX : ArrayList<Int> = arrayListOf(-1)
-    private var pointY : ArrayList<Int> = arrayListOf(-1)
+    private var pointX: ArrayList<Int> = arrayListOf(-1)
+    private var pointY: ArrayList<Int> = arrayListOf(-1)
 
     private var timeCounter = System.currentTimeMillis()
     private var timeDelay = 200
@@ -29,12 +29,12 @@ class SplinesActivity : AppCompatActivity() {
     external fun calculateSplinesP1(
         pointsAmount: Int,
         pointsCoords: IntArray
-    ) : DoubleArray
+    ): DoubleArray
 
     external fun calculateSplinesP2(
         pointsAmount: Int,
         pointsCoords: IntArray
-    ) : DoubleArray
+    ): DoubleArray
 
     override fun onCreate(
         savedInstanceState: Bundle?) {

@@ -25,7 +25,7 @@ class AStarActivity : AppCompatActivity() {
     private var finishX = -1
     private var finishY = -1
 
-    private var path : IntArray = intArrayOf(-1)
+    private var path: IntArray = intArrayOf(-1)
 
     external fun algorithmAStar(
         bitmap: Bitmap,

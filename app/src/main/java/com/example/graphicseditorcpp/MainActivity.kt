@@ -17,8 +17,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Bitmap
-import java.io.ByteArrayOutputStream
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,8 +26,8 @@ class MainActivity : AppCompatActivity() {
     private val permissionGallery = 1
     private val permissionCamera = 2
 
-    private var imageForProcessingPath : String? = null
-    private var bitmap : Bitmap = Bitmap.createBitmap(800, 1000, Bitmap.Config.ARGB_8888)
+    private var imageForProcessingPath: String? = null
+    private var bitmap: Bitmap = Bitmap.createBitmap(800, 1000, Bitmap.Config.ARGB_8888)
 
     companion object {
         init {
@@ -197,7 +195,7 @@ class MainActivity : AppCompatActivity() {
             data?.data
         }
         else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-            Uri.fromFile(File(imageForProcessingPath))
+            Uri.parse(imageForProcessingPath)
         }
         else {
             null
@@ -218,7 +216,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun grayscale(imageBitmap: Bitmap?):Bitmap? {
+    fun grayscale(
+        imageBitmap: Bitmap?): Bitmap? {
         var newBitmap: Bitmap? = null
         if(imageBitmap != null) {
             val width = imageBitmap.width
