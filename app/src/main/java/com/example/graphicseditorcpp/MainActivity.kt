@@ -144,11 +144,13 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureScaling -> {
                 val scaleIntent = Intent(this, ScalingActivity::class.java)
-                val stream = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val temp : ByteArray = stream.toByteArray()
-                scaleIntent.putExtra("picture", temp)
-                startActivity(scaleIntent)
+                if (imageForProcessingPath != null) {
+                    scaleIntent.putExtra("picture", imageForProcessingPath)
+                    startActivity(scaleIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_scalingbutton_nophoto), Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

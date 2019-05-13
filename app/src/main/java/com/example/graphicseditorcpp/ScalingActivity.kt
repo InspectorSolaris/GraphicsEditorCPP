@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_splines.*
 import android.graphics.BitmapFactory
+import android.net.Uri
+import kotlinx.android.synthetic.main.activity_scaling.*
 
 class ScalingActivity : AppCompatActivity() {
 
@@ -13,9 +15,9 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        val byteArray = intent.getByteArrayExtra("picture")
-        val bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-        imageViewSplines.setImageBitmap(bmp)
+        val temp = intent.getStringExtra("picture")
+        val pic : Uri = Uri.parse(temp)
+        imageForTurning.setImageURI(pic)
     }
 
     fun processButtonPressing(

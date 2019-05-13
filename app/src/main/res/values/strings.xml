@@ -13,6 +13,7 @@
     <string name="main_activity_imagebutton_algorithmastar">AStar algorithm</string>
     <string name="main_activity_imagebutton_tools">Image processing tools</string>
     <string name="main_activity_button_export">Export processed image</string>
+    <string name="main_activity_scalingbutton_nophoto">Please choose the photo first</string>
 
     <string name="astar_activity_button_setstart_text">Start</string>
     <string name="astar_activity_button_setfinish_text">Finish</string>
