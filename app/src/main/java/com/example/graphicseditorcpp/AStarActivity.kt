@@ -12,8 +12,8 @@ import java.lang.Math.min
 class AStarActivity : AppCompatActivity() {
 
     private val pixelSize = 50
-    private val nSize = 1200
-    private val mSize = 1500
+    private val nSize = 1200 // aStarMap width
+    private val mSize = 1500 // aStarMap height
     private val aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
 
     private var empirics = 1    // 1 - manhattan, 2 - euclid

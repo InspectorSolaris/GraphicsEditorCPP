@@ -14,19 +14,18 @@ import kotlin.math.min
 class SplinesActivity : AppCompatActivity() {
 
     private val squareSize = 10
-
-    private var nSize = 1200
-    private var mSize = 1500
-    private val bitmap: Bitmap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
-
-    private var pointX: ArrayList<Int> = arrayListOf(-1)
-    private var pointY: ArrayList<Int> = arrayListOf(-1)
-
     private val circleRadius = 1.6F
-    private val splineLen = 500
+    private val splineLen = 2000
+
+    private var nSize = 1200 // bitmapForSplines width
+    private var mSize = 1500 // bitmapForSplines height
+    private val bitmapForSplines: Bitmap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
+
+    private var pointX: ArrayList<Int> = arrayListOf(-1) // Array of x coordinates of inputed points
+    private var pointY: ArrayList<Int> = arrayListOf(-1) // Array of y coordinates of inputed points
 
     private var timeCounter = System.currentTimeMillis()
-    private var timeDelay = 200
+    private var timeDelay = 100
     private var drawn = false
 
     external fun calculateSplinesP1(
@@ -44,9 +43,9 @@ class SplinesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splines)
 
-        bitmap.eraseColor(getColor(R.color.splinesColorBackground))
+        bitmapForSplines.eraseColor(getColor(R.color.splinesColorBackground))
 
-        imageViewSplines.setImageBitmap(bitmap)
+        imageViewSplines.setImageBitmap(bitmapForSplines)
         imageViewSplines.layoutParams.width = nSize
         imageViewSplines.layoutParams.height = mSize
 
@@ -58,7 +57,7 @@ class SplinesActivity : AppCompatActivity() {
                 pointY.add(motionEvent.y.toInt())
                 timeCounter = System.currentTimeMillis()
 
-                imageViewSplines.setImageBitmap(bitmap)
+                imageViewSplines.setImageBitmap(bitmapForSplines)
             }
 
             true
@@ -73,7 +72,7 @@ class SplinesActivity : AppCompatActivity() {
                 val px = max(min(x + i, nSize), 0)
                 val py = max(min(y + j, mSize), 0)
 
-                bitmap.setPixel(px, py, getColor(R.color.splinesColorPoint))
+                bitmapForSplines.setPixel(px, py, getColor(R.color.splinesColorPoint))
             }
         }
     }
@@ -86,10 +85,9 @@ class SplinesActivity : AppCompatActivity() {
         p2x: DoubleArray,
         p2y: DoubleArray) {
         val paint = Paint()
-        val canvas = Canvas(bitmap)
+        val canvas = Canvas(bitmapForSplines)
 
         paint.color = getColor(R.color.splinesColorSpline)
-        paint.strokeWidth = 2.5F
 
         for(i in 0..(xCoords.size - 2)) {
             for(j in 0..splineLen) {
@@ -112,7 +110,7 @@ class SplinesActivity : AppCompatActivity() {
             }
         }
 
-        canvas.drawBitmap(bitmap, 0.0F, 0.0F, paint)
+        canvas.drawBitmap(bitmapForSplines, 0.0F, 0.0F, paint)
     }
 
     fun processButtonPressing(
@@ -138,7 +136,7 @@ class SplinesActivity : AppCompatActivity() {
 
                 drawSpline(xArray, yArray, p1x, p1y, p2x, p2y)
 
-                imageViewSplines.setImageBitmap(bitmap)
+                imageViewSplines.setImageBitmap(bitmapForSplines)
                 drawn = true
             }
         }

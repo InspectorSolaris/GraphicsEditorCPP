@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +28,6 @@ class MainActivity : AppCompatActivity() {
     private val permissionCamera = 2
 
     private var imageForProcessingPath: String? = null
-    private var bitmap: Bitmap = Bitmap.createBitmap(800, 1000, Bitmap.Config.ARGB_8888)
 
     companion object {
         init {
@@ -35,9 +35,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun createImageFile() : File {
-        val imageFileName = getString(R.string.main_activity_imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = getString(R.string.main_activity_imageforprocessingext)
+    private fun createImageFile(
+        name: String,
+        ext: String
+    ): File {
+        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFileExt = ext
         val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         return File.createTempFile(
@@ -106,15 +109,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun pickFromGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK)
+
         galleryIntent.type = "image/*"
-        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
+        galleryIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
+            createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))))
+
         startActivityForResult(galleryIntent, idPickFromGallery)
     }
 
     private fun pickFromCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
         cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider", createImageFile()))
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
+            createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))))
+
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
 
@@ -208,7 +217,6 @@ class MainActivity : AppCompatActivity() {
             imageButtonPickFromCamera.isEnabled = false
 
             imageForProcessing.setImageURI(imageUri)
-            bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             imageForProcessingPath = imageUri.toString()
         }
         else {
