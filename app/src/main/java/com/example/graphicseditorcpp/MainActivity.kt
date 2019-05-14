@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionCamera = 2
 
     private var imageForProcessingPath: String? = null
+    private var imageForProcessingString: String? = null
 
     companion object {
         init {
@@ -149,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             R.id.buttonPictureScaling -> {
                 val scaleIntent = Intent(this, ScalingActivity::class.java)
                 if (imageForProcessingPath != null) {
-                    scaleIntent.putExtra("picture", imageForProcessingPath)
+                    scaleIntent.putExtra("picture", imageForProcessingString)
                     startActivity(scaleIntent)
                 }
                 else {
@@ -218,6 +219,7 @@ class MainActivity : AppCompatActivity() {
 
             imageForProcessing.setImageURI(imageUri)
             imageForProcessingPath = imageUri.path
+            imageForProcessingString = imageUri.toString()
         }
         else {
             Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
