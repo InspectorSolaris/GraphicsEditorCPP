@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_scaling.*
 
 class ScalingActivity : AppCompatActivity() {
 
-    var imageForTurningPath: String? = null
+    var imageForScalingPath: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -18,12 +18,12 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        imageForTurningPath = intent.getStringExtra("image")
-        imageForTurning.setImageURI(Uri.parse(imageForTurningPath))
+        imageForScalingPath = intent.getStringExtra("image")
+        imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
     }
 
     fun scaling(n : Int) {
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForTurningPath))
+        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
         val width = imageBitmap.width
         val height = imageBitmap.height
         val startPixels = IntArray(width*height)
