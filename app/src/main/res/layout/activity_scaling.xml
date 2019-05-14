@@ -56,7 +56,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/buttonScale"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="16dp"
             android:max="7"
             android:progress="4"
             tools:layout_editor_absoluteY="575dp" tools:layout_editor_absoluteX="61dp"

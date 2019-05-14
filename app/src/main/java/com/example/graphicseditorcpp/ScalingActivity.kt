@@ -23,7 +23,7 @@ class ScalingActivity : AppCompatActivity() {
         imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
     }
 
-    fun doSmaller(n : Int) {
+    private fun doSmaller(n : Int) {
         val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
         val width = imageBitmap.width
         val height = imageBitmap.height
@@ -31,7 +31,6 @@ class ScalingActivity : AppCompatActivity() {
         val endPixels = IntArray( (width*height/(n*n)))
         imageBitmap.getPixels(startPixels, 0, width, 0 , 0, width, height)
         var k = 0
-        val newBitmap : Bitmap = Bitmap.createBitmap(width/n, height/n, Bitmap.Config.ARGB_8888)
         for (i in 0 until height-n+1 step n) {
             for (j in 0 until width-n+1 step n) {
                 val red = (Color.red(startPixels[i*width+j]) + Color.red(startPixels[(i+1)*width+j]) +
@@ -46,14 +45,20 @@ class ScalingActivity : AppCompatActivity() {
                 k += 1
             }
         }
+        val newBitmap : Bitmap = Bitmap.createBitmap(width/n, height/n, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(endPixels, 0, width/n, 0, 0, width/n, height/n)
         imageForTurning.setImageBitmap(newBitmap)
     }
 
-    fun doNothing() {
+    private fun doNothing() {
         imageForScalingPath = intent.getStringExtra("image")
         imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
     }
+
+    private fun doBigger(n : Int) {
+
+    }
+
     fun processButtonPressing(
         view: View
     ) {
@@ -67,7 +72,10 @@ class ScalingActivity : AppCompatActivity() {
                     1 -> doSmaller(16)
                     2 -> doSmaller(8)
                     3 -> doSmaller(4)
-                    4, 5, 6, 7 -> doNothing()
+                    4 -> doNothing()
+                    5 -> doBigger(2)
+                    6 -> doBigger(4)
+                    7 -> doBigger(8)
                 }
 
             }
