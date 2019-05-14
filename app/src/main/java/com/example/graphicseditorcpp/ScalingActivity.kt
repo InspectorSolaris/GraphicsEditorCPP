@@ -1,6 +1,7 @@
 package com.example.graphicseditorcpp
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,7 +23,7 @@ class ScalingActivity : AppCompatActivity() {
         imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
     }
 
-    fun scaling(n : Int) {
+    fun doSmaller(n : Int) {
         val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
         val width = imageBitmap.width
         val height = imageBitmap.height
@@ -33,8 +34,15 @@ class ScalingActivity : AppCompatActivity() {
         val newBitmap : Bitmap = Bitmap.createBitmap(width/n, height/n, Bitmap.Config.ARGB_8888)
         for (i in 0 until height-n+1 step n) {
             for (j in 0 until width-n+1 step n) {
-                val v1 = startPixels[i*width+j]
-                endPixels[k] = v1
+                val red = (Color.red(startPixels[i*width+j]) + Color.red(startPixels[(i+1)*width+j]) +
+                        Color.red(startPixels[i*width+j+1]) + Color.red(startPixels[(i+1)*width+j+1])) / 4
+                val green = (Color.green(startPixels[i*width+j]) + Color.green(startPixels[(i+1)*width+j]) +
+                        Color.green(startPixels[i*width+j+1]) + Color.green(startPixels[(i+1)*width+j+1])) / 4
+                val blue = (Color.blue(startPixels[i*width+j]) + Color.blue(startPixels[(i+1)*width+j]) +
+                        Color.blue(startPixels[i*width+j+1]) + Color.blue(startPixels[(i+1)*width+j+1])) / 4
+                val alpha = (Color.alpha(startPixels[i*width+j]) + Color.alpha(startPixels[(i+1)*width+j]) +
+                        Color.alpha(startPixels[i*width+j+1]) + Color.alpha(startPixels[(i+1)*width+j+1])) / 4
+                endPixels[k] = Color.argb(alpha, red, green, blue)
                 k += 1
             }
         }
@@ -49,7 +57,7 @@ class ScalingActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonScale -> {
-                scaling(16)
+                doSmaller(16)
             }
         }
     }

@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
-            android:layout_marginBottom="64dp" app:layout_constraintBottom_toTopOf="@+id/buttonScale"
+            android:layout_marginBottom="32dp" app:layout_constraintBottom_toTopOf="@+id/seekBarScaling"
             app:layout_constraintHorizontal_bias="0.6"
             android:contentDescription="@string/scaling_activity_imageview_imageforturning"/>
     <Button
@@ -52,10 +52,13 @@
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/imageForTurning"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:max="10"
-            android:progress="7"
+            app:layout_constraintBottom_toTopOf="@+id/buttonScale"
+            android:layout_marginBottom="32dp"
+            android:max="7"
+            android:progress="4"
             tools:layout_editor_absoluteY="575dp" tools:layout_editor_absoluteX="61dp"
             android:id="@+id/seekBarScaling"/>
 
