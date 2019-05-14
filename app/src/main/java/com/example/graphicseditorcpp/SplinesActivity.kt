@@ -39,7 +39,8 @@ class SplinesActivity : AppCompatActivity() {
     ): DoubleArray
 
     override fun onCreate(
-        savedInstanceState: Bundle?) {
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splines)
 
@@ -66,7 +67,8 @@ class SplinesActivity : AppCompatActivity() {
 
     private fun drawSquare(
         x: Int,
-        y: Int) {
+        y: Int
+    ) {
         for(i in (-squareSize / 2)..(+squareSize / 2)) {
             for(j in (-squareSize / 2)..(+squareSize / 2)) {
                 val px = max(min(x + i, nSize), 0)
@@ -83,7 +85,8 @@ class SplinesActivity : AppCompatActivity() {
         p1x: DoubleArray,
         p1y: DoubleArray,
         p2x: DoubleArray,
-        p2y: DoubleArray) {
+        p2y: DoubleArray
+    ) {
         val paint = Paint()
         val canvas = Canvas(bitmapForSplines)
 
@@ -114,7 +117,8 @@ class SplinesActivity : AppCompatActivity() {
     }
 
     fun processButtonPressing(
-        view: View) {
+        view: View
+    ) {
         when(view.id) {
             R.id.imageButtonBack -> {
                 finish()

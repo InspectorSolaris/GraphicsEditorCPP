@@ -21,8 +21,13 @@
 #include <tuple>
 #include <climits>
 
-extern "C" JNIEXPORT void JNICALL
-pictureTurning(); // Asya
+extern "C" JNIEXPORT jintArray JNICALL
+Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
+        JNIEnv *env,
+        jobject obj,
+        jint n,
+        jint m,
+        jdouble angle); // Herman
 
 // parameters: original pic, ...
 // return: color corrected picture
@@ -34,7 +39,7 @@ pictureColorcorrection(); // Dasha
 // return: scaled on specified ratio picture
 
 extern "C" JNIEXPORT void JNICALL
-pictureScaling();
+pictureScaling(); // Asya
 
 // parameters: original pic, ...
 // return: ...

@@ -11,7 +11,8 @@ class ScalingActivity : AppCompatActivity() {
     var imageForTurningPath: String? = null
 
     override fun onCreate(
-        savedInstanceState: Bundle?) {
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
@@ -20,7 +21,8 @@ class ScalingActivity : AppCompatActivity() {
     }
 
     fun processButtonPressing(
-        view: View) {
+        view: View
+    ) {
         when (view.id) {
             R.id.imageButtonBack -> {
                 finish()

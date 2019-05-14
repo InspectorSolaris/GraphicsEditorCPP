@@ -8,8 +8,82 @@
 // parameters: original pic, angle of rotation
 // return: turned on specified angle picture
 
-extern "C" JNIEXPORT void JNICALL
-pictureTurning();
+std::pair<int, int> getXY(
+        unsigned int n,
+        unsigned int m,
+        unsigned int i,
+        unsigned int j)
+{
+    int x = j - m / 2;
+    int y = n / 2 - i;
+
+    return {x, y};
+}
+
+std::pair<int, int> getOrigin(
+        std::pair<int, int> p,
+        double a)
+{
+    double x = p.first * cos(a) - p.second * sin(a);
+    double y = p.first * sin(a) + p.second * cos(a);
+
+    return {(int)x, (int)y};
+}
+
+extern "C" JNIEXPORT jintArray JNICALL
+Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
+        JNIEnv *env,
+        jobject obj,
+        jint n,
+        jint m,
+        jdouble angle)
+{
+    using namespace std;
+
+    unsigned int scaled_n = 4 * (unsigned int)n;
+    unsigned int scaled_m = 4 * (unsigned int)m;
+
+    vector<vector<unsigned int>> img(scaled_n, vector<unsigned int>(scaled_m));
+    vector<vector<unsigned int>> img_turned(n, vector<unsigned int>(m));
+
+    for(unsigned int i = 0; i < scaled_n; ++i)
+    {
+        for(unsigned int j = 0; j < scaled_m; ++j)
+        {
+            img[i][j] = (i / 4) * scaled_m + (j / 4) + 1;
+        }
+    }
+
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        for(unsigned int j = 0; j < m; ++j)
+        {
+            pair<int, int> point = getXY(scaled_n, scaled_m, i, j);
+            pair<int, int> origin = getOrigin(point, angle);
+
+            if(-scaled_m / 2 <= origin.first && origin.first < scaled_m / 2 &&
+                -scaled_n / 2 <= origin.second && origin.second < scaled_n / 2)
+            {
+                img_turned[i][j] = img[origin.first + scaled_m / 2][origin.second + scaled_n / 2];
+            }
+        }
+    }
+
+    jint buf[n * m];
+
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        for(unsigned int j = 0; j < m; ++j)
+        {
+            buf[i * m + j] = img_turned[i][j]
+        }
+    }
+
+    jintArray result = env->NewIntArray(n * m);
+    env->SetIntArrayRegion(result, 0, n * m, buf);
+
+    return result;
+}
 
 // parameters: original pic, ...
 // return: color corrected picture
