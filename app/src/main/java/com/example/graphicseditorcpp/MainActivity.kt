@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         ext: String
     ): File {
         val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = ext
+        val imageFileExt = ".$ext"
         val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         return File.createTempFile(
@@ -135,6 +135,11 @@ class MainActivity : AppCompatActivity() {
             R.id.imageButtonPickFromCamera -> {
                 tryPickFromCamera()
             }
+            R.id.imageButtonTools -> {
+                val dialog = BottomSheetDialog(this)
+                dialog.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
+                dialog.show()
+            }
             R.id.imageButtonAlgorithmAStar -> {
                 val aStarIntent = Intent(this, AStarActivity::class.java)
                 startActivity(aStarIntent)
@@ -143,19 +148,24 @@ class MainActivity : AppCompatActivity() {
                 val splinesIntent = Intent(this, SplinesActivity::class.java)
                 startActivity(splinesIntent)
             }
-            R.id.imageButtonTools -> {
-                val dialog = BottomSheetDialog(this)
-                dialog.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
-                dialog.show()
-            }
             R.id.buttonPictureScaling -> {
                 val scaleIntent = Intent(this, ScalingActivity::class.java)
                 if (imageForProcessingPath != null) {
-                    scaleIntent.putExtra("picture", imageForProcessingPath)
+                    scaleIntent.putExtra("image", imageForProcessingPath)
                     startActivity(scaleIntent)
                 }
                 else {
-                    Toast.makeText(this, getString(R.string.main_activity_scalingbutton_nophoto), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureTurning -> {
+                val turnIntent = Intent(this, TurningActivity::class.java)
+                if (imageForProcessingPath != null) {
+                    turnIntent.putExtra("image", imageForProcessingPath)
+                    startActivity(turnIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
                 }
             }
             R.id.buttonExport -> {

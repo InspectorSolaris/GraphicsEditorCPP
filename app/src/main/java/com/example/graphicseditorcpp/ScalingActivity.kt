@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.View
 import android.net.Uri
 import kotlinx.android.synthetic.main.activity_scaling.*
+import kotlinx.android.synthetic.main.activity_scaling.imageForTurning
+import kotlinx.android.synthetic.main.activity_turning.*
 
 class ScalingActivity : AppCompatActivity() {
 
-    var imageForTurningPath: String? = null
+    var imageForScalingPath: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -16,8 +18,8 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        imageForTurningPath = intent.getStringExtra("picture")
-        imageForTurning.setImageURI(Uri.parse(imageForTurningPath))
+        imageForScalingPath = intent.getStringExtra("image")
+        imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
     }
 
     fun processButtonPressing(
