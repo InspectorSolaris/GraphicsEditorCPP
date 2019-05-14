@@ -12,7 +12,7 @@ import java.io.FileInputStream
 class TurningActivity : AppCompatActivity() {
 
     var currentAngle = 0
-    var imageForTurningPath: String? = null
+    var imageForTurningString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -20,8 +20,8 @@ class TurningActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_turning)
 
-        imageForTurningPath = intent.getStringExtra("image")
-        imageForTurning.setImageURI(Uri.parse(imageForTurningPath))
+        imageForTurningString = intent.getStringExtra("image")
+        imageForTurning.setImageURI(Uri.parse(imageForTurningString))
 
         textViewAngle.text = currentAngle.toString()
         seekBarAngle.progress = currentAngle + 180
@@ -51,7 +51,7 @@ class TurningActivity : AppCompatActivity() {
     }
 
     private fun turnImage(){
-        val imageFileStream = FileInputStream(imageForTurningPath)
+        val imageFileStream = FileInputStream(imageForTurningString)
 
         val imageInfo = BitmapFactory.Options()
         imageInfo.inJustDecodeBounds = true
