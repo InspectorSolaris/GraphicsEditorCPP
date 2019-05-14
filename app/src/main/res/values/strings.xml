@@ -2,7 +2,7 @@
     <string name="app_name">GraphicsEditorCPP</string>
 
     <string name="main_activity_imageforprocessingname">processedImg_</string>
-    <string name="main_activity_imageforprocessingext">.png</string>
+    <string name="main_activity_imageforprocessingext">png</string>
 
     <string name="main_activity_imagebutton_picknew">Pick new image</string>
     <string name="main_activity_imageview_imageforprocessing">Image for processing</string>
@@ -11,7 +11,7 @@
     <string name="main_activity_imagebutton_algorithmastar">AStar algorithm</string>
     <string name="main_activity_imagebutton_tools">Image processing tools</string>
     <string name="main_activity_button_export">Export processed image</string>
-    <string name="main_activity_scalingbutton_nophoto">Please choose the photo first</string>
+    <string name="main_activity_nophoto">Please choose the photo first</string>
 
     <string name="astar_activity_button_setstart_text">Start</string>
     <string name="astar_activity_button_setfinish_text">Finish</string>
@@ -42,7 +42,11 @@
     <string name="splines_activity_button_drawsplines">Draw splines</string>
 
     <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
-    <string name="scaling_activity_button_buttonscale_text">Scale</string>
+    <string name="scaling_activity_button_scale_text">Scale</string>
+
+    <string name="turning_activity_button_turn_text">Turn</string>
+    <string name="turning_activity_button_clear_text">Clear</string>
+    <string name="turning_activity_textview_angle_text">0</string>
 
     <string name="tools_rotate">Rotate</string>
     <string name="tools_filters">Filters</string>
@@ -58,5 +62,6 @@
     <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
     <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
     <string name="error_main_image_pick">Error: Image picking fail</string>
+    <string name="turning_activity_imageview_imageforturning">Image for turning</string>
 
 </resources>

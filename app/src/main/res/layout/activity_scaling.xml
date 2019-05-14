@@ -40,7 +40,7 @@
             app:layout_constraintHorizontal_bias="0.6"
             android:contentDescription="@string/scaling_activity_imageview_imageforturning"/>
     <Button
-            android:text="@string/scaling_activity_button_buttonscale_text"
+            android:text="@string/scaling_activity_button_scale_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/buttonScale"
             android:onClick="processButtonPressing"
