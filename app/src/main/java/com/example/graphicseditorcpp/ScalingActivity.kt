@@ -18,10 +18,8 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        imageForTurningPath = intent.getStringExtra("picture")
+        imageForTurningPath = intent.getStringExtra("image")
         imageForTurning.setImageURI(Uri.parse(imageForTurningPath))
-
-
     }
 
     fun scaling(n : Int) {
