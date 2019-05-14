@@ -49,6 +49,11 @@ class ScalingActivity : AppCompatActivity() {
         newBitmap.setPixels(endPixels, 0, width/n, 0, 0, width/n, height/n)
         imageForTurning.setImageBitmap(newBitmap)
     }
+
+    fun doNothing() {
+        imageForScalingPath = intent.getStringExtra("image")
+        imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
+    }
     fun processButtonPressing(
         view: View
     ) {
@@ -57,7 +62,14 @@ class ScalingActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonScale -> {
-                doSmaller(16)
+                when (seekBarScaling.progress) {
+                    0 -> doSmaller(32)
+                    1 -> doSmaller(16)
+                    2 -> doSmaller(8)
+                    3 -> doSmaller(4)
+                    4, 5, 6, 7 -> doNothing()
+                }
+
             }
         }
     }
