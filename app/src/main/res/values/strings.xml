@@ -4,9 +4,7 @@
     <string name="main_activity_imageforprocessingname">processedImg_</string>
     <string name="main_activity_imageforprocessingext">.png</string>
 
-    <string name="main_activity_imagebutton_redu">Redo changes</string>
     <string name="main_activity_imagebutton_picknew">Pick new image</string>
-    <string name="main_activity_imagebutton_undo">Undo changes</string>
     <string name="main_activity_imageview_imageforprocessing">Image for processing</string>
     <string name="main_activity_imagebutton_pickfromgallery">Pick image from gallery</string>
     <string name="main_activity_imagebutton_pickfromcamera">Pick image from camera</string>

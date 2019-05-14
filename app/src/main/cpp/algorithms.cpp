@@ -2,64 +2,119 @@
 // Created by herman on 26.04.19.
 //
 
-
 #include "algorithms.h"
 
-// parameters: original pic, angle of rotation
-// return: turned on specified angle picture
+// image turning
 
-extern "C" JNIEXPORT void JNICALL
-pictureTurning();
+std::pair<int, int> getXY(
+        unsigned int n,
+        unsigned int m,
+        unsigned int i,
+        unsigned int j)
+{
+    int x = j - m / 2;
+    int y = n / 2 - i;
 
-// parameters: original pic, ...
-// return: color corrected picture
+    return {x, y};
+}
+
+std::pair<int, int> getOrigin(
+        std::pair<int, int> p,
+        double a)
+{
+    double x = p.first * cos(a) - p.second * sin(a);
+    double y = p.first * sin(a) + p.second * cos(a);
+
+    return {(int)x, (int)y};
+}
+
+extern "C" JNIEXPORT jintArray JNICALL
+Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
+        JNIEnv *env,
+        jobject,
+        jint n,
+        jint m,
+        jdouble angle)
+{
+    using namespace std;
+
+    unsigned int scaled_n = 4 * (unsigned int)n;
+    unsigned int scaled_m = 4 * (unsigned int)m;
+
+    vector<vector<unsigned int>> img(scaled_n, vector<unsigned int>(scaled_m));
+
+    for(unsigned int i = 0; i < scaled_n; ++i)
+    {
+        for(unsigned int j = 0; j < scaled_m; ++j)
+        {
+            img[i][j] = (i / 4) * scaled_m + (j / 4) + 1;
+        }
+    }
+
+    jint buf[n * m];
+
+    for(unsigned int i = 0; i < n; ++i)
+    {
+        for(unsigned int j = 0; j < m; ++j)
+        {
+            pair<int, int> point = getXY(scaled_n, scaled_m, i, j);
+            pair<int, int> origin = getOrigin(point, angle);
+
+            if(-scaled_m / 2 <= origin.first && origin.first < scaled_m / 2 &&
+                -scaled_n / 2 <= origin.second && origin.second < scaled_n / 2)
+            {
+                buf[i * m + j] = img[origin.first + scaled_m / 2][origin.second + scaled_n / 2];
+            }
+        }
+    }
+
+    jintArray result = env->NewIntArray(n * m);
+    env->SetIntArrayRegion(result, 0, n * m, buf);
+
+    return result;
+}
+
+// color correction
 
 extern "C" JNIEXPORT void JNICALL
 pictureColorcorrection();
 
-// parameters: original pic, scale ratio
-// return: scaled on specified ratio picture
+// image scaling
 
 extern "C" JNIEXPORT void JNICALL
 pictureScaling();
 
-// parameters: original pic, ...
-// return: ...
+// segmentation
 
 extern "C" JNIEXPORT void JNICALL
 pictureSegmentation();
 
-// parameters: original pic, retouching parameters
-// return: retouched pic
+// retouching
 
 extern "C" JNIEXPORT void JNICALL
 pictureRetouching();
 
-// parameters: original pic, retouching parameters
-// return: masked pic
+// unsharp masking
 
 extern "C" JNIEXPORT void JNICALL
 pictureUnsharpMasking();
 
-// parameters: original pic, bilinear algorithm parameters
-// return: processed pic
+// bilinear filtration
 
 extern "C" JNIEXPORT void JNICALL
 pictureBilinearFiltration();
 
-// parameters: original pic, trilinear algorithm parameters
-// return: processed pic
+// trilinear filtration
 
 extern "C" JNIEXPORT void JNICALL
 pictureTrilinearFiltration();
 
-// parameters: original pic (clear pic), positions of points
-// return: interpolated with splines broken line on original pic
+// splines
 
 extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
         JNIEnv *env,
-        jobject obj,
+        jobject,
         jint n,
         jintArray coords) {
     // algorithm from https://www.particleincell.com/2012/bezier-splines/
@@ -136,7 +191,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
 extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
         JNIEnv *env,
-        jobject obj,
+        jobject,
         jint n,
         jintArray coords) {
     // algorithm from https://www.particleincell.com/2012/bezier-splines/
@@ -156,9 +211,9 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
     }
 
     --n;
-    vector<double> a(n);
-    vector<double> b(n);
-    vector<double> c(n);
+    vector<double> a((unsigned int)n);
+    vector<double> b((unsigned int)n);
+    vector<double> c((unsigned int)n);
 
     a[0] = 0;
     b[0] = 2;
@@ -210,8 +265,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
     return result;
 }
 
-// parameters: map, start position, finish position
-// return: shortest way by A-Star
+// astar
 
 inline double distanceEmp(const int a[2], const int b[2], const int emp)
 {
@@ -243,7 +297,7 @@ inline int arrInd(const int & m, const std::pair<int, int> & x)
 extern "C" JNIEXPORT jintArray JNICALL
 Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
-        jobject obj,
+        jobject,
         jobject bitmap,
         jint start_x,
         jint start_y,
