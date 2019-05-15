@@ -56,7 +56,29 @@ class ScalingActivity : AppCompatActivity() {
     }
 
     private fun doBigger(n : Int) {
-
+        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
+        var width = imageBitmap.width
+        var height = imageBitmap.height
+        val startPixels = IntArray(width*height)
+        val endPixels = IntArray( (width*height*(n*n)))
+        imageBitmap.getPixels(startPixels, 0, width, 0 , 0, width, height)
+        width *= n
+        height *= n
+        val m : Int = width / n
+        var k = 0
+        while (k < startPixels.size) {
+            val forInt : Int = k / m
+            val firstIt = width * n * forInt + (k % m) * n
+            for (i in 0 until n) {
+                for (j in 0 until n) {
+                    endPixels[i*width+j+firstIt] = startPixels[k]
+                }
+            }
+            k += 1
+        }
+        val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        newBitmap.setPixels(endPixels, 0, width, 0, 0, width, height)
+        imageForTurning.setImageBitmap(newBitmap)
     }
 
     fun processButtonPressing(
@@ -68,10 +90,10 @@ class ScalingActivity : AppCompatActivity() {
             }
             R.id.buttonScale -> {
                 when (seekBarScaling.progress) {
-                    0 -> doSmaller(32)
-                    1 -> doSmaller(16)
-                    2 -> doSmaller(8)
-                    3 -> doSmaller(4)
+                    0 -> doSmaller(16)
+                    1 -> doSmaller(8)
+                    2 -> doSmaller(4)
+                    3 -> doSmaller(2)
                     4 -> doNothing()
                     5 -> doBigger(2)
                     6 -> doBigger(4)

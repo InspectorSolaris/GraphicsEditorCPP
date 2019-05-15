@@ -172,6 +172,16 @@ class MainActivity : AppCompatActivity() {
             R.id.buttonExport -> {
                 exportPicture()
             }
+            R.id.buttonPictureColorCorrection -> {
+                val filterIntent = Intent(this, FiltersActivity::class.java)
+                if (imageForProcessingPath != null) {
+                    filterIntent.putExtra("image", imageForProcessingString)
+                    startActivity(filterIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
         }
     }
 
