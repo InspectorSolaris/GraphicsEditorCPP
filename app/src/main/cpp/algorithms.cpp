@@ -51,6 +51,17 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
         }
     }
 
+    pair<double, double> corner[4];
+    for(unsigned int i = 0; i < n; i += n)
+    {
+        for(unsigned int j = 0; j < m; j += m)
+        {
+            pair<int, int> xy = getXY((unsigned int)n, (unsigned int)m, i, j);
+            corner[i].first = xy.first * cos(-angle) - xy.second * sin(-angle);
+            corner[i].second = xy.first * sin(-angle) + xy.second * cos(-angle);
+        }
+    }
+
     jint buf[n * m];
 
     for(unsigned int i = 0; i < n; ++i)

@@ -22,9 +22,6 @@ class TurningActivity : AppCompatActivity() {
 
         imageForTurningString = intent.getStringExtra("image")
         imageForTurning.setImageURI(Uri.parse(imageForTurningString))
-
-        textViewAngle.text = currentAngle.toString()
-        seekBarAngle.progress = currentAngle + 180
     }
 
     external fun imageTurning(
