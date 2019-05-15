@@ -20,6 +20,8 @@
             android:supportsRtl="true"
             android:theme="@style/DarkAppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".FiltersActivity">
+        </activity>
         <activity android:name=".TurningActivity">
         </activity>
         <activity android:name=".ScalingActivity">
