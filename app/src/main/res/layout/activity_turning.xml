@@ -45,14 +45,14 @@
             android:id="@+id/seekBarAngle" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:max="360" app:layout_constraintHorizontal_bias="1.0" android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout2" android:progress="180"/>
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout" android:progress="180"/>
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.0" android:id="@+id/linearLayout2"
+            app:layout_constraintHorizontal_bias="0.0" android:id="@+id/linearLayout"
             app:layout_constraintBottom_toBottomOf="parent">
         <Button
                 android:text="@string/turning_activity_button_turn_text"

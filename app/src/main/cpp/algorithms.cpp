@@ -38,8 +38,9 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
 {
     using namespace std;
 
-    unsigned int scaled_n = 4 * (unsigned int)n;
-    unsigned int scaled_m = 4 * (unsigned int)m;
+    const unsigned int scaling = 4;
+    const unsigned int scaled_n = scaling * (unsigned int)n;
+    const unsigned int scaled_m = scaling * (unsigned int)m;
 
     vector<vector<unsigned int>> img(scaled_n, vector<unsigned int>(scaled_m));
 
@@ -47,7 +48,7 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
     {
         for(unsigned int j = 0; j < scaled_m; ++j)
         {
-            img[i][j] = (i / 4) * scaled_m + (j / 4) + 1;
+            img[i][j] = (i / scaling) * m + (j / scaling) + 1;
         }
     }
 
@@ -57,30 +58,47 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
         for(unsigned int j = 0; j < m; j += m)
         {
             pair<int, int> xy = getXY((unsigned int)n, (unsigned int)m, i, j);
-            corner[i].first = xy.first * cos(-angle) - xy.second * sin(-angle);
-            corner[i].second = xy.first * sin(-angle) + xy.second * cos(-angle);
+            corner[i].first = xy.first * cos(angle) + xy.second * sin(angle);
+            corner[i].second = xy.second * cos(angle) - xy.first * sin(angle);
         }
     }
 
-    jint buf[n * m];
+    pair<int, int> x_bounds = {INT_MAX, INT_MIN};
+    pair<int, int> y_bounds = {INT_MAX, INT_MIN};
 
-    for(unsigned int i = 0; i < n; ++i)
+    for(unsigned int i = 0; i < 4; ++i)
     {
-        for(unsigned int j = 0; j < m; ++j)
+        x_bounds.first = min(x_bounds.first, (int)floor(corner[i].first));
+        x_bounds.second = max(x_bounds.second, (int)ceil(corner[i].first));
+        y_bounds.first = min(y_bounds.first, (int)floor(corner[i].second));
+        y_bounds.second = max(y_bounds.second, (int)ceil(corner[i].second));
+    }
+
+    auto res_n = (unsigned int)(y_bounds.second - y_bounds.first);
+    auto res_m = (unsigned int)(x_bounds.second - x_bounds.first);
+
+    jint res_size = res_n * res_m + 2;
+    jint buf[res_size];
+    buf[0] = res_n;
+    buf[1] = res_m;
+
+    for(unsigned int i = 0; i < res_n; ++i)
+    {
+        for(unsigned int j = 0; j < res_m; ++j)
         {
-            pair<int, int> point = getXY(scaled_n, scaled_m, i, j);
+            pair<int, int> point = getXY(scaled_n, scaled_m, scaling * i, scaling * j);
             pair<int, int> origin = getOrigin(point, angle);
 
             if(-scaled_m / 2 <= origin.first && origin.first < scaled_m / 2 &&
                 -scaled_n / 2 <= origin.second && origin.second < scaled_n / 2)
             {
-                buf[i * m + j] = img[origin.first + scaled_m / 2][origin.second + scaled_n / 2];
+                buf[i * m + j + 2] = img[origin.first + scaled_m / 2][origin.second + scaled_n / 2];
             }
         }
     }
 
-    jintArray result = env->NewIntArray(n * m);
-    env->SetIntArrayRegion(result, 0, n * m, buf);
+    jintArray result = env->NewIntArray(res_size);
+    env->SetIntArrayRegion(result, 0, res_size, buf);
 
     return result;
 }

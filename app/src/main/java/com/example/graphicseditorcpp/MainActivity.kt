@@ -15,9 +15,11 @@ import android.support.v4.content.FileProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import java.io.*
+import android.os.ParcelFileDescriptor
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private val permissionGallery = 1
     private val permissionCamera = 2
 
-    private var imageForProcessingPath: String? = null
     private var imageForProcessingString: String? = null
 
     companion object {
@@ -49,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             imageFileExt,
             imageFileDir
         ).apply {
-            imageForProcessingPath = absolutePath
+            imageForProcessingString = absolutePath
         }
     }
 
@@ -82,13 +83,11 @@ class MainActivity : AppCompatActivity() {
     private fun tryPickFromGallery() {
         if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
             checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
             requestPermissions(
                 arrayOf(
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ), permissionGallery)
-
         } else {
             pickFromGallery()
         }
@@ -97,13 +96,11 @@ class MainActivity : AppCompatActivity() {
     private fun tryPickFromCamera() {
         if (checkSelfPermission(android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED ||
             checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-
             requestPermissions(
                 arrayOf(
                     android.Manifest.permission.CAMERA,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ), permissionCamera)
-
         } else {
             pickFromCamera()
         }
@@ -151,7 +148,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureScaling -> {
                 val scaleIntent = Intent(this, ScalingActivity::class.java)
-                if (imageForProcessingPath != null) {
+                if (imageForProcessingString != null) {
                     scaleIntent.putExtra("image", imageForProcessingString)
                     startActivity(scaleIntent)
                 }
@@ -161,9 +158,19 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureTurning -> {
                 val turnIntent = Intent(this, TurningActivity::class.java)
-                if (imageForProcessingPath != null) {
-                    turnIntent.putExtra("image", imageForProcessingPath)
+                if (imageForProcessingString != null) {
+                    turnIntent.putExtra("image", imageForProcessingString)
                     startActivity(turnIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureColorCorrection -> {
+                val filterIntent = Intent(this, FiltersActivity::class.java)
+                if (imageForProcessingString != null) {
+                    filterIntent.putExtra("image", imageForProcessingString)
+                    startActivity(filterIntent)
                 }
                 else {
                     Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
@@ -171,16 +178,6 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonExport -> {
                 exportPicture()
-            }
-            R.id.buttonPictureColorCorrection -> {
-                val filterIntent = Intent(this, FiltersActivity::class.java)
-                if (imageForProcessingPath != null) {
-                    filterIntent.putExtra("image", imageForProcessingString)
-                    startActivity(filterIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
             }
         }
     }
@@ -193,7 +190,6 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when(requestCode) {
             permissionGallery -> {
-
                 if(grantResults.size > 1 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
@@ -201,10 +197,8 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, getString(R.string.error_main_gallery_permissions), Toast.LENGTH_LONG).show()
                 }
-
             }
             permissionCamera -> {
-
                 if(grantResults.size > 1 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                     grantResults[1] == PackageManager.PERMISSION_GRANTED) {
@@ -212,7 +206,6 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, getString(R.string.error_main_camera_permissions), Toast.LENGTH_LONG).show()
                 }
-
             }
 
         }
@@ -229,7 +222,7 @@ class MainActivity : AppCompatActivity() {
             data?.data
         }
         else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-            Uri.parse(imageForProcessingPath)
+            Uri.parse(imageForProcessingString)
         }
         else {
             null
@@ -242,7 +235,6 @@ class MainActivity : AppCompatActivity() {
             imageButtonPickFromCamera.isEnabled = false
 
             imageForProcessing.setImageURI(imageUri)
-            imageForProcessingPath = imageUri.path
             imageForProcessingString = imageUri.toString()
         }
         else {
@@ -250,12 +242,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun exportPicture() {
+        val parcelFileDescriptor = this.contentResolver.openFileDescriptor(Uri.parse(imageForProcessingString), "r")
+        val fileDescriptor = parcelFileDescriptor.fileDescriptor
         MediaStore.Images.Media.insertImage(
             contentResolver,
-            BitmapFactory.decodeStream(FileInputStream(imageForProcessingPath)),
+            BitmapFactory.decodeFileDescriptor(parcelFileDescriptor.fileDescriptor),
             getString(R.string.main_activity_imageforprocessingname),
             getString(R.string.main_activity_imageforprocessingname)
         )
