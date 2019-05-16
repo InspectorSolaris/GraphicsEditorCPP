@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
@@ -218,14 +219,23 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val imageUri = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
-            data?.data
-        }
-        else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-            Uri.parse(imageForProcessingString)
-        }
-        else {
-            null
+        val imageUri = when {
+            requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK -> {
+                createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))
+
+                val imageForProcessingFileOut = FileOutputStream(imageForProcessingString)
+                val imageForProcessingBitmap = BitmapFactory.decodeFileDescriptor(this.contentResolver.openFileDescriptor(data?.data, "r")?.fileDescriptor)
+
+                imageForProcessingBitmap.compress(Bitmap.CompressFormat.PNG, 100, imageForProcessingFileOut)
+
+                Uri.parse(imageForProcessingString)
+            }
+            requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK -> {
+                Uri.parse(imageForProcessingString)
+            }
+            else -> {
+                null
+            }
         }
 
         if(imageUri != null) {
@@ -243,13 +253,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun exportPicture() {
-        val parcelFileDescriptor = this.contentResolver.openFileDescriptor(Uri.parse(imageForProcessingString), "r")
-        val fileDescriptor = parcelFileDescriptor.fileDescriptor
         MediaStore.Images.Media.insertImage(
             contentResolver,
-            BitmapFactory.decodeFileDescriptor(parcelFileDescriptor.fileDescriptor),
-            getString(R.string.main_activity_imageforprocessingname),
-            getString(R.string.main_activity_imageforprocessingname)
+            BitmapFactory.decodeFile(imageForProcessingString),
+            getString(R.string.main_activity_imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date()) + ".${getString(R.string.main_activity_imageforprocessingext)}",
+            getString(R.string.main_activity_imageforprocessingname) + ".${getString(R.string.main_activity_imageforprocessingext)}"
         )
     }
 }
