@@ -18,9 +18,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.BitmapFactory
 import java.io.*
-import android.os.ParcelFileDescriptor
-
-
 
 class MainActivity : AppCompatActivity() {
 
