@@ -27,7 +27,7 @@ class AStarActivity : AppCompatActivity() {
 
     private var path: IntArray = intArrayOf(-1)
 
-    external fun algorithmAStar(
+    private external fun algorithmAStar(
         bitmap: Bitmap,
         start_x: Int,
         start_y: Int,
@@ -177,14 +177,14 @@ class AStarActivity : AppCompatActivity() {
     }
 
     private fun drawGrid() {
-        for(i in pixelSize..(nSize - 1) step pixelSize) {
-            for(j in 0..(mSize - 1)) {
+        for(i in pixelSize until nSize - 1 step pixelSize) {
+            for(j in 0 until mSize - 1) {
                 aStarMap.setPixel(i, j, getColor(R.color.aStarColorGrid))
             }
         }
 
-        for(i in pixelSize..(mSize - 1) step pixelSize) {
-            for(j in 0..(nSize - 1)) {
+        for(i in pixelSize until mSize - 1 step pixelSize) {
+            for(j in 0 until nSize - 1) {
                 aStarMap.setPixel(j, i, getColor(R.color.aStarColorGrid))
             }
         }
@@ -194,8 +194,8 @@ class AStarActivity : AppCompatActivity() {
         coordX: Int,
         coordY: Int,
         color: Int) {
-        for (i in 1..(pixelSize - 1)) {
-            for (j in 1..(pixelSize - 1)) {
+        for (i in 1 until pixelSize - 1) {
+            for (j in 1 until pixelSize - 1) {
                 aStarMap.setPixel(coordX + i, coordY + j, color)
             }
         }

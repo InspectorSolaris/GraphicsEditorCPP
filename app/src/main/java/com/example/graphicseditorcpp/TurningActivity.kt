@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_turning.*
 import kotlinx.android.synthetic.main.activity_turning.imageForTurning
 import java.io.FileInputStream
@@ -42,7 +41,7 @@ class TurningActivity : AppCompatActivity() {
         })
     }
 
-    external fun imageTurning(
+    private external fun imageTurning(
         n: Int, // image height
         m: Int, // image width
         angle: Double
@@ -78,17 +77,22 @@ class TurningActivity : AppCompatActivity() {
         val image = BitmapFactory.decodeStream(imageFileStream)
         val imageTurned = Bitmap.createBitmap(imageTurnedInd[1], imageTurnedInd[0], Bitmap.Config.ARGB_8888)
 
-        for(i in 0..(imageTurnedInd[0] - 1)) {
-            for(j in 0..(imageTurnedInd[1] - 1)) {
-                val ind = i * imageTurnedInd[1] + j
+        for(i in 0 until imageTurnedInd[0] - 1) {
+            for(j in 0 until imageTurnedInd[1] - 1) {
+                val ind = i * imageTurnedInd[1] + j + 2
 
-                if(imageTurnedInd[ind] == 0) {
-                    imageTurned.setPixel(i, j, 0x00000000)
+                if(imageTurnedInd[ind] == -1) {
+                    imageTurned.setPixel(j, i, 0x00000000)
                 }
-                else if(imageTurnedInd[ind] > 0) {
+                else if(imageTurnedInd[ind] > -1) {
+                    val x = imageTurnedInd[ind] % imageInfo.outWidth
+                    val y = imageTurnedInd[ind] / imageInfo.outWidth
 
+                    imageTurned.setPixel(j, i, image.getPixel(x, y))
                 }
             }
         }
+
+        imageForTurning.setImageBitmap(imageTurned)
     }
 }

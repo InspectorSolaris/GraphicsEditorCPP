@@ -29,12 +29,12 @@ class SplinesActivity : AppCompatActivity() {
     private var timeDelay = 100
     private var drawn = false
 
-    external fun calculateSplinesP1(
+    private external fun calculateSplinesP1(
         pointsAmount: Int,
         pointsCoords: IntArray
     ): DoubleArray
 
-    external fun calculateSplinesP2(
+    private external fun calculateSplinesP2(
         pointsAmount: Int,
         pointsCoords: IntArray
     ): DoubleArray
@@ -129,7 +129,7 @@ class SplinesActivity : AppCompatActivity() {
                 val xArray = IntArray(pointX.size - 1)
                 val yArray = IntArray(pointY.size - 1)
 
-                for(i in 1..(pointX.size - 1)) {
+                for(i in 1 until pointX.size - 1) {
                     xArray[i - 1] = pointX[i]
                     yArray[i - 1] = pointY[i]
                 }

@@ -20,7 +20,7 @@ class ScalingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_scaling)
 
         imageForScalingPath = intent.getStringExtra("image")
-        imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
+        imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
     }
 
     private fun doSmaller(n : Int) {
@@ -47,12 +47,12 @@ class ScalingActivity : AppCompatActivity() {
         }
         val newBitmap : Bitmap = Bitmap.createBitmap(width/n, height/n, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(endPixels, 0, width/n, 0, 0, width/n, height/n)
-        imageForTurning.setImageBitmap(newBitmap)
+        imageForScaling.setImageBitmap(newBitmap)
     }
 
     private fun doNothing() {
         imageForScalingPath = intent.getStringExtra("image")
-        imageForTurning.setImageURI(Uri.parse(imageForScalingPath))
+        imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
     }
 
     private fun doBigger(n : Int) {
@@ -78,7 +78,7 @@ class ScalingActivity : AppCompatActivity() {
         }
         val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(endPixels, 0, width, 0, 0, width, height)
-        imageForTurning.setImageBitmap(newBitmap)
+        imageForScaling.setImageBitmap(newBitmap)
     }
 
     fun processButtonPressing(

@@ -38,6 +38,8 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
 {
     using namespace std;
 
+    angle *= 3.14159265358979323846 / 180;
+
     const unsigned int scaling = 4;
     const unsigned int scaled_n = scaling * (unsigned int)n;
     const unsigned int scaled_m = scaling * (unsigned int)m;
@@ -48,18 +50,18 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
     {
         for(unsigned int j = 0; j < scaled_m; ++j)
         {
-            img[i][j] = (i / scaling) * m + (j / scaling) + 1;
+            img[i][j] = (i / scaling) * m + (j / scaling);
         }
     }
 
     pair<double, double> corner[4];
-    for(unsigned int i = 0; i < n; i += n)
+    for(unsigned int i = 0; i <= n; i += n)
     {
-        for(unsigned int j = 0; j < m; j += m)
+        for(unsigned int j = 0; j <= m; j += m)
         {
             pair<int, int> xy = getXY((unsigned int)n, (unsigned int)m, i, j);
-            corner[i].first = xy.first * cos(angle) + xy.second * sin(angle);
-            corner[i].second = xy.second * cos(angle) - xy.first * sin(angle);
+            corner[2 * (i / n) + (j / m)].first = xy.first * cos(angle) + xy.second * sin(angle);
+            corner[2 * (i / n) + (j / m)].second = xy.second * cos(angle) - xy.first * sin(angle);
         }
     }
 
@@ -77,8 +79,10 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
     auto res_n = (unsigned int)(y_bounds.second - y_bounds.first);
     auto res_m = (unsigned int)(x_bounds.second - x_bounds.first);
 
+    const unsigned int buf_size = (unsigned int)1 << 20;
+
     jint res_size = res_n * res_m + 2;
-    jint buf[res_size];
+    jint buf[buf_size];
     buf[0] = res_n;
     buf[1] = res_m;
 
@@ -93,6 +97,10 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
                 -scaled_n / 2 <= origin.second && origin.second < scaled_n / 2)
             {
                 buf[i * m + j + 2] = img[origin.first + scaled_m / 2][origin.second + scaled_n / 2];
+            }
+            else
+            {
+                buf[i * m + j + 2] = -1;
             }
         }
     }

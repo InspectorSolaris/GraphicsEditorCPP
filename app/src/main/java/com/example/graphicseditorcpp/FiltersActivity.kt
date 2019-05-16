@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_scaling.*
 
 class FiltersActivity : AppCompatActivity() {
 
-
     var imageForFiltersString: String? = null
 
     override fun onCreate(
