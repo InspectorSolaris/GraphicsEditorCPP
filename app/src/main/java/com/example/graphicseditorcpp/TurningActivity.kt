@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.SeekBar
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_turning.*
 import kotlinx.android.synthetic.main.activity_turning.imageForTurning
 import java.io.File
