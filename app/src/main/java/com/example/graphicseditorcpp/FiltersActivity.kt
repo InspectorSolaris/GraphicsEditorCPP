@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import kotlinx.android.synthetic.main.activity_filters.*
-import kotlinx.android.synthetic.main.activity_scaling.*
 
 class FiltersActivity : AppCompatActivity() {
 

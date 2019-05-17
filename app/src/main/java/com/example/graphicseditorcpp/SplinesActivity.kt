@@ -3,10 +3,8 @@ package com.example.graphicseditorcpp
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Path
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_splines.*
 import kotlin.math.max
