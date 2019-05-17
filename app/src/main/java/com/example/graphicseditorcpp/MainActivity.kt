@@ -144,16 +144,6 @@ class MainActivity : AppCompatActivity() {
                 val splinesIntent = Intent(this, SplinesActivity::class.java)
                 startActivity(splinesIntent)
             }
-            R.id.buttonPictureScaling -> {
-                val scaleIntent = Intent(this, ScalingActivity::class.java)
-                if (imageForProcessingString != null) {
-                    scaleIntent.putExtra("image", imageForProcessingString)
-                    startActivity(scaleIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
             R.id.buttonPictureTurning -> {
                 val turnIntent = Intent(this, TurningActivity::class.java)
                 if (imageForProcessingString != null) {
@@ -169,6 +159,66 @@ class MainActivity : AppCompatActivity() {
                 if (imageForProcessingString != null) {
                     filterIntent.putExtra("image", imageForProcessingString)
                     startActivity(filterIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureScaling -> {
+                val scaleIntent = Intent(this, ScalingActivity::class.java)
+                if (imageForProcessingString != null) {
+                    scaleIntent.putExtra("image", imageForProcessingString)
+                    startActivity(scaleIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureSegmentation -> {
+                val segmentationIntent = Intent(this, SegmentationActivity::class.java)
+                if (imageForProcessingString != null) {
+                    segmentationIntent.putExtra("image", imageForProcessingString)
+                    startActivity(segmentationIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureRetouching -> {
+                val retouchingIntent = Intent(this, RetouchingActivity::class.java)
+                if (imageForProcessingString != null) {
+                    retouchingIntent.putExtra("image", imageForProcessingString)
+                    startActivity(retouchingIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureUnsharpMasking -> {
+                val maskingIntent = Intent(this, MaskingActivity::class.java)
+                if (imageForProcessingString != null) {
+                    maskingIntent.putExtra("image", imageForProcessingString)
+                    startActivity(maskingIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureBilinearFiltration -> {
+                val bilinearFiltIntent = Intent(this, BilinearFiltActivity::class.java)
+                if (imageForProcessingString != null) {
+                    bilinearFiltIntent.putExtra("image", imageForProcessingString)
+                    startActivity(bilinearFiltIntent)
+                }
+                else {
+                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+                }
+            }
+            R.id.buttonPictureTrilinearFiltration -> {
+                val trilinearFiltIntent = Intent(this, TrilinearFiltActivity::class.java)
+                if (imageForProcessingString != null) {
+                    trilinearFiltIntent.putExtra("image", imageForProcessingString)
+                    startActivity(trilinearFiltIntent)
                 }
                 else {
                     Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
@@ -256,6 +306,7 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.main_activity_imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date()) + ".${getString(R.string.main_activity_imageforprocessingext)}",
             getString(R.string.main_activity_imageforprocessingname) + ".${getString(R.string.main_activity_imageforprocessingext)}"
         )
+        Toast.makeText(this, getString(R.string.main_activity_imageexportsuccess), Toast.LENGTH_LONG).show()
     }
 }
 

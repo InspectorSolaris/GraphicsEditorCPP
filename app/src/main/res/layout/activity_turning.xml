@@ -27,7 +27,7 @@
                 android:id="@+id/imageButtonBack"
                 android:onClick="processButtonPressing"
                 app:layout_constraintStart_toStartOf="parent"
-                android:contentDescription="@string/splines_activity_imagebutton_back"/>
+                android:contentDescription="@string/imagebutton_back"/>
     </android.support.constraint.ConstraintLayout>
     <ImageView
             android:layout_width="0dp"

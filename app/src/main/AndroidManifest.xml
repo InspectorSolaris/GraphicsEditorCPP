@@ -12,14 +12,24 @@
             android:required="true"/>
 
     <application
-            android:largeHeap="true"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:largeHeap="true"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/DarkAppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".TrilinearFiltActivity">
+        </activity>
+        <activity android:name=".BilinearFiltActivity">
+        </activity>
+        <activity android:name=".MaskingActivity">
+        </activity>
+        <activity android:name=".RetouchingActivity">
+        </activity>
+        <activity android:name=".SegmentationActivity">
+        </activity>
         <activity android:name=".FiltersActivity">
         </activity>
         <activity android:name=".TurningActivity">

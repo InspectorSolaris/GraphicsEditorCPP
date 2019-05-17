@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
 
+    <string name="imagebutton_back">Back to previous activity</string>
+
     <string name="main_activity_imageforprocessingname">processedImg_</string>
     <string name="main_activity_imageforprocessingext">png</string>
 
@@ -12,6 +14,7 @@
     <string name="main_activity_imagebutton_tools">Image processing tools</string>
     <string name="main_activity_button_export">Export processed image</string>
     <string name="main_activity_nophoto">Please choose the photo first</string>
+    <string name="main_activity_imageexportsuccess">Image export success</string>
 
     <string name="astar_activity_button_setstart_text">Start</string>
     <string name="astar_activity_button_setfinish_text">Finish</string>
@@ -19,7 +22,6 @@
     <string name="astar_activity_button_erase_text">Erase</string>
     <string name="astar_activity_button_runastar_text">Run</string>
     <string name="astar_activity_imagebutton_astarsettings">Settings for AStar algorithm</string>
-    <string name="astar_activity_imagebutton_back">Back to previous activity</string>
     <string name="astar_activity_imageview_astarmap">AStar Map</string>
     <string name="astar_activity_button_setstart">Set start for AStar</string>
     <string name="astar_activity_button_setfinish">Set finish for AStar</string>
@@ -37,22 +39,31 @@
     <string name="astar_activity_popup_8directional">8 directional</string>
     <string name="astar_activity_popup_8directionalcheck">8 directional (check)</string>
 
-    <string name="splines_activity_imagebutton_back">Back to previous activity</string>
-    <string name="splines_activitu_button_drawsplines_text">Draw</string>
-    <string name="splines_activity_button_drawsplines">Draw splines</string>
-
-    <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
-    <string name="scaling_activity_button_scale_text">Scale</string>
-
+    <string name="turning_activity_imageview_imageforturning">Image for turning</string>
     <string name="turning_activity_button_turn_text">Turn</string>
     <string name="turning_activity_button_clear_text">Clear</string>
     <string name="turning_activity_textview_angle_text">0</string>
 
     <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
-    <string name="filters_activity_imagebutton_back">Back to previous activity</string>
     <string name="filters_activity_button_f1_text">F1</string>
     <string name="filters_activity_button_f2_text">F2</string>
     <string name="filters_activity_button_f3_text">F3</string>
+
+    <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
+    <string name="scaling_activity_button_scale_text">Scale</string>
+
+    <string name="segmentation_activity_imageview_imageforsegmentation">Image for segmentation</string>
+
+    <string name="retouching_activity_imageview_imageforretouching">Image for retouching</string>
+
+    <string name="masking_activity_imaveview_imageformasking">Image for masking</string>
+
+    <string name="bilinearfilt_activity_imaveview_imageforbilinearfilt">Image for bilinear filt</string>
+
+    <string name="trilinearfilt_activity_imageview_imagefortrilinear_filt">Image for trilinear filt</string>
+
+    <string name="splines_activitu_button_drawsplines_text">Draw</string>
+    <string name="splines_activity_button_drawsplines">Draw splines</string>
 
     <string name="tools_rotate">Rotate</string>
     <string name="tools_filters">Filters</string>
@@ -68,6 +79,5 @@
     <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
     <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
     <string name="error_main_image_pick">Error: Image picking fail</string>
-    <string name="turning_activity_imageview_imageforturning">Image for turning</string>
 
 </resources>
