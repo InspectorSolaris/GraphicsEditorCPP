@@ -8,13 +8,12 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.SeekBar
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_turning.*
 import kotlinx.android.synthetic.main.activity_turning.imageForTurning
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.lang.Math.max
-import java.lang.Math.min
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,6 +65,32 @@ class TurningActivity : AppCompatActivity() {
         }
     }
 
+    private fun tryCopyImageFile(){
+        if(imageTurnedString != null) {
+            val outputFile = File(imageForTurningString)
+            outputFile.delete()
+            outputFile.createNewFile()
+
+            val inputFileStream = FileInputStream(imageTurnedString)
+            val outputFileStream = FileOutputStream(imageForTurningString)
+
+            val buf = ByteArray(1024)
+            var len: Int
+            var check = true
+            while (check) {
+                len = inputFileStream.read(buf)
+                check = len > 0
+
+                if (check) {
+                    outputFileStream.write(buf, 0, len)
+                }
+            }
+
+            inputFileStream.close()
+            outputFileStream.close()
+        }
+    }
+
     private external fun imageTurning(
         angle: Double,
         orig: Bitmap,
@@ -77,6 +102,7 @@ class TurningActivity : AppCompatActivity() {
     ) {
         when(view.id) {
             R.id.imageButtonBack -> {
+                tryCopyImageFile()
                 finish()
             }
             R.id.buttonClear -> {
@@ -99,7 +125,10 @@ class TurningActivity : AppCompatActivity() {
 
         imageForTurning.setImageBitmap(imageTurned)
 
-        createImageFile(getString(R.string.turning_activity_imageturnedname), getString(R.string.turning_activity_imageturnedext))
+        if(imageTurnedString == null) {
+            createImageFile(getString(R.string.turning_activity_imageturnedname), getString(R.string.turning_activity_imageturnedext))
+        }
+
         imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
     }
 }

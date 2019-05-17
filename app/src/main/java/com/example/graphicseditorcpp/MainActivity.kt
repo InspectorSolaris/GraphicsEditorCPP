@@ -149,6 +149,8 @@ class MainActivity : AppCompatActivity() {
                 if (imageForProcessingString != null) {
                     turnIntent.putExtra("image", imageForProcessingString)
                     startActivity(turnIntent)
+
+                    imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
                 }
                 else {
                     Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
