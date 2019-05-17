@@ -43,6 +43,8 @@
     <string name="turning_activity_button_turn_text">Turn</string>
     <string name="turning_activity_button_clear_text">Clear</string>
     <string name="turning_activity_textview_angle_text">0</string>
+    <string name="turning_activity_imageturnedname">turnedImg_</string>
+    <string name="turning_activity_imageturnedext">png</string>
 
     <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
     <string name="filters_activity_button_f1_text">F1</string>

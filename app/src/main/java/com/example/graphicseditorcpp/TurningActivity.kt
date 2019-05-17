@@ -5,16 +5,24 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_turning.*
 import kotlinx.android.synthetic.main.activity_turning.imageForTurning
+import java.io.File
 import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.lang.Math.max
+import java.lang.Math.min
+import java.text.SimpleDateFormat
+import java.util.*
 
 class TurningActivity : AppCompatActivity() {
 
     var currentAngle = 0
     var imageForTurningString: String? = null
+    var imageTurnedString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -41,11 +49,28 @@ class TurningActivity : AppCompatActivity() {
         })
     }
 
+    private fun createImageFile(
+        name: String,
+        ext: String
+    ): File {
+        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFileExt = ".$ext"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageTurnedString = absolutePath
+        }
+    }
+
     private external fun imageTurning(
-        n: Int, // image height
-        m: Int, // image width
-        angle: Double
-    ): IntArray
+        angle: Double,
+        orig: Bitmap,
+        turn: Bitmap
+    )
 
     fun processButtonPressing(
         view: View
@@ -65,34 +90,16 @@ class TurningActivity : AppCompatActivity() {
     }
 
     private fun turnImage(){
-        val imageFileStream = FileInputStream(imageForTurningString)
-
         val imageInfo = BitmapFactory.Options()
-        imageInfo.inJustDecodeBounds = true
 
-        BitmapFactory.decodeStream(imageFileStream, null, imageInfo)
+        val imageOriginal = BitmapFactory.decodeFile(imageForTurningString, imageInfo)
+        val imageTurned = Bitmap.createBitmap(imageInfo.outWidth, imageInfo.outHeight, Bitmap.Config.ARGB_8888)
 
-        val imageTurnedInd = imageTurning(imageInfo.outHeight, imageInfo.outWidth, currentAngle.toDouble())
-
-        val image = BitmapFactory.decodeStream(imageFileStream)
-        val imageTurned = Bitmap.createBitmap(imageTurnedInd[1], imageTurnedInd[0], Bitmap.Config.ARGB_8888)
-
-        for(i in 0 until imageTurnedInd[0] - 1) {
-            for(j in 0 until imageTurnedInd[1] - 1) {
-                val ind = i * imageTurnedInd[1] + j + 2
-
-                if(imageTurnedInd[ind] == -1) {
-                    imageTurned.setPixel(j, i, 0x00000000)
-                }
-                else if(imageTurnedInd[ind] > -1) {
-                    val x = imageTurnedInd[ind] % imageInfo.outWidth
-                    val y = imageTurnedInd[ind] / imageInfo.outWidth
-
-                    imageTurned.setPixel(j, i, image.getPixel(x, y))
-                }
-            }
-        }
+        imageTurning(currentAngle.toDouble(), imageOriginal, imageTurned)
 
         imageForTurning.setImageBitmap(imageTurned)
+
+        createImageFile(getString(R.string.turning_activity_imageturnedname), getString(R.string.turning_activity_imageturnedext))
+        imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
     }
 }

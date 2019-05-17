@@ -6,109 +6,59 @@
 
 // image turning
 
-std::pair<int, int> getXY(
-        unsigned int n,
-        unsigned int m,
-        unsigned int i,
-        unsigned int j)
-{
-    int x = j - m / 2;
-    int y = n / 2 - i;
-
-    return {x, y};
-}
-
-std::pair<int, int> getOrigin(
-        std::pair<int, int> p,
-        double a)
-{
-    double x = p.first * cos(a) - p.second * sin(a);
-    double y = p.first * sin(a) + p.second * cos(a);
-
-    return {(int)x, (int)y};
-}
-
-extern "C" JNIEXPORT jintArray JNICALL
+extern "C" JNIEXPORT void JNICALL
 Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
         JNIEnv *env,
         jobject,
-        jint n,
-        jint m,
-        jdouble angle)
+        jdouble angle,
+        jobject image_orig,
+        jobject image_turn)
 {
-    using namespace std;
+    AndroidBitmapInfo  orig_info;
+    AndroidBitmapInfo  turn_info;
+    void             * orig_ptr = nullptr;
+    void             * turn_ptr = nullptr;
 
-    angle *= 3.14159265358979323846 / 180;
+    AndroidBitmap_getInfo(env, image_orig, &orig_info);
+    AndroidBitmap_getInfo(env, image_turn, &turn_info);
 
-    const unsigned int scaling = 4;
-    const unsigned int scaled_n = scaling * (unsigned int)n;
-    const unsigned int scaled_m = scaling * (unsigned int)m;
+    AndroidBitmap_lockPixels(env, image_orig, &orig_ptr);
+    AndroidBitmap_lockPixels(env, image_turn, &turn_ptr);
 
-    vector<vector<unsigned int>> img(scaled_n, vector<unsigned int>(scaled_m));
+    long double pi = 3.1415926535897931L;
+    long double a = angle * pi / 180.0L;
+    long double n = turn_info.height;
+    long double m = turn_info.width;
 
-    for(unsigned int i = 0; i < scaled_n; ++i)
+    auto orig = (uint32_t *)orig_ptr;
+    auto turn = (uint32_t *)turn_ptr;
+
+    for(unsigned int i = 0; i < n; ++i)
     {
-        for(unsigned int j = 0; j < scaled_m; ++j)
+        for(unsigned int j = 0; j < m; ++j)
         {
-            img[i][j] = (i / scaling) * m + (j / scaling);
-        }
-    }
+            int x_position = (int)(j - m / 2);
+            int y_position = (int)(n / 2 - i);
 
-    pair<double, double> corner[4];
-    for(unsigned int i = 0; i <= n; i += n)
-    {
-        for(unsigned int j = 0; j <= m; j += m)
-        {
-            pair<int, int> xy = getXY((unsigned int)n, (unsigned int)m, i, j);
-            corner[2 * (i / n) + (j / m)].first = xy.first * cos(angle) + xy.second * sin(angle);
-            corner[2 * (i / n) + (j / m)].second = xy.second * cos(angle) - xy.first * sin(angle);
-        }
-    }
+            long double x_turn = x_position * cos(a) - y_position * sin(a);
+            long double y_turn = y_position * cos(a) + x_position * sin(a);
 
-    pair<int, int> x_bounds = {INT_MAX, INT_MIN};
-    pair<int, int> y_bounds = {INT_MAX, INT_MIN};
+            int x = (int) (x_turn + m / 2);
+            int y = (int) (n / 2 - y_turn);
 
-    for(unsigned int i = 0; i < 4; ++i)
-    {
-        x_bounds.first = min(x_bounds.first, (int)floor(corner[i].first));
-        x_bounds.second = max(x_bounds.second, (int)ceil(corner[i].first));
-        y_bounds.first = min(y_bounds.first, (int)floor(corner[i].second));
-        y_bounds.second = max(y_bounds.second, (int)ceil(corner[i].second));
-    }
-
-    auto res_n = (unsigned int)(y_bounds.second - y_bounds.first);
-    auto res_m = (unsigned int)(x_bounds.second - x_bounds.first);
-
-    const unsigned int buf_size = (unsigned int)1 << 20;
-
-    jint res_size = res_n * res_m + 2;
-    jint buf[buf_size];
-    buf[0] = res_n;
-    buf[1] = res_m;
-
-    for(unsigned int i = 0; i < res_n; ++i)
-    {
-        for(unsigned int j = 0; j < res_m; ++j)
-        {
-            pair<int, int> point = getXY(scaled_n, scaled_m, scaling * i, scaling * j);
-            pair<int, int> origin = getOrigin(point, angle);
-
-            if(-scaled_m / 2 <= origin.first && origin.first < scaled_m / 2 &&
-                -scaled_n / 2 <= origin.second && origin.second < scaled_n / 2)
-            {
-                buf[i * m + j + 2] = img[origin.first + scaled_m / 2][origin.second + scaled_n / 2];
+            if (0 <= x && x < m &&
+                0 <= y && y < n) {
+                turn[i * (int) m + j] = orig[y * (int) m + x];
             }
             else
             {
-                buf[i * m + j + 2] = -1;
+                turn[i * (int)m + j] = 0x00000000;
             }
         }
     }
 
-    jintArray result = env->NewIntArray(res_size);
-    env->SetIntArrayRegion(result, 0, res_size, buf);
-
-    return result;
+    AndroidBitmap_unlockPixels(env, image_orig);
+    AndroidBitmap_unlockPixels(env, image_turn);
 }
 
 // color correction

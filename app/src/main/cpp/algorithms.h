@@ -21,13 +21,13 @@
 #include <tuple>
 #include <climits>
 
-extern "C" JNIEXPORT jintArray JNICALL
+extern "C" JNIEXPORT void JNICALL
 Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
         JNIEnv *env,
-        jobject obj,
-        jint n,
-        jint m,
-        jdouble angle); // Herman
+        jobject,
+        jdouble angle,
+        jobject image_orig,
+        jobject image_turn); // Herman
 
 // parameters: original pic, ...
 // return: color corrected picture
