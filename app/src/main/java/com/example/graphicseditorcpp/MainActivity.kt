@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private val permissionGallery = 1
     private val permissionCamera = 2
+    private var dialog : BottomSheetDialog? = null
 
     private var imageForProcessingString: String? = null
 
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dialog = BottomSheetDialog(this)
 
         imageButtonPickNew.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
@@ -132,9 +134,9 @@ class MainActivity : AppCompatActivity() {
                 tryPickFromCamera()
             }
             R.id.imageButtonTools -> {
-                val dialog = BottomSheetDialog(this)
-                dialog.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
-                dialog.show()
+
+                dialog!!.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
+                dialog!!.show()
             }
             R.id.imageButtonAlgorithmAStar -> {
                 val aStarIntent = Intent(this, AStarActivity::class.java)
@@ -142,10 +144,12 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonSplines -> {
                 val splinesIntent = Intent(this, SplinesActivity::class.java)
+                dialog!!.hide()
                 startActivity(splinesIntent)
             }
             R.id.buttonPictureTurning -> {
                 val turnIntent = Intent(this, TurningActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     turnIntent.putExtra("image", imageForProcessingString)
                     startActivity(turnIntent)
@@ -158,6 +162,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureColorCorrection -> {
                 val filterIntent = Intent(this, FiltersActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     filterIntent.putExtra("image", imageForProcessingString)
                     startActivity(filterIntent)
@@ -168,6 +173,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureScaling -> {
                 val scaleIntent = Intent(this, ScalingActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     scaleIntent.putExtra("image", imageForProcessingString)
                     startActivity(scaleIntent)
@@ -188,6 +194,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureRetouching -> {
                 val retouchingIntent = Intent(this, RetouchingActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     retouchingIntent.putExtra("image", imageForProcessingString)
                     startActivity(retouchingIntent)
@@ -198,6 +205,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureUnsharpMasking -> {
                 val maskingIntent = Intent(this, MaskingActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     maskingIntent.putExtra("image", imageForProcessingString)
                     startActivity(maskingIntent)
@@ -208,6 +216,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureBilinearFiltration -> {
                 val bilinearFiltIntent = Intent(this, BilinearFiltActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     bilinearFiltIntent.putExtra("image", imageForProcessingString)
                     startActivity(bilinearFiltIntent)
@@ -218,6 +227,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureTrilinearFiltration -> {
                 val trilinearFiltIntent = Intent(this, TrilinearFiltActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     trilinearFiltIntent.putExtra("image", imageForProcessingString)
                     startActivity(trilinearFiltIntent)
