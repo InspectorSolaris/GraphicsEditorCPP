@@ -67,7 +67,8 @@ class TurningActivity : AppCompatActivity() {
 
     private fun tryCopyImageFile(){
         if(imageTurnedString != null) {
-            BitmapFactory.decodeFile(imageTurnedString).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForTurningString))
+            BitmapFactory.decodeFile(imageTurnedString)
+                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForTurningString))
         }
     }
 
@@ -107,7 +108,10 @@ class TurningActivity : AppCompatActivity() {
         imageForTurning.setImageBitmap(imageTurned)
 
         if(imageTurnedString == null) {
-            createImageFile(getString(R.string.turning_activity_imageturnedname), getString(R.string.turning_activity_imageturnedext))
+            createImageFile(
+                getString(R.string.turning_activity_imageturnedname),
+                getString(R.string.turning_activity_imageturnedext)
+            )
         }
 
         imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))

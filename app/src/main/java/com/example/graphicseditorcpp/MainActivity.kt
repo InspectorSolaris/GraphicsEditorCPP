@@ -118,8 +118,15 @@ class MainActivity : AppCompatActivity() {
     private fun pickFromCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
-            createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))))
+        cameraIntent.putExtra(
+            MediaStore.EXTRA_OUTPUT,
+            FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
+            createImageFile(
+                getString(R.string.main_activity_imageforprocessingname),
+                getString(R.string.main_activity_imageforprocessingext)
+            )
+            )
+        )
 
         startActivityForResult(cameraIntent, idPickFromCamera)
     }
@@ -197,7 +204,7 @@ class MainActivity : AppCompatActivity() {
                 dialog!!.hide()
                 if (imageForProcessingString != null) {
                     retouchingIntent.putExtra("image", imageForProcessingString)
-                    startActivity(retouchingIntent)
+                    startActivityForResult(retouchingIntent, idImageChange)
                 }
                 else {
                     Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
@@ -314,7 +321,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else {
-            imageForProcessingString = data?.extras?.getString("image")
+            createImageFile(
+                getString(R.string.main_activity_imageforprocessingname),
+                getString(R.string.main_activity_imageforprocessingext)
+            )
+
+            BitmapFactory.decodeFile(data?.extras?.getString("image"))
+                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
+
             imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
         }
     }
