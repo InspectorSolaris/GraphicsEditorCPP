@@ -1,6 +1,7 @@
 package com.example.graphicseditorcpp
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -82,7 +83,7 @@ class TurningActivity : AppCompatActivity() {
         when(view.id) {
             R.id.imageButtonBack -> {
                 tryCopyImageFile()
-                setResult(Activity.RESULT_OK)
+                setResult(Activity.RESULT_OK, Intent().putExtra("image", imageForTurningString))
                 finish()
             }
             R.id.buttonClear -> {

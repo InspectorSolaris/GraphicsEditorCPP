@@ -1,6 +1,7 @@
 package com.example.graphicseditorcpp
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,10 +11,8 @@ import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_retouching.*
 import java.io.FileOutputStream
-class RetouchingActivity : AppCompatActivity() {
 
-    var timeCounter = System.currentTimeMillis()
-    val timeDelay = 50
+class RetouchingActivity : AppCompatActivity() {
 
     var retouchingRadius = 50
     var imageForRetouchingString: String? = null
@@ -44,15 +43,11 @@ class RetouchingActivity : AppCompatActivity() {
         })
 
         imageForRetouching.setOnTouchListener { _, motionEvent ->
-            if(System.currentTimeMillis() - timeCounter > timeDelay) {
-                val imageLocal = imageRetouchedBitmap
+            val imageLocal = imageRetouchedBitmap
 
-                imageRetouching(retouchingRadius, motionEvent.x.toInt(), motionEvent.y.toInt(), imageLocal)
-                imageForRetouching.setImageBitmap(imageRetouchedBitmap)
-                imageRetouchedBitmap = imageLocal
-
-                timeCounter = System.currentTimeMillis()
-            }
+            imageRetouching(retouchingRadius, motionEvent.x.toInt(), motionEvent.y.toInt(), imageLocal)
+            imageForRetouching.setImageBitmap(imageRetouchedBitmap)
+            imageRetouchedBitmap = imageLocal
 
             true
         }
@@ -78,7 +73,7 @@ class RetouchingActivity : AppCompatActivity() {
         when (view.id) {
             R.id.imageButtonBack -> {
                 tryCopyImageFile()
-                setResult(Activity.RESULT_OK)
+                setResult(Activity.RESULT_OK, Intent().putExtra("image", imageForRetouchingString))
                 finish()
             }
             R.id.buttonDismiss -> {

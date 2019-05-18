@@ -183,6 +183,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.buttonPictureSegmentation -> {
                 val segmentationIntent = Intent(this, SegmentationActivity::class.java)
+                dialog!!.hide()
                 if (imageForProcessingString != null) {
                     segmentationIntent.putExtra("image", imageForProcessingString)
                     startActivity(segmentationIntent)
@@ -313,6 +314,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         else {
+            imageForProcessingString = data?.extras?.getString("image")
             imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
         }
     }

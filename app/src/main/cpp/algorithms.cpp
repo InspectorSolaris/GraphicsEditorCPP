@@ -145,7 +145,7 @@ Java_com_example_graphicseditorcpp_RetouchingActivity_imageRetouching(
         {
             if((i - y) * (i - y) + (j - x) * (j - x) <= r * r)
             {
-                new_rgb.push_back(blurPixel(i, j, info.height, info.width, (int)ceil(sqrt((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img));
+                new_rgb.push_back(blurPixel(i, j, info.height, info.width, (int)ceil(log((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img));
             }
         }
     }
