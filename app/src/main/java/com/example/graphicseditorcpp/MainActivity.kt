@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val idPickFromGallery = 1
     private val idPickFromCamera = 2
+    private val idImageChange = 3
 
     private val permissionGallery = 1
     private val permissionCamera = 2
@@ -148,9 +149,7 @@ class MainActivity : AppCompatActivity() {
                 val turnIntent = Intent(this, TurningActivity::class.java)
                 if (imageForProcessingString != null) {
                     turnIntent.putExtra("image", imageForProcessingString)
-                    startActivity(turnIntent)
-
-                    imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                    startActivityForResult(turnIntent, idImageChange)
                 }
                 else {
                     Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
@@ -268,36 +267,43 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val imageUri = when {
-            requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK -> {
-                createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))
+        if(requestCode != idImageChange) {
+            val imageUri = when {
+                requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK -> {
+                    createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))
 
-                val imageForProcessingFileOut = FileOutputStream(imageForProcessingString)
-                val imageForProcessingBitmap = BitmapFactory.decodeFileDescriptor(this.contentResolver.openFileDescriptor(data?.data, "r")?.fileDescriptor)
+                    BitmapFactory.decodeFileDescriptor(
+                        this.contentResolver.openFileDescriptor(
+                            data?.data,
+                            "r"
+                        )?.fileDescriptor
+                    ).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
 
-                imageForProcessingBitmap.compress(Bitmap.CompressFormat.PNG, 100, imageForProcessingFileOut)
-
-                Uri.parse(imageForProcessingString)
+                    Uri.parse(imageForProcessingString)
+                }
+                requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK -> {
+                    Uri.parse(imageForProcessingString)
+                }
+                else -> {
+                    null
+                }
             }
-            requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK -> {
-                Uri.parse(imageForProcessingString)
-            }
-            else -> {
-                null
-            }
-        }
 
-        if(imageUri != null) {
-            imageButtonPickFromGallery.visibility = View.GONE
-            imageButtonPickFromGallery.isEnabled = false
-            imageButtonPickFromCamera.visibility = View.GONE
-            imageButtonPickFromCamera.isEnabled = false
+            if (imageUri != null) {
+                imageButtonPickFromGallery.visibility = View.GONE
+                imageButtonPickFromGallery.isEnabled = false
+                imageButtonPickFromCamera.visibility = View.GONE
+                imageButtonPickFromCamera.isEnabled = false
 
-            imageForProcessing.setImageURI(imageUri)
-            imageForProcessingString = imageUri.toString()
+                imageForProcessing.setImageURI(imageUri)
+                imageForProcessingString = imageUri.toString()
+            }
+            else {
+                Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
+            }
         }
         else {
-            Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
+            imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -66,27 +68,7 @@ class TurningActivity : AppCompatActivity() {
 
     private fun tryCopyImageFile(){
         if(imageTurnedString != null) {
-            val outputFile = File(imageForTurningString)
-            outputFile.delete()
-            outputFile.createNewFile()
-
-            val inputFileStream = FileInputStream(imageTurnedString)
-            val outputFileStream = FileOutputStream(imageForTurningString)
-
-            val buf = ByteArray(1024)
-            var len: Int
-            var check = true
-            while (check) {
-                len = inputFileStream.read(buf)
-                check = len > 0
-
-                if (check) {
-                    outputFileStream.write(buf, 0, len)
-                }
-            }
-
-            inputFileStream.close()
-            outputFileStream.close()
+            BitmapFactory.decodeFile(imageTurnedString).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForTurningString))
         }
     }
 
@@ -102,6 +84,7 @@ class TurningActivity : AppCompatActivity() {
         when(view.id) {
             R.id.imageButtonBack -> {
                 tryCopyImageFile()
+                setResult(Activity.RESULT_OK)
                 finish()
             }
             R.id.buttonClear -> {

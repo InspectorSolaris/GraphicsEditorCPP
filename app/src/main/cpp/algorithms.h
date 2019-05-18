@@ -51,7 +51,13 @@ pictureSegmentation();
 // return: retouched pic
 
 extern "C" JNIEXPORT void JNICALL
-pictureRetouching(); // Danil
+Java_com_example_graphicseditorcpp_RetouchingActivity_imageRetouching(
+        JNIEnv *env,
+        jobject,
+        jint r,
+        jint x,
+        jint y,
+        jobject image); // Herman
 
 // parameters: original pic, retouching parameters
 // return: masked pic

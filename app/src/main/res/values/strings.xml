@@ -57,6 +57,9 @@
     <string name="segmentation_activity_imageview_imageforsegmentation">Image for segmentation</string>
 
     <string name="retouching_activity_imageview_imageforretouching">Image for retouching</string>
+    <string name="retouching_activity_button_dismiss_text">Dismiss</string>
+    <string name="retouching_activity_imageturnedname">retouchedImg_</string>
+    <string name="retouching_activity_imageturnedext">png</string>
 
     <string name="masking_activity_imaveview_imageformasking">Image for masking</string>
 

@@ -78,8 +78,92 @@ pictureSegmentation();
 
 // retouching
 
+uint32_t blurPixel(
+        const int x,
+        const int y,
+        const int n,
+        const int m,
+        const int r,
+        const uint32_t * img)
+{
+    uint32_t result = 0xFF000000;
+
+    int rc = 0;
+    int gc = 0;
+    int bc = 0;
+    int counter = 0;
+
+    for(int i = -r; i <= r; ++i)
+    {
+        for(int j = -r; j <= r; ++j)
+        {
+            if(0 <= x + j && x + j < n &&
+               0 <= y + i && y + i < m)
+            {
+                rc += (img[(x + j) * m + (y + i)] & 0x00FF0000) >> 16;
+                gc += (img[(x + j) * m + (y + i)] & 0x0000FF00) >> 8;
+                bc += (img[(x + j) * m + (y + i)] & 0x000000FF) >> 0;
+                ++counter;
+            }
+        }
+    }
+
+    rc /= counter;
+    gc /= counter;
+    bc /= counter;
+
+    result += rc << 16;
+    result += gc << 8;
+    result += bc << 0;
+
+    return result;
+}
+
 extern "C" JNIEXPORT void JNICALL
-pictureRetouching();
+Java_com_example_graphicseditorcpp_RetouchingActivity_imageRetouching(
+        JNIEnv *env,
+        jobject,
+        jint r,
+        jint x,
+        jint y,
+        jobject image)
+{
+    AndroidBitmapInfo  info;
+    void             * ptr = nullptr;
+
+    AndroidBitmap_getInfo(env, image, &info);
+    AndroidBitmap_lockPixels(env, image, &ptr);
+
+    using namespace std;
+
+    vector<uint32_t> new_rgb;
+
+    auto img = (uint32_t *)ptr;
+    for(int i = max(y - r, 0); i < min(y + r, (int)info.height); ++i)
+    {
+        for(int j = max(x - r, 0); j < min(x + r, (int)info.width); ++j)
+        {
+            if((i - y) * (i - y) + (j - x) * (j - x) <= r * r)
+            {
+                new_rgb.push_back(blurPixel(i, j, info.height, info.width, (int)ceil(sqrt((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img));
+            }
+        }
+    }
+
+    int k = 0;
+    for(int i = max(y - r, 0); i < min(y + r, (int)info.height); ++i)
+    {
+        for(int j = max(x - r, 0); j < min(x + r, (int)info.width); ++j)
+        {
+            if((i - y) * (i - y) + (j - x) * (j - x) <= r * r)
+            {
+                img[i * info.width + j] = new_rgb[k++];
+            }
+        }
+    }
+
+    AndroidBitmap_unlockPixels(env, image);
+}
 
 // unsharp masking
 
