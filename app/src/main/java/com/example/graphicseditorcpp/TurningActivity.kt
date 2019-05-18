@@ -1,7 +1,6 @@
 package com.example.graphicseditorcpp
 
 import android.app.Activity
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -13,7 +12,6 @@ import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_turning.*
 import kotlinx.android.synthetic.main.activity_turning.imageForTurning
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
