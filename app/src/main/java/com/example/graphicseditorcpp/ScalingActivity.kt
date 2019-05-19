@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_scaling.*
 
 class ScalingActivity : AppCompatActivity() {
 
-    var imageForScalingString: String? = null
+    var imageForScalingPath: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -19,67 +19,82 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        imageForScalingString = intent.getStringExtra("image")
-        imageForScaling.setImageURI(Uri.parse(imageForScalingString))
+        imageForScalingPath = intent.getStringExtra("image")
+        imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
     }
 
-    private fun doSmaller(n : Int) {
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingString))
+    private fun resizeBilinear(pixels: IntArray, w: Int, h: Int, w2: Int, h2: Int): IntArray {
+        //code from http://tech-algorithm.com/articles/bilinear-image-scaling/
+
+        val temp = IntArray(w2 * h2)
+        var a: Int
+        var b: Int
+        var c: Int
+        var d: Int
+        var x: Int
+        var y: Int
+        var index: Int
+        val xRatio = (w - 1).toFloat() / w2
+        val yRatio = (h - 1).toFloat() / h2
+        var xDiff: Float
+        var yDiff: Float
+        var blue: Float
+        var red: Float
+        var green: Float
+        var alpha: Float
+        var offset = 0
+        for (i in 0 until h2) {
+            for (j in 0 until w2) {
+                x = (xRatio * j).toInt()
+                y = (yRatio * i).toInt()
+                xDiff = xRatio * j - x
+                yDiff = yRatio * i - y
+                index = y * w + x
+                a = pixels[index]
+                b = pixels[index + 1]
+                c = pixels[index + w]
+                d = pixels[index + w + 1]
+                    // Yb = Ab(1-w)(1-h) + Bb(w)(1-h) + Cb(h)(1-w) + Db(wh)
+                    blue =
+                        Color.blue(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.blue(b).toFloat() * xDiff * (1 - yDiff) +
+                                Color.blue(c).toFloat() * yDiff * (1 - xDiff) + Color.blue(d).toFloat() * (xDiff * yDiff)
+                    green =
+                        Color.green(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.green(b).toFloat() * xDiff * (1 - yDiff) +
+                                Color.green(c).toFloat() * yDiff * (1 - xDiff) + Color.green(d).toFloat() * (xDiff * yDiff)
+
+                    red =
+                        Color.red(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.red(b).toFloat() * xDiff * (1 - yDiff) +
+                                Color.red(c).toFloat() * yDiff * (1 - xDiff) + Color.red(d).toFloat() * (xDiff * yDiff)
+                    alpha =
+                        Color.alpha(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.alpha(b).toFloat() * xDiff * (1 - yDiff) +
+                                Color.alpha(c).toFloat() * yDiff * (1 - xDiff) + Color.alpha(d).toFloat() * (xDiff * yDiff)
+
+
+                    temp[offset] = Color.argb(alpha.toInt(), red.toInt(), green.toInt(), blue.toInt())
+                offset += 1
+            }
+        }
+        return temp
+    }
+
+    private fun scale(side : Boolean, extent: Int) {
+        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
         val width = imageBitmap.width
         val height = imageBitmap.height
-        val startPixels = IntArray(width*height)
-        val endPixels = IntArray( (width*height/(n*n)))
-        imageBitmap.getPixels(startPixels, 0, width, 0 , 0, width, height)
-        var k = 0
-        for (i in 0 until height-n+1 step n) {
-            for (j in 0 until width-n+1 step n) {
-                val red = (Color.red(startPixels[i*width+j]) + Color.red(startPixels[(i+1)*width+j]) +
-                        Color.red(startPixels[i*width+j+1]) + Color.red(startPixels[(i+1)*width+j+1])) / 4
-                val green = (Color.green(startPixels[i*width+j]) + Color.green(startPixels[(i+1)*width+j]) +
-                        Color.green(startPixels[i*width+j+1]) + Color.green(startPixels[(i+1)*width+j+1])) / 4
-                val blue = (Color.blue(startPixels[i*width+j]) + Color.blue(startPixels[(i+1)*width+j]) +
-                        Color.blue(startPixels[i*width+j+1]) + Color.blue(startPixels[(i+1)*width+j+1])) / 4
-                val alpha = (Color.alpha(startPixels[i*width+j]) + Color.alpha(startPixels[(i+1)*width+j]) +
-                        Color.alpha(startPixels[i*width+j+1]) + Color.alpha(startPixels[(i+1)*width+j+1])) / 4
-                endPixels[k] = Color.argb(alpha, red, green, blue)
-                k += 1
-            }
+        val pixelsArray = IntArray(width*height)
+        imageBitmap.getPixels(pixelsArray, 0, width, 0 , 0, width, height)
+        if (side) {
+            val newBitmap : Bitmap = Bitmap.createBitmap(width*extent, height*extent, Bitmap.Config.ARGB_8888)
+            newBitmap.setPixels(resizeBilinear(pixelsArray, width, height, width*extent, height*extent),
+                0, width*extent, 0, 0, width*extent, height*extent)
+            imageForScaling.setImageBitmap(newBitmap)
         }
-        val newBitmap : Bitmap = Bitmap.createBitmap(width/n, height/n, Bitmap.Config.ARGB_8888)
-        newBitmap.setPixels(endPixels, 0, width/n, 0, 0, width/n, height/n)
-        imageForScaling.setImageBitmap(newBitmap)
-    }
-
-    private fun doNothing() {
-        imageForScalingString = intent.getStringExtra("image")
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingString))
-        imageForScaling.setImageBitmap(imageBitmap)
-    }
-
-    private fun doBigger(n : Int) {
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingString))
-        var width = imageBitmap.width
-        var height = imageBitmap.height
-        val startPixels = IntArray(width*height)
-        val endPixels = IntArray( (width*height*(n*n)))
-        imageBitmap.getPixels(startPixels, 0, width, 0 , 0, width, height)
-        width *= n
-        height *= n
-        val m : Int = width / n
-        var k = 0
-        while (k < startPixels.size) {
-            val forInt : Int = k / m
-            val firstIt = width * n * forInt + (k % m) * n
-            for (i in 0 until n) {
-                for (j in 0 until n) {
-                    endPixels[i*width+j+firstIt] = startPixels[k]
-                }
-            }
-            k += 1
+        else {
+            val newBitmap : Bitmap = Bitmap.createBitmap(width/extent, height/extent, Bitmap.Config.ARGB_8888)
+            newBitmap.setPixels(resizeBilinear(pixelsArray, width, height, width/extent, height/extent),
+                0, width/extent, 0, 0, width/extent, height/extent)
+            imageForScaling.setImageBitmap(newBitmap)
         }
-        val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        newBitmap.setPixels(endPixels, 0, width, 0, 0, width, height)
-        imageForScaling.setImageBitmap(newBitmap)
     }
 
     fun processButtonPressing(
@@ -91,14 +106,15 @@ class ScalingActivity : AppCompatActivity() {
             }
             R.id.buttonScale -> {
                 when (seekBarScaling.progress) {
-                    0 -> doSmaller(16)
-                    1 -> doSmaller(8)
-                    2 -> doSmaller(4)
-                    3 -> doSmaller(2)
-                    4 -> doNothing()
-                    5 -> doBigger(2)
-                    6 -> doBigger(4)
-                    7 -> doBigger(8)
+                    0 -> scale(false, 16)
+                    1 -> scale(false, 8)
+                    2 -> scale(false, 4)
+                    3 -> scale(false, 2)
+                    4 -> scale(false, 1)
+                    5 -> scale(true, 2)
+                    6 -> scale(true, 4)
+                    7 -> scale(true, 8)
+                    8 -> scale(true, 16)
                 }
 
             }
