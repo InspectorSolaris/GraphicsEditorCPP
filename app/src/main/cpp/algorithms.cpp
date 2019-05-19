@@ -88,6 +88,12 @@ uint32_t blurPixel(
 {
     uint32_t result = 0xFF000000;
 
+    if(0 <= x && x < n &&
+        0 <= y && y < m)
+    {
+        result &= img[x * m + y];
+    }
+
     int rc = 0;
     int gc = 0;
     int bc = 0;
