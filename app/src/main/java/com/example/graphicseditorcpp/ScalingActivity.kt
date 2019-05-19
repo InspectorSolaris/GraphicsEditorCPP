@@ -8,10 +8,13 @@ import android.view.View
 import android.net.Uri
 import android.provider.MediaStore.Images.Media.getBitmap
 import kotlinx.android.synthetic.main.activity_scaling.*
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 
 class ScalingActivity : AppCompatActivity() {
 
-    var imageForScalingPath: String? = null
+    private var imageForScalingPath: String? = null
+
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -19,9 +22,32 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
+        seekBarScaling.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                var scaleNum = ""
+                when (progress)  {
+                    0 -> scaleNum = "*0,0625"
+                    1 -> scaleNum = "*0.125"
+                    2 -> scaleNum = "*0.25"
+                    3 -> scaleNum = "*0.5"
+                    4 -> scaleNum = "*1"
+                    5 -> scaleNum = "*2"
+                    6 -> scaleNum = "*4"
+                    7 -> scaleNum = "*8"
+                    8 -> scaleNum  ="*16"
+                }
+                buttonScale.text = scaleNum
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+        })
+
         imageForScalingPath = intent.getStringExtra("image")
         imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
     }
+
 
     private fun resizeBilinear(pixels: IntArray, w: Int, h: Int, w2: Int, h2: Int): IntArray {
         //code from http://tech-algorithm.com/articles/bilinear-image-scaling/

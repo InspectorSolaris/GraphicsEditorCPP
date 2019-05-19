@@ -54,8 +54,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/buttonScale"
             android:layout_marginBottom="16dp"
-            android:max="7"
+            android:max="8"
             android:progress="4"
             android:id="@+id/seekBarScaling"/>
+
 
 </android.support.constraint.ConstraintLayout>
