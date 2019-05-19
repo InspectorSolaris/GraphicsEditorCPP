@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_scaling.*
 
 class ScalingActivity : AppCompatActivity() {
 
-    var imageForScalingPath: String? = null
+    var imageForScalingString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -19,12 +19,12 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        imageForScalingPath = intent.getStringExtra("image")
-        imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
+        imageForScalingString = intent.getStringExtra("image")
+        imageForScaling.setImageURI(Uri.parse(imageForScalingString))
     }
 
     private fun doSmaller(n : Int) {
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
+        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingString))
         val width = imageBitmap.width
         val height = imageBitmap.height
         val startPixels = IntArray(width*height)
@@ -51,12 +51,13 @@ class ScalingActivity : AppCompatActivity() {
     }
 
     private fun doNothing() {
-        imageForScalingPath = intent.getStringExtra("image")
-        imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
+        imageForScalingString = intent.getStringExtra("image")
+        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingString))
+        imageForScaling.setImageBitmap(imageBitmap)
     }
 
     private fun doBigger(n : Int) {
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
+        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingString))
         var width = imageBitmap.width
         var height = imageBitmap.height
         val startPixels = IntArray(width*height)

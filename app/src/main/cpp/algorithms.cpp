@@ -219,7 +219,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
         a[i] = 1;
         b[i] = 4;
         c[i] = 1;
-        d[i] = points[i] + 2 * points[i + 1];
+        d[i] = 4 * points[i] + 2 * points[i + 1];
     }
 
     a[n - 1] = 2;

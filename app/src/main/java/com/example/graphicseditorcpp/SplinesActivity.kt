@@ -127,7 +127,7 @@ class SplinesActivity : AppCompatActivity() {
                 val xArray = IntArray(pointX.size - 1)
                 val yArray = IntArray(pointY.size - 1)
 
-                for(i in 1 until pointX.size - 1) {
+                for(i in 1 until pointX.size) {
                     xArray[i - 1] = pointX[i]
                     yArray[i - 1] = pointY[i]
                 }
