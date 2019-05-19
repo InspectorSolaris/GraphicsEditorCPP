@@ -227,7 +227,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
     c[n - 1] = 0;
     d[n - 1] = 8 * points[n - 1] + points[n];
 
-    for(unsigned int i = 1; i < n; i++)
+    for(unsigned int i = 1; i < n; ++i)
     {
         double w = a[i] / b[i - 1];
         b[i] = b[i] - w * c[i - 1];
@@ -240,7 +240,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
         p1[n - 2 - i] = (d[n - 2 - i] - c[n - 2 - i] * p1[n - 2 - i + 1]) / b[n - 2 - i];
     }
 
-    for(unsigned int i = 0; i < n - 1; i++)
+    for(unsigned int i = 0; i < n - 1; ++i)
     {
         p2[i] = 2 * points[i + 1] - p1[i + 1];
     }
@@ -304,7 +304,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
     c[n - 1] = 0;
     d[n - 1] = 8 * points[n - 1] + points[n];
 
-    for(unsigned int i = 1; i < n; i++)
+    for(unsigned int i = 1; i < n; ++i)
     {
         double w = a[i] / b[i - 1];
         b[i] = b[i] - w * c[i - 1];
@@ -317,7 +317,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP2(
         p1[n - 2 - i] = (d[n - 2 - i] - c[n - 2 - i] * p1[n - 2 - i + 1]) / b[n - 2 - i];
     }
 
-    for(unsigned int i = 0; i < n - 1; i++)
+    for(unsigned int i = 0; i < n - 1; ++i)
     {
         p2[i] = 2 * points[i + 1] - p1[i + 1];
     }

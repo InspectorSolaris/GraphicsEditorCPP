@@ -286,33 +286,28 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode != idImageChange) {
-//            val imageUri = when {
-//                requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK -> {
-//                    createImageFile(getString(R.string.main_activity_imageforprocessingname), getString(R.string.main_activity_imageforprocessingext))
-//
-//                    BitmapFactory.decodeFileDescriptor(
-//                        this.contentResolver.openFileDescriptor(
-//                            data?.data,
-//                            "r"
-//                        )?.fileDescriptor
-//                    ).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
-//
-//                    Uri.parse(imageForProcessingString)
-//                }
-//                requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK -> {
-//                    Uri.parse(imageForProcessingString)
-//                }
-//                else -> {
-//                    null
-//                }
-            val imageUri = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
-                data?.data
-            }
-            else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-                Uri.parse(imageForProcessingString)
-            }
-            else {
-                null
+            val imageUri = when {
+                requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK -> {
+                    createImageFile(
+                        getString(R.string.main_activity_imageforprocessingname),
+                        getString(R.string.main_activity_imageforprocessingext)
+                    )
+
+                    BitmapFactory.decodeFileDescriptor(
+                        this.contentResolver.openFileDescriptor(
+                            data?.data,
+                            "r"
+                        )?.fileDescriptor
+                    ).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
+
+                    Uri.parse(imageForProcessingString)
+                }
+                requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK -> {
+                    Uri.parse(imageForProcessingString)
+                }
+                else -> {
+                    null
+                }
             }
 
             if (imageUri != null) {

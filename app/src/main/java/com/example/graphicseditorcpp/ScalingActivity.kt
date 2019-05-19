@@ -1,6 +1,7 @@
 package com.example.graphicseditorcpp
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -104,7 +105,7 @@ class ScalingActivity : AppCompatActivity() {
     }
 
     private fun scale(side : Boolean, extent: Int) {
-        val imageBitmap : Bitmap = getBitmap(this.contentResolver, Uri.parse(imageForScalingPath))
+        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageForScalingPath)
         val width = imageBitmap.width
         val height = imageBitmap.height
         val pixelsArray = IntArray(width*height)

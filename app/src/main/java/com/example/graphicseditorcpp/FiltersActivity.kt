@@ -1,6 +1,7 @@
 package com.example.graphicseditorcpp
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -30,8 +31,7 @@ class FiltersActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonF1 -> {
-                val imageBitmap: Bitmap =
-                    MediaStore.Images.Media.getBitmap(this.contentResolver, Uri.parse(imageForFiltersString))
+                val imageBitmap: Bitmap = BitmapFactory.decodeFile(imageForFiltersString)
                 grayscale(imageBitmap)
             }
         }
