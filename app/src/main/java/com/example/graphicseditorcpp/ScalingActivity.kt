@@ -7,15 +7,12 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.net.Uri
-import android.provider.MediaStore.Images.Media.getBitmap
 import kotlinx.android.synthetic.main.activity_scaling.*
 import android.widget.SeekBar
-import android.widget.SeekBar.OnSeekBarChangeListener
 
 class ScalingActivity : AppCompatActivity() {
 
     private var imageForScalingPath: String? = null
-
 
     override fun onCreate(
         savedInstanceState: Bundle?

@@ -17,7 +17,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.BitmapFactory
+import android.view.ViewGroup
 import java.io.*
+import java.lang.Math.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,8 +29,11 @@ class MainActivity : AppCompatActivity() {
 
     private val permissionGallery = 1
     private val permissionCamera = 2
-    private var dialog : BottomSheetDialog? = null
 
+    private var dialog: BottomSheetDialog? = null
+
+    private var imageForProcessingHistory: MutableList<String> = mutableListOf("")
+    private var imageForProcessingInd: Int = 0
     private var imageForProcessingString: String? = null
 
     companion object {
@@ -50,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             imageFileExt,
             imageFileDir
         ).apply {
+            imageForProcessingHistory.add(absolutePath)
+            imageForProcessingInd++
             imageForProcessingString = absolutePath
         }
     }
@@ -121,10 +128,10 @@ class MainActivity : AppCompatActivity() {
         cameraIntent.putExtra(
             MediaStore.EXTRA_OUTPUT,
             FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
-            createImageFile(
-                getString(R.string.main_activity_imageforprocessingname),
-                getString(R.string.main_activity_imageforprocessingext)
-            )
+                createImageFile(
+                    getString(R.string.main_activity_imageforprocessingname),
+                    getString(R.string.main_activity_imageforprocessingext)
+                )
             )
         )
 
@@ -141,9 +148,18 @@ class MainActivity : AppCompatActivity() {
             R.id.imageButtonPickFromCamera -> {
                 tryPickFromCamera()
             }
+            R.id.imageButtonRedo -> {
+                imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 1)
+                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+                imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+            }
+            R.id.imageButtonUndo -> {
+                imageForProcessingInd = max(imageForProcessingInd - 1, 1)
+                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+                imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+            }
             R.id.imageButtonTools -> {
-
-                dialog!!.setContentView(layoutInflater.inflate(R.layout.tools_layout, null))
+                dialog!!.setContentView(layoutInflater.inflate(R.layout.tools_layout, null as ViewGroup?))
                 dialog!!.show()
             }
             R.id.imageButtonAlgorithmAStar -> {
@@ -244,7 +260,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             R.id.buttonExport -> {
-                exportPicture()
+                exportImage()
             }
         }
     }
@@ -295,7 +311,7 @@ class MainActivity : AppCompatActivity() {
 
                     BitmapFactory.decodeFileDescriptor(
                         this.contentResolver.openFileDescriptor(
-                            data?.data,
+                            data?.data as Uri,
                             "r"
                         )?.fileDescriptor
                     ).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
@@ -309,15 +325,6 @@ class MainActivity : AppCompatActivity() {
                     null
                 }
             }
-//            val imageUri = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
-//                data?.data
-//            }
-//            else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-//                Uri.parse(imageForProcessingString)
-//            }
-//            else {
-//                null
-//            }
 
             if (imageUri != null) {
                 imageButtonPickFromGallery.visibility = View.GONE
@@ -332,20 +339,24 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
             }
         }
-        else {
+        else if(data?.extras!!.getBoolean("changed")){
+            val imageForProcessingOldString = imageForProcessingString
+            while(imageForProcessingInd < imageForProcessingHistory.size - 1) {
+                imageForProcessingHistory.removeAt(imageForProcessingInd + 1)
+            }
+
             createImageFile(
                 getString(R.string.main_activity_imageforprocessingname),
                 getString(R.string.main_activity_imageforprocessingext)
             )
 
-            BitmapFactory.decodeFile(data?.extras?.getString("image"))
+            BitmapFactory.decodeFile(imageForProcessingOldString)
                 .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
-
             imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
         }
     }
 
-    private fun exportPicture() {
+    private fun exportImage() {
         MediaStore.Images.Media.insertImage(
             contentResolver,
             BitmapFactory.decodeFile(imageForProcessingString),

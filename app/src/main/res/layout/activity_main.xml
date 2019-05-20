@@ -17,7 +17,29 @@
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
+        <ImageButton
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_undo"
+                android:id="@+id/imageButtonUndo"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#00FFFFFF" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonRedo"
+                android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="1.0" android:onClick="processButtonPressing"
+                android:contentDescription="@string/main_activity_imagebutton_undo"/>
+        <ImageButton
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_redo"
+                android:id="@+id/imageButtonRedo"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#00FFFFFF" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonPickNew"
+                android:onClick="processButtonPressing"
+                android:contentDescription="@string/main_activity_imagebutton_redo"/>
         <ImageButton
                 android:layout_width="54dp"
                 android:layout_height="54dp"

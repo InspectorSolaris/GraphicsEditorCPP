@@ -30,6 +30,11 @@
         </activity>
         <activity android:name=".SegmentationActivity">
         </activity>
+
+        <meta-data
+                android:name="com.google.android.gms.vision.DEPENDENCIES"
+                android:value="face" />
+
         <activity android:name=".FiltersActivity">
         </activity>
         <activity android:name=".TurningActivity">

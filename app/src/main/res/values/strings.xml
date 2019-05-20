@@ -15,6 +15,10 @@
     <string name="main_activity_button_export">Export processed image</string>
     <string name="main_activity_nophoto">Please choose the photo first</string>
     <string name="main_activity_imageexportsuccess">Image export success</string>
+    <string name="main_activity_imagebutton_redo">Redo changes</string>
+    <string name="main_activity_imagebutton_undo">Undo changes</string>
+    <string name="main_activity_popup_pickfromgallery">Pick from Gallery</string>
+    <string name="main_activity_popup_pickfromcamera">Pick from Camera</string>
 
     <string name="astar_activity_button_setstart_text">Start</string>
     <string name="astar_activity_button_setfinish_text">Finish</string>
@@ -28,8 +32,6 @@
     <string name="astar_activity_button_setwall">Set wall for AStar</string>
     <string name="astar_activity_button_erase">Erase point from AStar map</string>
     <string name="astar_activity_button_runastar">Run AStar algorithm</string>
-    <string name="main_activity_popup_pickfromgallery">Pick from Gallery</string>
-    <string name="main_activity_popup_pickfromcamera">Pick from Camera</string>
     <string name="astar_activity_popup_resizemap">Size</string>
     <string name="astar_activity_popup_empirics">Empirics</string>
     <string name="astar_activity_popup_manhattandist">Manhattan</string>
@@ -55,6 +57,9 @@
     <string name="scaling_activity_button_scale_text">Scale</string>
 
     <string name="segmentation_activity_imageview_imageforsegmentation">Image for segmentation</string>
+    <string name="segmentation_activity_button_segmentation_text">Segmentation</string>
+    <string name="segmentation_activity_button_segmentation">Run segmentation</string>
+    <string name="segmentation_activity_button_dismiss_text">Dismiss</string>
 
     <string name="retouching_activity_imageview_imageforretouching">Image for retouching</string>
     <string name="retouching_activity_button_dismiss_text">Dismiss</string>
@@ -69,6 +74,7 @@
 
     <string name="splines_activitu_button_drawsplines_text">Draw</string>
     <string name="splines_activity_button_drawsplines">Draw splines</string>
+    <string name="splines_activity_button_clear_text">Clear</string>
 
     <string name="tools_rotate">Rotate</string>
     <string name="tools_filters">Filters</string>
