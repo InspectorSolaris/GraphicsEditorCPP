@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private var dialog : BottomSheetDialog? = null
 
     private var imageForProcessingString: String? = null
+    private var imageForProcessingHistory: List<String>? = null
 
     companion object {
         init {
@@ -309,15 +310,6 @@ class MainActivity : AppCompatActivity() {
                     null
                 }
             }
-//            val imageUri = if(requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK) {
-//                data?.data
-//            }
-//            else if(requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK) {
-//                Uri.parse(imageForProcessingString)
-//            }
-//            else {
-//                null
-//            }
 
             if (imageUri != null) {
                 imageButtonPickFromGallery.visibility = View.GONE
