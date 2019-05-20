@@ -86,5 +86,6 @@
     <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
     <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
     <string name="error_main_image_pick">Error: Image picking fail</string>
+    <string name="segmentation_activity_button_dismiss_text">Dismiss</string>
 
 </resources>

@@ -211,9 +211,9 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
     }
 
     --n;
-    vector<double> a(n);
-    vector<double> b(n);
-    vector<double> c(n);
+    vector<double> a((unsigned int)n);
+    vector<double> b((unsigned int)n);
+    vector<double> c((unsigned int)n);
 
     a[0] = 0;
     b[0] = 2;
@@ -250,7 +250,6 @@ Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
     {
         p2[i] = 2 * points[i + 1] - p1[i + 1];
     }
-    p2[n - 1] = 0.5 * (points[n] + p1[n - 1]);
 
     jdoubleArray result = env->NewDoubleArray(n);
     jdouble buf[n];
@@ -419,8 +418,7 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         for(unsigned int j = 0; j < map_y; ++j)
         {
             int ind = mapInfo.width + 1 + i * pixel_size + j * pixel_size * pixel_size * map_x;
-            int clr = src[ind];
-            int color = (unsigned int)clr & 0x00FFFFFF;
+            int color = src[ind] & 0x00FFFFFF;
 
             if(color == 0x00000000)
             {
@@ -476,9 +474,6 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
                g[u[0]][u[1]] ||
                (i > 3 && directions == 1) ||
                (i > 3 && directions == 3 && (g[v[0]][u[1]] || g[u[0]][v[1]]))) { continue; }
-
-            bool a = g[v[0]][u[1]];
-            bool b = g[u[0]][v[1]];
 
             if(u_d < d[arrInd(m, u)])
             {

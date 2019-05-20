@@ -37,16 +37,27 @@
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
             android:contentDescription="@string/segmentation_activity_imageview_imageforsegmentation"
-            app:layout_constraintBottom_toTopOf="@+id/buttonRunSegmentation" android:layout_marginBottom="32dp"/>
-    <Button
-            android:text="@string/segmentation_activity_button_segmentation_text"
+            android:layout_marginBottom="32dp" app:layout_constraintBottom_toTopOf="@+id/linearLayout"/>
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonRunSegmentation"
-            android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:onClick="processButtonPressing"
-            android:contentDescription="@string/segmentation_activity_button_segmentation_text"/>
+            app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/linearLayout">
+        <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/segmentation_activity_button_segmentation_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/buttonSegmentation" android:layout_weight="1"
+                android:textColor="@color/buttonColor" android:background="@color/colorPrimaryDark"
+                android:contentDescription="@string/segmentation_activity_button_segmentation"/>
+        <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:text="@string/segmentation_activity_button_dismiss_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/buttonDismiss" android:layout_weight="1"
+                android:textColor="@color/buttonColor" android:background="@color/colorPrimaryDark"/>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
