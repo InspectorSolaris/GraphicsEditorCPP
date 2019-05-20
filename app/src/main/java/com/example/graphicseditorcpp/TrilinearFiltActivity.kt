@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_trilinear_filt.*
 
 class TrilinearFiltActivity : AppCompatActivity() {
 
-    var imageForTrilinearFiltString: String? = null
+    private var imageForTrilinearFiltString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?

@@ -19,8 +19,8 @@ import java.io.FileOutputStream
 
 class SegmentationActivity : AppCompatActivity() {
 
-    var imageForSegmentationString: String? = null
-    var imageSegmentatedBitmap: Bitmap? = null
+    private var imageForSegmentationString: String? = null
+    private var imageSegmentedBitmap: Bitmap? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -33,8 +33,8 @@ class SegmentationActivity : AppCompatActivity() {
     }
 
     private fun tryCopyImageFile(){
-        if(imageSegmentatedBitmap != null) {
-            val imageLocal = imageSegmentatedBitmap
+        if(imageSegmentedBitmap != null) {
+            val imageLocal = imageSegmentedBitmap
             imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSegmentationString))
         }
     }
@@ -52,26 +52,26 @@ class SegmentationActivity : AppCompatActivity() {
                 segmentation()
             }
             R.id.buttonDismiss -> {
-                imageSegmentatedBitmap = null
+                imageSegmentedBitmap = null
                 imageForSegmentation.setImageURI(Uri.parse(imageForSegmentationString))
             }
         }
     }
 
     private fun segmentation() {
-        imageSegmentatedBitmap = BitmapFactory.decodeFile(imageForSegmentationString)
+        imageSegmentedBitmap = BitmapFactory.decodeFile(imageForSegmentationString)
 
         val myRectPaint = Paint()
         myRectPaint.strokeWidth = 5f
         myRectPaint.color = Color.RED
         myRectPaint.style = Paint.Style.STROKE
 
-        val tempBitmap = Bitmap.createBitmap(imageSegmentatedBitmap!!.width, imageSegmentatedBitmap!!.height, Bitmap.Config.ARGB_8888)
+        val tempBitmap = Bitmap.createBitmap(imageSegmentedBitmap!!.width, imageSegmentedBitmap!!.height, Bitmap.Config.ARGB_8888)
         val tempCanvas = Canvas(tempBitmap)
-        tempCanvas.drawBitmap(imageSegmentatedBitmap!!, 0.0F, 0.0F, null)
+        tempCanvas.drawBitmap(imageSegmentedBitmap!!, 0.0F, 0.0F, null)
 
         val faceDetector = FaceDetector.Builder(applicationContext).setTrackingEnabled(false) .build()
-        val frame = Frame.Builder().setBitmap(imageSegmentatedBitmap).build()
+        val frame = Frame.Builder().setBitmap(imageSegmentedBitmap).build()
         val faces = faceDetector.detect(frame)
 
         for (i in 0 until faces.size()) {
@@ -83,7 +83,7 @@ class SegmentationActivity : AppCompatActivity() {
             tempCanvas.drawRoundRect(RectF(x1, y1, x2, y2), 2F, 2F, myRectPaint)
         }
 
-        imageSegmentatedBitmap = tempBitmap
+        imageSegmentedBitmap = tempBitmap
         imageForSegmentation.setImageBitmap(tempBitmap)
     }
 }

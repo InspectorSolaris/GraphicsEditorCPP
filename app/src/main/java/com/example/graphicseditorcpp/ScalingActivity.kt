@@ -14,7 +14,6 @@ class ScalingActivity : AppCompatActivity() {
 
     private var imageForScalingPath: String? = null
 
-
     override fun onCreate(
         savedInstanceState: Bundle?
     ) {

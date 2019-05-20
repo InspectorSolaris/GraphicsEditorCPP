@@ -19,9 +19,11 @@ import java.util.*
 
 class TurningActivity : AppCompatActivity() {
 
-    var currentAngle = 0
-    var imageForTurningString: String? = null
-    var imageTurnedString: String? = null
+    private var imageChanged = false
+
+    private var currentAngle = 0
+    private var imageForTurningString: String? = null
+    private var imageTurnedString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -84,7 +86,7 @@ class TurningActivity : AppCompatActivity() {
         when(view.id) {
             R.id.imageButtonBack -> {
                 tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("image", imageForTurningString))
+                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
                 finish()
             }
             R.id.buttonClear -> {
@@ -115,5 +117,6 @@ class TurningActivity : AppCompatActivity() {
         }
 
         imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
+        imageChanged = currentAngle != 0
     }
 }

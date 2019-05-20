@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_bilinear_filt.*
 
 class BilinearFiltActivity : AppCompatActivity() {
 
-    var imageForBilinearFiltString: String? = null
+    private var imageForBilinearFiltString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?

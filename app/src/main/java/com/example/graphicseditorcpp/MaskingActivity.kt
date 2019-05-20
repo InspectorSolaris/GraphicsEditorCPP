@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_masking.*
 
 class MaskingActivity : AppCompatActivity() {
 
-    var imageForMaskingString: String? = null
+    private var imageForMaskingString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?

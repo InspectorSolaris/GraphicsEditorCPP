@@ -12,7 +12,7 @@ import kotlin.math.min
 
 class SplinesActivity : AppCompatActivity() {
 
-    private val squareSize = 10
+    private val circleR = 35
     private val circleRadius = 1.6F
     private val splineLen = 2000
 
@@ -52,7 +52,7 @@ class SplinesActivity : AppCompatActivity() {
         imageViewSplines.setOnTouchListener { _, motionEvent ->
 
             if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
-                drawSquare(motionEvent.x.toInt(), motionEvent.y.toInt())
+                drawCircle(motionEvent.x.toInt(), motionEvent.y.toInt())
                 pointX.add(motionEvent.x.toInt())
                 pointY.add(motionEvent.y.toInt())
                 timeCounter = System.currentTimeMillis()
@@ -64,16 +64,18 @@ class SplinesActivity : AppCompatActivity() {
         }
     }
 
-    private fun drawSquare(
+    private fun drawCircle(
         x: Int,
         y: Int
     ) {
-        for(i in (-squareSize / 2)..(+squareSize / 2)) {
-            for(j in (-squareSize / 2)..(+squareSize / 2)) {
+        for(i in (-circleR / 2)..(+circleR / 2)) {
+            for(j in (-circleR / 2)..(+circleR / 2)) {
                 val px = max(min(x + i, nSize), 0)
                 val py = max(min(y + j, mSize), 0)
 
-                bitmapForSplines.setPixel(px, py, getColor(R.color.splinesColorPoint))
+                if ((px - x) * (px - x) + (py - y) * (py - y) < circleR) {
+                    bitmapForSplines.setPixel(px, py, getColor(R.color.splinesColorPoint))
+                }
             }
         }
     }
@@ -123,7 +125,6 @@ class SplinesActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonDrawSplines -> {
-
                 val xArray = IntArray(pointX.size - 1)
                 val yArray = IntArray(pointY.size - 1)
 
@@ -141,6 +142,11 @@ class SplinesActivity : AppCompatActivity() {
 
                 imageViewSplines.setImageBitmap(bitmapForSplines)
                 drawn = true
+            }
+            R.id.buttonClear -> {
+                bitmapForSplines.eraseColor(getColor(R.color.splinesColorBackground))
+                imageViewSplines.setImageBitmap(bitmapForSplines)
+                drawn = false
             }
         }
     }

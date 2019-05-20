@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_filters.*
 
 class FiltersActivity : AppCompatActivity() {
 
-    var imageForFiltersString: String? = null
+    private var imageForFiltersString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?

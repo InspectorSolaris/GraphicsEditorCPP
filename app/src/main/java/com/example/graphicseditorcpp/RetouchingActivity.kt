@@ -14,9 +14,11 @@ import java.io.FileOutputStream
 
 class RetouchingActivity : AppCompatActivity() {
 
-    var retouchingRadius = 50
-    var imageForRetouchingString: String? = null
-    var imageRetouchedBitmap: Bitmap? = null
+    private var imageChanged = false
+
+    private var retouchingRadius = 50
+    private var imageForRetouchingString: String? = null
+    private var imageRetouchedBitmap: Bitmap? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -48,6 +50,7 @@ class RetouchingActivity : AppCompatActivity() {
             imageRetouching(retouchingRadius, motionEvent.x.toInt(), motionEvent.y.toInt(), imageLocal)
             imageForRetouching.setImageBitmap(imageRetouchedBitmap)
             imageRetouchedBitmap = imageLocal
+            imageChanged = true
 
             true
         }
@@ -73,12 +76,13 @@ class RetouchingActivity : AppCompatActivity() {
         when (view.id) {
             R.id.imageButtonBack -> {
                 tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("image", imageForRetouchingString))
+                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
                 finish()
             }
             R.id.buttonDismiss -> {
                 imageRetouchedBitmap = BitmapFactory.decodeFile(imageForRetouchingString)
                 imageForRetouching.setImageBitmap(imageRetouchedBitmap)
+                imageChanged = false
             }
         }
     }
