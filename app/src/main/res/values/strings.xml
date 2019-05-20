@@ -55,6 +55,8 @@
     <string name="scaling_activity_button_scale_text">Scale</string>
 
     <string name="segmentation_activity_imageview_imageforsegmentation">Image for segmentation</string>
+    <string name="segmentation_activity_button_segmentation_text">Segmentation</string>
+    <string name="segmentation_activity_button_segmentation_descruption">run segmentation</string>
 
     <string name="retouching_activity_imageview_imageforretouching">Image for retouching</string>
     <string name="retouching_activity_button_dismiss_text">Dismiss</string>
