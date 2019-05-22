@@ -49,12 +49,10 @@ class FiltersActivity : AppCompatActivity() {
                 grayscale()
             }
             R.id.buttonF2 -> {
-                val imageBitmap: Bitmap = BitmapFactory.decodeFile(imageForFiltersString)
-                sepia(imageBitmap)
+                sepia()
             }
             R.id.buttonF3 -> {
-                val imageBitmap: Bitmap = BitmapFactory.decodeFile(imageForFiltersString)
-                negative(imageBitmap)
+                negative()
             }
         }
     }
@@ -91,18 +89,17 @@ class FiltersActivity : AppCompatActivity() {
         imageChanged = true
     }
 
-    private fun sepia(
-        imageBitmap: Bitmap?
-    ) {
+    private fun sepia() {
+        val imageLocal = imageFilteredBitmap
         var newBitmap: Bitmap? = null
-        if (imageBitmap != null) {
-            val width = imageBitmap.width
-            val height = imageBitmap.height
+        if (imageLocal != null) {
+            val width = imageLocal.width
+            val height = imageLocal.height
             newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
             val srcPixels = IntArray(width * height)
             val newPixels = IntArray(width * height)
-            imageBitmap.getPixels(srcPixels, 0, width, 0, 0, width, height)
+            imageLocal.getPixels(srcPixels, 0, width, 0, 0, width, height)
 
             for (i in 0 until srcPixels.size) {
                 val p: Long = srcPixels[i].toLong()
@@ -125,30 +122,29 @@ class FiltersActivity : AppCompatActivity() {
 
             newBitmap.setPixels(newPixels, 0, width, 0, 0, width, height)
         }
+
         imageForFilters.setImageBitmap(newBitmap)
         imageFilteredBitmap = newBitmap
         imageChanged = true
     }
 
-    private fun negative(
-        imageBitmap: Bitmap?
-    ) {
+    private fun negative() {
+        val imageLocal = imageFilteredBitmap
         var newBitmap: Bitmap? = null
-        if (imageBitmap != null) {
-            val width = imageBitmap.width
-            val height = imageBitmap.height
+        if (imageLocal != null) {
+            val width = imageLocal.width
+            val height = imageLocal.height
             newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
             val srcPixels = IntArray(width * height)
             val newPixels = IntArray(width * height)
-            imageBitmap.getPixels(srcPixels, 0, width, 0, 0, width, height)
+            imageLocal.getPixels(srcPixels, 0, width, 0, 0, width, height)
 
             for (i in 0 until srcPixels.size) {
                 val p: Long = srcPixels[i].toLong()
                 var r: Long = ((p and 0x00FF0000) shr 16)
                 var g: Long = ((p and 0x0000FF00) shr 8)
                 var b: Long = ((p and 0x000000FF) shr 0)
-
 
                 r = 255 - r
                 g = 255 - g
@@ -161,6 +157,7 @@ class FiltersActivity : AppCompatActivity() {
 
             newBitmap.setPixels(newPixels, 0, width, 0, 0, width, height)
         }
+
         imageForFilters.setImageBitmap(newBitmap)
         imageFilteredBitmap = newBitmap
         imageChanged = true
