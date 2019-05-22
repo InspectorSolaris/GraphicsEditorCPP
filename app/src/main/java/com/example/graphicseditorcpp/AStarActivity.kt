@@ -26,6 +26,7 @@ class AStarActivity : AppCompatActivity() {
     private var finishY = -1
 
     private var path: IntArray = intArrayOf(-1)
+    private var pathIsDrown = false
 
     private external fun algorithmAStar(
         bitmap: Bitmap,
@@ -38,10 +39,11 @@ class AStarActivity : AppCompatActivity() {
         pixel_size: Int,
         map_x: Int,
         map_y: Int
-    ) : IntArray
+    ): IntArray
 
     override fun onCreate(
-        savedInstanceState: Bundle?) {
+        savedInstanceState: Bundle?
+    ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
@@ -53,6 +55,18 @@ class AStarActivity : AppCompatActivity() {
         imageViewAStarMap.setImageBitmap(aStarMap)
 
         imageViewAStarMap.setOnTouchListener { _, motionEvent ->
+            if(pathIsDrown){
+                for(i in path) {
+                    colorizeSquare(
+                        pixelSize * (i % (nSize / pixelSize)),
+                        pixelSize * (i / (nSize / pixelSize)),
+                        getColor(R.color.aStarColorEmpty)
+                    )
+                }
+
+                pathIsDrown = false
+            }
+
             var coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
             var coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
 
@@ -193,7 +207,8 @@ class AStarActivity : AppCompatActivity() {
     private fun colorizeSquare(
         coordX: Int,
         coordY: Int,
-        color: Int) {
+        color: Int
+    ) {
         for (i in 1 until pixelSize - 1) {
             for (j in 1 until pixelSize - 1) {
                 aStarMap.setPixel(coordX + i, coordY + j, color)
@@ -202,7 +217,8 @@ class AStarActivity : AppCompatActivity() {
     }
 
     fun processButtonPressing(
-        view: View) {
+        view: View
+    ) {
         when(view.id) {
             R.id.imageButtonBack -> {
                 finish()
@@ -237,11 +253,17 @@ class AStarActivity : AppCompatActivity() {
                     )
 
                     for(i in path) {
-                        colorizeSquare(pixelSize * (i % (nSize / pixelSize)), pixelSize * (i / (nSize / pixelSize)), getColor(R.color.aStarColorPath))
+                        colorizeSquare(
+                            pixelSize * (i % (nSize / pixelSize)),
+                            pixelSize * (i / (nSize / pixelSize)),
+                            getColor(R.color.aStarColorPath)
+                        )
                     }
 
                     colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
                     colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
+
+                    pathIsDrown = true
                 }
                 else {
                     Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()
