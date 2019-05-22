@@ -1,5 +1,7 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -7,10 +9,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_filters.*
+import java.io.FileOutputStream
 
 class FiltersActivity : AppCompatActivity() {
 
+    private var imageChanged = false
+
     private var imageForFiltersString: String? = null
+    private var imageFilteredBitmap: Bitmap? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -19,7 +25,15 @@ class FiltersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_filters)
 
         imageForFiltersString = intent.getStringExtra("image")
+        imageFilteredBitmap = BitmapFactory.decodeFile(imageForFiltersString)
         imageForFilters.setImageURI(Uri.parse(imageForFiltersString))
+    }
+
+    private fun tryCopyImageFile(){
+        if(imageFilteredBitmap != null) {
+            val imageLocal = imageFilteredBitmap
+            imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForFiltersString))
+        }
     }
 
     fun processButtonPressing(
@@ -27,27 +41,27 @@ class FiltersActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
+                tryCopyImageFile()
+                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
                 finish()
             }
             R.id.buttonF1 -> {
-                val imageBitmap: Bitmap = BitmapFactory.decodeFile(imageForFiltersString)
-                grayscale(imageBitmap)
+                grayscale()
             }
         }
     }
 
-    private fun grayscale(
-        imageBitmap: Bitmap?
-    ) {
+    private fun grayscale() {
+        val imageLocal = imageFilteredBitmap
         var newBitmap: Bitmap? = null
-        if (imageBitmap != null) {
-            val width = imageBitmap.width
-            val height = imageBitmap.height
+        if (imageLocal != null) {
+            val width = imageLocal.width
+            val height = imageLocal.height
             newBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 
             val srcPixels = IntArray(width * height)
             val newPixels = IntArray(width * height)
-            imageBitmap.getPixels(srcPixels, 0, width, 0, 0, width, height)
+            imageLocal.getPixels(srcPixels, 0, width, 0, 0, width, height)
 
             for (i in 0 until srcPixels.size) {
                 val p: Long = srcPixels[i].toLong()
@@ -63,7 +77,10 @@ class FiltersActivity : AppCompatActivity() {
 
             newBitmap.setPixels(newPixels, 0, width, 0, 0, width, height)
         }
+
         imageForFilters.setImageBitmap(newBitmap)
+        imageFilteredBitmap = newBitmap
+        imageChanged = true
     }
 }
 

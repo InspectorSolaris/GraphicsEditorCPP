@@ -3,8 +3,8 @@
 
     <string name="imagebutton_back">Back to previous activity</string>
 
-    <string name="main_activity_imageforprocessingname">processedImg_</string>
-    <string name="main_activity_imageforprocessingext">png</string>
+    <string name="imageforprocessingname">processedImg_</string>
+    <string name="imageforprocessingext">png</string>
 
     <string name="main_activity_imagebutton_picknew">Pick new image</string>
     <string name="main_activity_imageview_imageforprocessing">Image for processing</string>
@@ -45,8 +45,6 @@
     <string name="turning_activity_button_turn_text">Turn</string>
     <string name="turning_activity_button_clear_text">Clear</string>
     <string name="turning_activity_textview_angle_text">0</string>
-    <string name="turning_activity_imageturnedname">turnedImg_</string>
-    <string name="turning_activity_imageturnedext">png</string>
 
     <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
     <string name="filters_activity_button_f1_text">F1</string>
@@ -63,8 +61,6 @@
 
     <string name="retouching_activity_imageview_imageforretouching">Image for retouching</string>
     <string name="retouching_activity_button_dismiss_text">Dismiss</string>
-    <string name="retouching_activity_imageturnedname">retouchedImg_</string>
-    <string name="retouching_activity_imageturnedext">png</string>
 
     <string name="masking_activity_imaveview_imageformasking">Image for masking</string>
 
@@ -90,5 +86,8 @@
     <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
     <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
     <string name="error_main_image_pick">Error: Image picking fail</string>
+
+    <string name="intent_code_image_for_processing">processing</string>
+    <string name="intent_code_image_processed">processed</string>
 
 </resources>

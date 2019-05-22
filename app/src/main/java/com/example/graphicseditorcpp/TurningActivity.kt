@@ -111,8 +111,8 @@ class TurningActivity : AppCompatActivity() {
 
         if(imageTurnedString == null) {
             createImageFile(
-                getString(R.string.turning_activity_imageturnedname),
-                getString(R.string.turning_activity_imageturnedext)
+                getString(R.string.imageforprocessingname),
+                getString(R.string.imageforprocessingext)
             )
         }
 

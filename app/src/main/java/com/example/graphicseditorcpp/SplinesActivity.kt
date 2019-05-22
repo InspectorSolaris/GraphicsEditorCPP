@@ -1,24 +1,24 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
+import android.graphics.BitmapFactory
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_splines.*
-import kotlin.math.max
-import kotlin.math.min
+import java.io.FileOutputStream
 
 class SplinesActivity : AppCompatActivity() {
 
-    private val circleR = 35
-    private val circleRadius = 1.6F
-    private val splineLen = 2000
+    private var imageChanged = true
 
-    private var nSize = 1200 // bitmapForSplines width
-    private var mSize = 1500 // bitmapForSplines height
-    private val bitmapForSplines: Bitmap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
+    private val pointRadius = 75
+    private val splineRadius = 10
+
+    private var imageForSplinesString: String? = null
+    private var imageForSplinesBitmap: Bitmap? = null
 
     private var pointX: ArrayList<Int> = arrayListOf(-1) // Array of x coordinates of inputed points
     private var pointY: ArrayList<Int> = arrayListOf(-1) // Array of y coordinates of inputed points
@@ -26,6 +26,67 @@ class SplinesActivity : AppCompatActivity() {
     private var timeCounter = System.currentTimeMillis()
     private var timeDelay = 100
     private var drawn = false
+
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splines)
+
+        imageForSplinesString = intent.getStringExtra("image")
+        imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
+        imageForSplines.setImageBitmap(imageForSplinesBitmap)
+
+        imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
+        imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
+
+        imageForSplines.setOnTouchListener { _, motionEvent ->
+
+            if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
+                drawCircle(
+                    motionEvent.x.toInt(),
+                    motionEvent.y.toInt(),
+                    pointRadius,
+                    getColor(R.color.splinesColorPoint),
+                    imageForSplinesBitmap!!
+                )
+
+                pointX.add(motionEvent.x.toInt())
+                pointY.add(motionEvent.y.toInt())
+                timeCounter = System.currentTimeMillis()
+
+                imageForSplines.setImageBitmap(imageForSplinesBitmap)
+            }
+
+            true
+        }
+    }
+
+    private fun tryCopyImageFile(){
+        if(imageForSplinesBitmap != null) {
+            imageForSplinesBitmap!!
+                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSplinesString))
+        }
+    }
+
+    private external fun drawCircle(
+        x: Int,
+        y: Int,
+        r: Int,
+        c: Int,
+        image: Bitmap)
+
+    private external fun drawSplines(
+        n: Int,
+        r: Int,
+        c: Int,
+        xCoords: IntArray,
+        yCoords: IntArray,
+        p1x: DoubleArray,
+        p1y: DoubleArray,
+        p2x: DoubleArray,
+        p2y: DoubleArray,
+        image: Bitmap)
 
     private external fun calculateSplinesP1(
         pointsAmount: Int,
@@ -37,91 +98,13 @@ class SplinesActivity : AppCompatActivity() {
         pointsCoords: IntArray
     ): DoubleArray
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splines)
-
-        bitmapForSplines.eraseColor(getColor(R.color.splinesColorBackground))
-
-        imageViewSplines.setImageBitmap(bitmapForSplines)
-        imageViewSplines.layoutParams.width = nSize
-        imageViewSplines.layoutParams.height = mSize
-
-        imageViewSplines.setOnTouchListener { _, motionEvent ->
-
-            if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
-                drawCircle(motionEvent.x.toInt(), motionEvent.y.toInt())
-                pointX.add(motionEvent.x.toInt())
-                pointY.add(motionEvent.y.toInt())
-                timeCounter = System.currentTimeMillis()
-
-                imageViewSplines.setImageBitmap(bitmapForSplines)
-            }
-
-            true
-        }
-    }
-
-    private fun drawCircle(
-        x: Int,
-        y: Int
-    ) {
-        for(i in (-circleR / 2)..(+circleR / 2)) {
-            for(j in (-circleR / 2)..(+circleR / 2)) {
-                val px = max(min(x + i, nSize), 0)
-                val py = max(min(y + j, mSize), 0)
-
-                if ((px - x) * (px - x) + (py - y) * (py - y) < circleR) {
-                    bitmapForSplines.setPixel(px, py, getColor(R.color.splinesColorPoint))
-                }
-            }
-        }
-    }
-
-    private fun drawSpline(
-        xCoords: IntArray,
-        yCoords: IntArray,
-        p1x: DoubleArray,
-        p1y: DoubleArray,
-        p2x: DoubleArray,
-        p2y: DoubleArray
-    ) {
-        val paint = Paint()
-        val canvas = Canvas(bitmapForSplines)
-
-        paint.color = getColor(R.color.splinesColorSpline)
-
-        for(i in 0..(xCoords.size - 2)) {
-            for(j in 0..splineLen) {
-
-                val t: Double = j.toDouble() / splineLen.toDouble()
-
-                val a = (1 - t) * (1 - t) * (1 - t)
-                val b = (1 - t) * (1 - t) * t
-                val c = (1 - t) * t * t
-                val d = t * t * t
-
-                val x: Float = (a * xCoords[i] + b * 3 * p1x[i] + c * 3 * p2x[i] + d * xCoords[i + 1]).toFloat()
-                val y: Float = (a * yCoords[i] + b * 3 * p1y[i] + c * 3 * p2y[i] + d * yCoords[i + 1]).toFloat()
-
-                if (0 <= x && x < nSize &&
-                    0 <= y && y < mSize
-                ) {
-                    canvas.drawCircle(x, y, circleRadius, paint)
-                }
-            }
-        }
-
-        canvas.drawBitmap(bitmapForSplines, 0.0F, 0.0F, paint)
-    }
-
     fun processButtonPressing(
         view: View
     ) {
         when(view.id) {
             R.id.imageButtonBack -> {
+                tryCopyImageFile()
+                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
                 finish()
             }
             R.id.buttonDrawSplines -> {
@@ -138,14 +121,24 @@ class SplinesActivity : AppCompatActivity() {
                 val p2x = calculateSplinesP2(xArray.size, xArray)
                 val p2y = calculateSplinesP2(yArray.size, yArray)
 
-                drawSpline(xArray, yArray, p1x, p1y, p2x, p2y)
+                drawSplines(
+                    xArray.size,
+                    splineRadius,
+                    getColor(R.color.splinesColorSpline),
+                    xArray,
+                    yArray,
+                    p1x,
+                    p1y,
+                    p2x,
+                    p2y,
+                    imageForSplinesBitmap!!)
 
-                imageViewSplines.setImageBitmap(bitmapForSplines)
+                imageForSplines.setImageBitmap(imageForSplinesBitmap!!)
                 drawn = true
             }
             R.id.buttonClear -> {
-                bitmapForSplines.eraseColor(getColor(R.color.splinesColorBackground))
-                imageViewSplines.setImageBitmap(bitmapForSplines)
+                imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
+                imageForSplines.setImageBitmap(imageForSplinesBitmap)
                 drawn = false
             }
         }

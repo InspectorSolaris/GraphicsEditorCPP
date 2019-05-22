@@ -1,5 +1,7 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -7,12 +9,20 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.net.Uri
+import android.os.Environment
 import kotlinx.android.synthetic.main.activity_scaling.*
 import android.widget.SeekBar
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ScalingActivity : AppCompatActivity() {
 
-    private var imageForScalingPath: String? = null
+    private var imageChanged = false
+
+    private var imageForScalingString: String? = null
+    private var imageScaledString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -42,10 +52,33 @@ class ScalingActivity : AppCompatActivity() {
             }
         })
 
-        imageForScalingPath = intent.getStringExtra("image")
-        imageForScaling.setImageURI(Uri.parse(imageForScalingPath))
+        imageForScalingString = intent.getStringExtra("image")
+        imageForScaling.setImageURI(Uri.parse(imageForScalingString))
     }
 
+    private fun createImageFile(
+        name: String,
+        ext: String
+    ): File {
+        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFileExt = ".$ext"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageScaledString = absolutePath
+        }
+    }
+
+    private fun tryCopyImageFile(){
+        if(imageScaledString != null) {
+            BitmapFactory.decodeFile(imageScaledString)
+                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForScalingString))
+        }
+    }
 
     private fun resizeBilinear(pixels: IntArray, w: Int, h: Int, w2: Int, h2: Int): IntArray {
         //code from http://tech-algorithm.com/articles/bilinear-image-scaling/
@@ -102,7 +135,7 @@ class ScalingActivity : AppCompatActivity() {
     }
 
     private fun scale(side : Boolean, extent: Int) {
-        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageForScalingPath)
+        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageForScalingString)
         val width = imageBitmap.width
         val height = imageBitmap.height
         val pixelsArray = IntArray(width*height)
@@ -112,12 +145,26 @@ class ScalingActivity : AppCompatActivity() {
             newBitmap.setPixels(resizeBilinear(pixelsArray, width, height, width*extent, height*extent),
                 0, width*extent, 0, 0, width*extent, height*extent)
             imageForScaling.setImageBitmap(newBitmap)
+            if(imageScaledString == null){
+                createImageFile(
+                    getString(R.string.imageforprocessingname),
+                    getString(R.string.imageforprocessingext)
+                )
+            }
+            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageScaledString))
         }
         else {
             val newBitmap : Bitmap = Bitmap.createBitmap(width/extent, height/extent, Bitmap.Config.ARGB_8888)
             newBitmap.setPixels(resizeBilinear(pixelsArray, width, height, width/extent, height/extent),
                 0, width/extent, 0, 0, width/extent, height/extent)
             imageForScaling.setImageBitmap(newBitmap)
+            if(imageScaledString == null){
+                createImageFile(
+                    getString(R.string.imageforprocessingname),
+                    getString(R.string.imageforprocessingext)
+                )
+            }
+            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageScaledString))
         }
     }
 
@@ -126,6 +173,8 @@ class ScalingActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
+                tryCopyImageFile()
+                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
                 finish()
             }
             R.id.buttonScale -> {
@@ -141,6 +190,7 @@ class ScalingActivity : AppCompatActivity() {
                     8 -> scale(true, 16)
                 }
 
+                imageChanged = seekBarScaling.progress != 4
             }
         }
     }

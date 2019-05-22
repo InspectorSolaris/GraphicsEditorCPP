@@ -32,32 +32,13 @@ class MainActivity : AppCompatActivity() {
 
     private var dialog: BottomSheetDialog? = null
 
-    private var imageForProcessingHistory: MutableList<String> = mutableListOf("")
     private var imageForProcessingInd: Int = 0
+    private var imageForProcessingHistory: MutableList<String> = mutableListOf("")
     private var imageForProcessingString: String? = null
 
     companion object {
         init {
             System.loadLibrary("native-lib")
-        }
-    }
-
-    private fun createImageFile(
-        name: String,
-        ext: String
-    ): File {
-        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = ".$ext"
-        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        return File.createTempFile(
-            imageFileName,
-            imageFileExt,
-            imageFileDir
-        ).apply {
-            imageForProcessingHistory.add(absolutePath)
-            imageForProcessingInd++
-            imageForProcessingString = absolutePath
         }
     }
 
@@ -86,6 +67,35 @@ class MainActivity : AppCompatActivity() {
             }
             popupMenu.show()
         }
+    }
+
+    private fun createImageFile(
+        name: String,
+        ext: String
+    ): File {
+        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFileExt = ".$ext"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageForProcessingInd++
+            imageForProcessingHistory.add(absolutePath)
+            imageForProcessingString = absolutePath
+        }
+    }
+
+    private fun exportImage() {
+        MediaStore.Images.Media.insertImage(
+            contentResolver,
+            BitmapFactory.decodeFile(imageForProcessingString),
+            getString(R.string.imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date()) + ".${getString(R.string.imageforprocessingext)}",
+            getString(R.string.imageforprocessingname) + ".${getString(R.string.imageforprocessingext)}"
+        )
+        Toast.makeText(this, getString(R.string.main_activity_imageexportsuccess), Toast.LENGTH_LONG).show()
     }
 
     private fun tryPickFromGallery() {
@@ -129,13 +139,69 @@ class MainActivity : AppCompatActivity() {
             MediaStore.EXTRA_OUTPUT,
             FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
                 createImageFile(
-                    getString(R.string.main_activity_imageforprocessingname),
-                    getString(R.string.main_activity_imageforprocessingext)
+                    getString(R.string.imageforprocessingname),
+                    getString(R.string.imageforprocessingext)
                 )
             )
         )
 
         startActivityForResult(cameraIntent, idPickFromCamera)
+    }
+
+    private fun runActivity(
+        activity: Activity
+    ) {
+        val activityIntent = Intent(this, activity::class.java)
+        activityIntent.putExtra("image", imageForProcessingString)
+        startActivityForResult(activityIntent, idImageChange)
+    }
+
+    fun processToolsButtons(
+        view: View
+    ) {
+        val resultActivity = when {
+            imageForProcessingString == null -> {
+                null
+            }
+            view.id == R.id.buttonSplines -> {
+                SplinesActivity()
+            }
+            view.id == R.id.buttonPictureTurning -> {
+                TurningActivity()
+            }
+            view.id == R.id.buttonPictureColorCorrection -> {
+                FiltersActivity()
+            }
+            view.id == R.id.buttonPictureScaling -> {
+                ScalingActivity()
+            }
+            view.id == R.id.buttonPictureSegmentation -> {
+                SegmentationActivity()
+            }
+            view.id == R.id.buttonPictureRetouching -> {
+                RetouchingActivity()
+            }
+            view.id == R.id.buttonPictureUnsharpMasking -> {
+                MaskingActivity()
+            }
+            view.id == R.id.buttonPictureBilinearFiltration -> {
+                BilinearFiltActivity()
+            }
+            view.id == R.id.buttonPictureTrilinearFiltration -> {
+                TrilinearFiltActivity()
+            }
+            else -> {
+                null
+            }
+        }
+
+        if(resultActivity != null) {
+            runActivity(resultActivity)
+            dialog!!.hide()
+        }
+        else {
+            Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+        }
     }
 
     fun processButtonPressing(
@@ -165,99 +231,6 @@ class MainActivity : AppCompatActivity() {
             R.id.imageButtonAlgorithmAStar -> {
                 val aStarIntent = Intent(this, AStarActivity::class.java)
                 startActivity(aStarIntent)
-            }
-            R.id.buttonSplines -> {
-                val splinesIntent = Intent(this, SplinesActivity::class.java)
-                dialog!!.hide()
-                startActivity(splinesIntent)
-            }
-            R.id.buttonPictureTurning -> {
-                val turnIntent = Intent(this, TurningActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    turnIntent.putExtra("image", imageForProcessingString)
-                    startActivityForResult(turnIntent, idImageChange)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureColorCorrection -> {
-                val filterIntent = Intent(this, FiltersActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    filterIntent.putExtra("image", imageForProcessingString)
-                    startActivity(filterIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureScaling -> {
-                val scaleIntent = Intent(this, ScalingActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    scaleIntent.putExtra("image", imageForProcessingString)
-                    startActivity(scaleIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureSegmentation -> {
-                val segmentationIntent = Intent(this, SegmentationActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    segmentationIntent.putExtra("image", imageForProcessingString)
-                    startActivity(segmentationIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureRetouching -> {
-                val retouchingIntent = Intent(this, RetouchingActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    retouchingIntent.putExtra("image", imageForProcessingString)
-                    startActivityForResult(retouchingIntent, idImageChange)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureUnsharpMasking -> {
-                val maskingIntent = Intent(this, MaskingActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    maskingIntent.putExtra("image", imageForProcessingString)
-                    startActivity(maskingIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureBilinearFiltration -> {
-                val bilinearFiltIntent = Intent(this, BilinearFiltActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    bilinearFiltIntent.putExtra("image", imageForProcessingString)
-                    startActivity(bilinearFiltIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
-            }
-            R.id.buttonPictureTrilinearFiltration -> {
-                val trilinearFiltIntent = Intent(this, TrilinearFiltActivity::class.java)
-                dialog!!.hide()
-                if (imageForProcessingString != null) {
-                    trilinearFiltIntent.putExtra("image", imageForProcessingString)
-                    startActivity(trilinearFiltIntent)
-                }
-                else {
-                    Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
-                }
             }
             R.id.buttonExport -> {
                 exportImage()
@@ -301,32 +274,35 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode != idImageChange) {
-            val imageUri = when {
-                requestCode == idPickFromGallery && resultCode == Activity.RESULT_OK -> {
-                    createImageFile(
-                        getString(R.string.main_activity_imageforprocessingname),
-                        getString(R.string.main_activity_imageforprocessingext)
-                    )
-
-                    BitmapFactory.decodeFileDescriptor(
-                        this.contentResolver.openFileDescriptor(
-                            data?.data as Uri,
-                            "r"
-                        )?.fileDescriptor
-                    ).compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
-
-                    Uri.parse(imageForProcessingString)
-                }
-                requestCode == idPickFromCamera && resultCode == Activity.RESULT_OK -> {
-                    Uri.parse(imageForProcessingString)
-                }
-                else -> {
-                    null
-                }
+        val imageUri = when {
+            resultCode != Activity.RESULT_OK -> {
+                null
             }
+            requestCode == idPickFromGallery -> {
+                createImageFile(
+                    getString(R.string.imageforprocessingname),
+                    getString(R.string.imageforprocessingext)
+                )
 
-            if (imageUri != null) {
+                BitmapFactory.decodeFileDescriptor(
+                    this.contentResolver.openFileDescriptor(
+                        data?.data as Uri,
+                        "r"
+                    )?.fileDescriptor
+                ).compress(Bitmap.CompressFormat.PNG,100, FileOutputStream(imageForProcessingString))
+
+                Uri.parse(imageForProcessingString)
+            }
+            requestCode == idPickFromCamera -> {
+                Uri.parse(imageForProcessingString)
+            }
+            else -> {
+                null
+            }
+        }
+
+        when {
+            imageUri != null -> {
                 imageButtonPickFromGallery.visibility = View.GONE
                 imageButtonPickFromGallery.isEnabled = false
                 imageButtonPickFromCamera.visibility = View.GONE
@@ -335,35 +311,25 @@ class MainActivity : AppCompatActivity() {
                 imageForProcessing.setImageURI(imageUri)
                 imageForProcessingString = imageUri.toString()
             }
-            else {
+            requestCode != idImageChange -> {
                 Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
             }
-        }
-        else if(data?.extras!!.getBoolean("changed")){
-            val imageForProcessingOldString = imageForProcessingString
-            while(imageForProcessingInd < imageForProcessingHistory.size - 1) {
-                imageForProcessingHistory.removeAt(imageForProcessingInd + 1)
+            data?.extras!!.getBoolean("changed") -> {
+                val imageForProcessingStringOld = imageForProcessingString
+                while(imageForProcessingInd < imageForProcessingHistory.size - 1) {
+                    imageForProcessingHistory.removeAt(imageForProcessingInd + 1)
+                }
+
+                createImageFile(
+                    getString(R.string.imageforprocessingname),
+                    getString(R.string.imageforprocessingext)
+                )
+
+                BitmapFactory.decodeFile(imageForProcessingStringOld)
+                    .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
+                imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
             }
-
-            createImageFile(
-                getString(R.string.main_activity_imageforprocessingname),
-                getString(R.string.main_activity_imageforprocessingext)
-            )
-
-            BitmapFactory.decodeFile(imageForProcessingOldString)
-                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
-            imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
         }
-    }
-
-    private fun exportImage() {
-        MediaStore.Images.Media.insertImage(
-            contentResolver,
-            BitmapFactory.decodeFile(imageForProcessingString),
-            getString(R.string.main_activity_imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date()) + ".${getString(R.string.main_activity_imageforprocessingext)}",
-            getString(R.string.main_activity_imageforprocessingname) + ".${getString(R.string.main_activity_imageforprocessingext)}"
-        )
-        Toast.makeText(this, getString(R.string.main_activity_imageexportsuccess), Toast.LENGTH_LONG).show()
     }
 }
 

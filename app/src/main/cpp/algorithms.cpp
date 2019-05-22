@@ -43,8 +43,8 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
             long double x_turn = x_position * cos(a) - y_position * sin(a);
             long double y_turn = y_position * cos(a) + x_position * sin(a);
 
-            int x = (int) (x_turn + m / 2);
-            int y = (int) (n / 2 - y_turn);
+            int x = (int)(x_turn + m / 2);
+            int y = (int)(n / 2 - y_turn);
 
             if (0 <= x && x < m &&
                 0 <= y && y < n) {
@@ -66,16 +66,6 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
 extern "C" JNIEXPORT void JNICALL
 pictureColorcorrection();
 
-// image scaling
-
-extern "C" JNIEXPORT void JNICALL
-pictureScaling();
-
-// segmentation
-
-extern "C" JNIEXPORT void JNICALL
-pictureSegmentation();
-
 // retouching
 
 uint32_t blurPixel(
@@ -88,27 +78,27 @@ uint32_t blurPixel(
 {
     uint32_t result = 0xFF000000;
 
-    if(0 <= x && x < n &&
-        0 <= y && y < m)
+    if(0 <= x && x < m &&
+        0 <= y && y < n)
     {
         result &= img[x * m + y];
     }
 
-    int rc = 0;
-    int gc = 0;
-    int bc = 0;
+    uint32_t rc = 0;
+    uint32_t gc = 0;
+    uint32_t bc = 0;
     int counter = 0;
 
     for(int i = -r; i <= r; ++i)
     {
         for(int j = -r; j <= r; ++j)
         {
-            if(0 <= x + j && x + j < n &&
-               0 <= y + i && y + i < m)
+            if(0 <= x + j && x + j < m &&
+               0 <= y + i && y + i < n)
             {
-                rc += (img[(x + j) * m + (y + i)] & 0x00FF0000) >> 16;
-                gc += (img[(x + j) * m + (y + i)] & 0x0000FF00) >> 8;
-                bc += (img[(x + j) * m + (y + i)] & 0x000000FF) >> 0;
+                rc += (img[(y + i) * m + (x + j)] & 0x00FF0000U) >> 16U;
+                gc += (img[(y + i) * m + (x + j)] & 0x0000FF00U) >> 8U;
+                bc += (img[(y + i) * m + (x + j)] & 0x000000FFU) >> 0U;
                 ++counter;
             }
         }
@@ -118,9 +108,9 @@ uint32_t blurPixel(
     gc /= counter;
     bc /= counter;
 
-    result += rc << 16;
-    result += gc << 8;
-    result += bc << 0;
+    result += rc << 16U;
+    result += gc << 8U;
+    result += bc << 0U;
 
     return result;
 }
@@ -151,7 +141,7 @@ Java_com_example_graphicseditorcpp_RetouchingActivity_imageRetouching(
         {
             if((i - y) * (i - y) + (j - x) * (j - x) <= r * r)
             {
-                new_rgb.push_back(blurPixel(i, j, info.height, info.width, (int)ceil(log((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img));
+                new_rgb.push_back(blurPixel(j, i, info.height, info.width, (int)ceil(log((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img));
             }
         }
     }
@@ -187,6 +177,103 @@ extern "C" JNIEXPORT void JNICALL
 pictureTrilinearFiltration();
 
 // splines
+
+void drawCircle(
+        int x,
+        int y,
+        int r,
+        uint32_t c,
+        uint32_t * img_ptr,
+        AndroidBitmapInfo info)
+{
+    for(int i = -r / 2; i <= r / 2; ++i)
+    {
+        for(int j = -r / 2; j <= r / 2; ++j)
+        {
+            int px = std::max(std::min(x + i, (int)info.width - 1), 0);
+            int py = std::max(std::min(y + j, (int)info.height - 1), 0);
+
+            if ((px - x) * (px - x) + (py - y) * (py - y) < r)
+            {
+                img_ptr[py * info.width + px] = c;
+            }
+        }
+    }
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_graphicseditorcpp_SplinesActivity_drawCircle(
+        JNIEnv *env,
+        jobject,
+        jint x,
+        jint y,
+        jint r,
+        jint c,
+        jobject img)
+{
+    AndroidBitmapInfo  info;
+    void             * ptr;
+
+    AndroidBitmap_getInfo(env, img, &info);
+    AndroidBitmap_lockPixels(env, img, &ptr);
+
+    auto img_ptr = (uint32_t *)ptr;
+    drawCircle(x, y, r, (uint32_t)c, img_ptr, info);
+
+    AndroidBitmap_unlockPixels(env, img);
+}
+
+extern "C" JNIEXPORT void JNICALL
+Java_com_example_graphicseditorcpp_SplinesActivity_drawSplines(
+        JNIEnv *env,
+        jobject,
+        jint n,
+        jint r,
+        jint c,
+        jintArray px_coords,
+        jintArray py_coords,
+        jdoubleArray p1x_coords,
+        jdoubleArray p1y_coords,
+        jdoubleArray p2x_coords,
+        jdoubleArray p2y_coords,
+        jobject img)
+{
+    jint * px = env->GetIntArrayElements(px_coords, nullptr);
+    jint * py = env->GetIntArrayElements(py_coords, nullptr);
+
+    jdouble * p1x = env->GetDoubleArrayElements(p1x_coords, nullptr);
+    jdouble * p1y = env->GetDoubleArrayElements(p1y_coords, nullptr);
+    jdouble * p2x = env->GetDoubleArrayElements(p2x_coords, nullptr);
+    jdouble * p2y = env->GetDoubleArrayElements(p2y_coords, nullptr);
+
+    AndroidBitmapInfo  info;
+    void             * ptr;
+
+    AndroidBitmap_getInfo(env, img, &info);
+    AndroidBitmap_lockPixels(env, img, &ptr);
+
+    int splineLen = 5000;
+    auto img_ptr = (uint32_t *)ptr;
+    for(int i = 0; i < n - 1; ++i)
+    {
+        for(int j = 0; j < splineLen; ++j)
+        {
+            double t = (double)j / (double)splineLen;
+
+            double ca = (1 - t) * (1 - t) * (1 - t);
+            double cb = (1 - t) * (1 - t) * t;
+            double cc = (1 - t) * t * t;
+            double cd = t * t * t;
+
+            double x = (ca * px[i] + cb * 3 * p1x[i] + cc * 3 * p2x[i] + cd * px[i + 1]);
+            double y = (ca * py[i] + cb * 3 * p1y[i] + cc * 3 * p2y[i] + cd * py[i + 1]);
+
+            drawCircle((int)x, (int)y, r, (uint32_t)c, img_ptr, info);
+        }
+    }
+
+    AndroidBitmap_unlockPixels(env, img);
+}
 
 extern "C" JNIEXPORT jdoubleArray JNICALL
 Java_com_example_graphicseditorcpp_SplinesActivity_calculateSplinesP1(
@@ -411,14 +498,14 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
     vector<int> p((unsigned int)n * m, (INT_MAX));
     vector<int> d((unsigned int)n * m, (INT_MAX));
 
-    auto * src = (uint32_t*)ptr;
+    auto * src = (uint32_t *)ptr;
 
     for(unsigned int i = 0; i < map_x; ++i)
     {
         for(unsigned int j = 0; j < map_y; ++j)
         {
             int ind = mapInfo.width + 1 + i * pixel_size + j * pixel_size * pixel_size * map_x;
-            int color = src[ind] & 0x00FFFFFF;
+            uint32_t color = src[ind] & 0x00FFFFFFU;
 
             if(color == 0x00000000)
             {
@@ -473,7 +560,10 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
                0 > u[1] || u[1] >= m ||
                g[u[0]][u[1]] ||
                (i > 3 && directions == 1) ||
-               (i > 3 && directions == 3 && (g[v[0]][u[1]] || g[u[0]][v[1]]))) { continue; }
+               (i > 3 && directions == 3 && (g[v[0]][u[1]] || g[u[0]][v[1]])))
+            {
+                continue;
+            }
 
             if(u_d < d[arrInd(m, u)])
             {
@@ -488,12 +578,12 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
 
     if(p[arrInd(m, {y[0], y[1]})] != (INT_MAX))
     {
-        res.push_back({y[0], y[1]});
+        res.emplace_back(y[0], y[1]);
 
         for(int i = 0; p[arrInd(m, res[i])] != -1; ++i)
         {
             int s = p[arrInd(m, res[i])];
-            res.push_back({s / m, s % m});
+            res.emplace_back(s / m, s % m);
         }
 
         reverse(res.begin(), res.end());
@@ -506,8 +596,8 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         buf[i] = map_x * res[i].first + res[i].second;
     }
 
-    jintArray result = env->NewIntArray(res.size());
-    env->SetIntArrayRegion(result, 0, res.size(), buf);
+    jintArray result = env->NewIntArray((jint)res.size());
+    env->SetIntArrayRegion(result, 0, (jint)res.size(), buf);
 
     return result;
 }

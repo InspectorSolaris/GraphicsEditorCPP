@@ -19,6 +19,8 @@ import java.io.FileOutputStream
 
 class SegmentationActivity : AppCompatActivity() {
 
+    private var imageChanged = false
+
     private var imageForSegmentationString: String? = null
     private var imageSegmentedBitmap: Bitmap? = null
 
@@ -52,6 +54,7 @@ class SegmentationActivity : AppCompatActivity() {
                 segmentation()
             }
             R.id.buttonDismiss -> {
+                imageChanged = false
                 imageSegmentedBitmap = null
                 imageForSegmentation.setImageURI(Uri.parse(imageForSegmentationString))
             }
@@ -84,6 +87,7 @@ class SegmentationActivity : AppCompatActivity() {
         }
 
         imageSegmentedBitmap = tempBitmap
+        imageChanged = true
         imageForSegmentation.setImageBitmap(tempBitmap)
     }
 }
