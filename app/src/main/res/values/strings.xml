@@ -47,9 +47,9 @@
     <string name="turning_activity_textview_angle_text">0</string>
 
     <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
-    <string name="filters_activity_button_f1_text">F1</string>
-    <string name="filters_activity_button_f2_text">F2</string>
-    <string name="filters_activity_button_f3_text">F3</string>
+    <string name="filters_activity_button_f1_text">BnW</string>
+    <string name="filters_activity_button_f2_text">Sepia</string>
+    <string name="filters_activity_button_f3_text">Negative</string>
 
     <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
     <string name="scaling_activity_button_scale_text">Scale</string>
