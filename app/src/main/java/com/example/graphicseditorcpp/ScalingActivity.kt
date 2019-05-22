@@ -34,7 +34,7 @@ class ScalingActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 var scaleNum = ""
                 when (progress)  {
-                    0 -> scaleNum = "*0,0625"
+                    0 -> scaleNum = "*0.0625"
                     1 -> scaleNum = "*0.125"
                     2 -> scaleNum = "*0.25"
                     3 -> scaleNum = "*0.5"

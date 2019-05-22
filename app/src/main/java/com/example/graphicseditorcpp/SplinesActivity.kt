@@ -137,6 +137,8 @@ class SplinesActivity : AppCompatActivity() {
                 drawn = true
             }
             R.id.buttonClear -> {
+                pointX = arrayListOf(-1)
+                pointY = arrayListOf(-1)
                 imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
                 imageForSplines.setImageBitmap(imageForSplinesBitmap)
                 drawn = false

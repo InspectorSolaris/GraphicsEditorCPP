@@ -126,6 +126,8 @@ class FiltersActivity : AppCompatActivity() {
             newBitmap.setPixels(newPixels, 0, width, 0, 0, width, height)
         }
         imageForFilters.setImageBitmap(newBitmap)
+        imageFilteredBitmap = newBitmap
+        imageChanged = true
     }
 
     private fun negative(
@@ -160,6 +162,8 @@ class FiltersActivity : AppCompatActivity() {
             newBitmap.setPixels(newPixels, 0, width, 0, 0, width, height)
         }
         imageForFilters.setImageBitmap(newBitmap)
+        imageFilteredBitmap = newBitmap
+        imageChanged = true
     }
 }
 

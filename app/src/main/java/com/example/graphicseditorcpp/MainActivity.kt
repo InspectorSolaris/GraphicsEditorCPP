@@ -215,14 +215,18 @@ class MainActivity : AppCompatActivity() {
                 tryPickFromCamera()
             }
             R.id.imageButtonRedo -> {
-                imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 1)
-                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
-                imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                if (imageForProcessingInd != 0) {
+                    imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 1)
+                    imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+                    imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                }
             }
             R.id.imageButtonUndo -> {
-                imageForProcessingInd = max(imageForProcessingInd - 1, 1)
-                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
-                imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                if (imageForProcessingInd != 0) {
+                    imageForProcessingInd = max(imageForProcessingInd - 1, 1)
+                    imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+                    imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                }
             }
             R.id.imageButtonTools -> {
                 dialog!!.setContentView(layoutInflater.inflate(R.layout.tools_layout, null as ViewGroup?))
