@@ -12,9 +12,9 @@ import java.lang.Math.min
 class AStarActivity : AppCompatActivity() {
 
     private val pixelSize = 50
-    private val nSize = 1200 // aStarMap width
-    private val mSize = 1500 // aStarMap height
-    private val aStarMap = Bitmap.createBitmap(nSize, mSize, Bitmap.Config.ARGB_8888)
+    private val aStarMapWidth = 1200 // aStarMap width
+    private val aStarMapHeight = 1500 // aStarMap height
+    private val aStarMap = Bitmap.createBitmap(aStarMapWidth, aStarMapHeight, Bitmap.Config.ARGB_8888)
 
     private var empirics = 1    // 1 - manhattan, 2 - euclid
     private var directions = 1  // 1 - 4-directional, 2 - 8-directional, 3 - 8-directional with check
@@ -34,11 +34,9 @@ class AStarActivity : AppCompatActivity() {
         start_y: Int,
         finish_x: Int,
         finish_y: Int,
-        empirics: Int,
+        empiric: Int,
         directions: Int,
-        pixel_size: Int,
-        map_x: Int,
-        map_y: Int
+        pixel_size: Int
     ): IntArray
 
     override fun onCreate(
@@ -58,20 +56,22 @@ class AStarActivity : AppCompatActivity() {
             if(pathIsDrown){
                 for(i in path) {
                     colorizeSquare(
-                        pixelSize * (i % (nSize / pixelSize)),
-                        pixelSize * (i / (nSize / pixelSize)),
+                        pixelSize * (i % (aStarMapWidth / pixelSize)),
+                        pixelSize * (i / (aStarMapWidth / pixelSize)),
                         getColor(R.color.aStarColorEmpty)
                     )
                 }
 
+                colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
+                colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
                 pathIsDrown = false
             }
 
             var coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
             var coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
 
-            coordX = min(coordX, nSize - pixelSize)
-            coordY = min(coordY, mSize - pixelSize)
+            coordX = min(coordX, aStarMapWidth - pixelSize)
+            coordY = min(coordY, aStarMapHeight - pixelSize)
             coordX = max(coordX, 0)
             coordY = max(coordY, 0)
 
@@ -159,27 +159,27 @@ class AStarActivity : AppCompatActivity() {
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
                     R.id.popupManhattanDist -> {
-                        Toast.makeText(this, "You chose Manhattan Dist as empiric", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.astar_activity_toast_manhattan), Toast.LENGTH_SHORT).show()
                         empirics = 1
                         true
                     }
                     R.id.popupEuclidDist -> {
-                        Toast.makeText(this, "You chose Euclid Dist as empiric", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.astar_activity_toast_euclid), Toast.LENGTH_SHORT).show()
                         empirics = 2
                         true
                     }
                     R.id.popup4Directional -> {
-                        Toast.makeText(this, "4 directions", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.astar_activity_toast_4dir), Toast.LENGTH_LONG).show()
                         directions = 1
                         true
                     }
                     R.id.popup8Directional -> {
-                        Toast.makeText(this, "8 directions", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.astar_activity_toast_8dir), Toast.LENGTH_LONG).show()
                         directions = 2
                         true
                     }
                     R.id.popup8DirectionalCheck -> {
-                        Toast.makeText(this, "8 directions with check", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.astar_activity_toast_8dirc), Toast.LENGTH_LONG).show()
                         directions = 3
                         true
                     }
@@ -191,14 +191,14 @@ class AStarActivity : AppCompatActivity() {
     }
 
     private fun drawGrid() {
-        for(i in pixelSize until nSize - 1 step pixelSize) {
-            for(j in 0 until mSize - 1) {
+        for(i in pixelSize until aStarMapWidth - 1 step pixelSize) {
+            for(j in 0 until aStarMapHeight - 1) {
                 aStarMap.setPixel(i, j, getColor(R.color.aStarColorGrid))
             }
         }
 
-        for(i in pixelSize until mSize - 1 step pixelSize) {
-            for(j in 0 until nSize - 1) {
+        for(i in pixelSize until aStarMapHeight - 1 step pixelSize) {
+            for(j in 0 until aStarMapWidth - 1) {
                 aStarMap.setPixel(j, i, getColor(R.color.aStarColorGrid))
             }
         }
@@ -247,15 +247,13 @@ class AStarActivity : AppCompatActivity() {
                         finishY / pixelSize,
                         empirics,
                         directions,
-                        pixelSize,
-                        nSize / pixelSize,
-                        mSize / pixelSize
+                        pixelSize
                     )
 
                     for(i in path) {
                         colorizeSquare(
-                            pixelSize * (i % (nSize / pixelSize)),
-                            pixelSize * (i / (nSize / pixelSize)),
+                            pixelSize * (i % (aStarMapWidth / pixelSize)),
+                            pixelSize * (i / (aStarMapWidth / pixelSize)),
                             getColor(R.color.aStarColorPath)
                         )
                     }
@@ -266,7 +264,7 @@ class AStarActivity : AppCompatActivity() {
                     pathIsDrown = true
                 }
                 else {
-                    Toast.makeText(this, "Set start and finish points before run algorithm", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.astar_activity_toast_setpoints), Toast.LENGTH_LONG).show()
                 }
             }
         }

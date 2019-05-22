@@ -40,6 +40,12 @@
     <string name="astar_activity_popup_4directional">4 directional</string>
     <string name="astar_activity_popup_8directional">8 directional</string>
     <string name="astar_activity_popup_8directionalcheck">8 directional (check)</string>
+    <string name="astar_activity_toast_manhattan">You chose Manhattan Dist as empiric</string>
+    <string name="astar_activity_toast_euclid">You chose Euclid Dist as empiric</string>
+    <string name="astar_activity_toast_4dir">4 directions</string>
+    <string name="astar_activity_toast_8dir">8 directions</string>
+    <string name="astar_activity_toast_8dirc">8 directions with check</string>
+    <string name="astar_activity_toast_setpoints">Set start and finish points before run algorithm</string>
 
     <string name="turning_activity_imageview_imageforturning">Image for turning</string>
     <string name="turning_activity_button_turn_text">Turn</string>
