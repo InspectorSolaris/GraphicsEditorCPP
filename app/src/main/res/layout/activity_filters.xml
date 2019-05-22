@@ -40,30 +40,35 @@
             android:contentDescription="@string/filters_activity_imageview_imageforfilters"/>
     <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="416dp"
+            android:layout_height="86dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.0" android:id="@+id/linearLayout"
             app:layout_constraintBottom_toBottomOf="parent">
-        <Button
-                android:text="@string/filters_activity_button_f1_text"
+        <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="54dp" android:id="@+id/buttonF1" android:layout_weight="1"
-                android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
-                android:onClick="processButtonPressing"/>
-        <Button
-                android:text="@string/filters_activity_button_f2_text"
-                android:layout_width="match_parent"
-                android:layout_height="54dp" android:id="@+id/buttonF2" android:layout_weight="1"
-                android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
-                android:onClick="processButtonPressing"/>
-        <Button
-                android:text="@string/filters_activity_button_f3_text"
-                android:layout_width="match_parent"
-                android:layout_height="54dp" android:id="@+id/buttonF3" android:layout_weight="1"
-                android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
-                android:onClick="processButtonPressing"/>
+                android:layout_height="match_parent" android:layout_weight="1" android:id="@+id/recyclerviewforfilters"
+                android:scrollbars="horizontal">
+            <Button
+                    android:text="@string/filters_activity_button_f1_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp" android:id="@+id/buttonF1" android:layout_weight="1"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"/>
+            <Button
+                    android:text="@string/filters_activity_button_f2_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp" android:id="@+id/buttonF2" android:layout_weight="1"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"/>
+            <Button
+                    android:text="@string/filters_activity_button_f3_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="54dp" android:id="@+id/buttonF3" android:layout_weight="1"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"/>
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
