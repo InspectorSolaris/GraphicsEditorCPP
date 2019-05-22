@@ -14,8 +14,8 @@ class SplinesActivity : AppCompatActivity() {
 
     private var imageChanged = true
 
-    private val pointRadius = 75
-    private val splineRadius = 10
+    private var pointRadius = 75
+    private var splineRadius = 10
 
     private var imageForSplinesString: String? = null
     private var imageForSplinesBitmap: Bitmap? = null
@@ -24,7 +24,7 @@ class SplinesActivity : AppCompatActivity() {
     private var pointY: ArrayList<Int> = arrayListOf(-1) // Array of y coordinates of inputed points
 
     private var timeCounter = System.currentTimeMillis()
-    private var timeDelay = 100
+    private var timeDelay = 200
     private var drawn = false
 
     override fun onCreate(
@@ -37,8 +37,8 @@ class SplinesActivity : AppCompatActivity() {
         imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
         imageForSplines.setImageBitmap(imageForSplinesBitmap)
 
-        imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
-        imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
+        pointRadius = pointRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
+        splineRadius = splineRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
 
         imageForSplines.setOnTouchListener { _, motionEvent ->
 

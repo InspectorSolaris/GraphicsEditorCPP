@@ -252,7 +252,7 @@ Java_com_example_graphicseditorcpp_SplinesActivity_drawSplines(
     AndroidBitmap_getInfo(env, img, &info);
     AndroidBitmap_lockPixels(env, img, &ptr);
 
-    int splineLen = 5000;
+    int splineLen = 250;
     auto img_ptr = (uint32_t *)ptr;
     for(int i = 0; i < n - 1; ++i)
     {

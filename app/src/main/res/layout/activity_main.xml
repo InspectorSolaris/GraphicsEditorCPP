@@ -51,14 +51,15 @@
                 android:contentDescription="@string/main_activity_imagebutton_picknew"/>
     </android.support.constraint.ConstraintLayout>
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:srcCompat="@color/colorPrimaryDark"
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@color/colorPrimary"
             android:id="@+id/imageForProcessing"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             android:contentDescription="@string/main_activity_imageview_imageforprocessing"
             app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools" android:layout_marginTop="32dp"
-            app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromGallery" android:layout_marginBottom="32dp"/>
+            app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromGallery" android:layout_marginBottom="32dp"
+    />
     <ImageButton
             android:layout_width="0dp"
             android:layout_height="0dp" app:srcCompat="@drawable/ic_photo_library"
