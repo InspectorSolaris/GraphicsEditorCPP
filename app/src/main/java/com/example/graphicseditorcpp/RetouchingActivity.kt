@@ -47,7 +47,7 @@ class RetouchingActivity : AppCompatActivity() {
         imageForRetouching.setOnTouchListener { _, motionEvent ->
             val imageLocal = imageRetouchedBitmap
 
-            imageRetouching(motionEvent.x.toInt(), motionEvent.y.toInt(), retouchingRadius, imageLocal)
+            imageRetouching(motionEvent.x.toInt(), motionEvent.y.toInt(), retouchingRadius, imageLocal!!)
             imageForRetouching.setImageBitmap(imageRetouchedBitmap)
             imageRetouchedBitmap = imageLocal
             imageChanged = true
@@ -67,7 +67,7 @@ class RetouchingActivity : AppCompatActivity() {
         x: Int,
         y: Int,
         r: Int,
-        image: Bitmap?
+        image: Bitmap
     )
 
     fun processButtonPressing(

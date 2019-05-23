@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         init {
-            System.loadLibrary("image_algorithms")
+            System.loadLibrary("image-algorithms")
         }
     }
 

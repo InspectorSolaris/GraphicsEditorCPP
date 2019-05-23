@@ -12,8 +12,8 @@ import java.lang.Math.min
 class AStarActivity : AppCompatActivity() {
 
     private val pixelSize = 50
-    private val aStarMapWidth = 1200 // aStarMap width
-    private val aStarMapHeight = 1500 // aStarMap height
+    private val aStarMapWidth = 800 // aStarMap width
+    private val aStarMapHeight = 800 // aStarMap height
     private val aStarMap = Bitmap.createBitmap(aStarMapWidth, aStarMapHeight, Bitmap.Config.ARGB_8888)
 
     private var empirics = 1    // 1 - manhattan, 2 - euclid
@@ -27,17 +27,6 @@ class AStarActivity : AppCompatActivity() {
 
     private var path: IntArray = intArrayOf(-1)
     private var pathIsDrown = false
-
-    private external fun algorithmAStar(
-        bitmap: Bitmap,
-        start_x: Int,
-        start_y: Int,
-        finish_x: Int,
-        finish_y: Int,
-        empiric: Int,
-        directions: Int,
-        pixel_size: Int
-    ): IntArray
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -190,6 +179,17 @@ class AStarActivity : AppCompatActivity() {
         }
     }
 
+    private external fun algorithmAStar(
+        bitmap: Bitmap,
+        start_x: Int,
+        start_y: Int,
+        finish_x: Int,
+        finish_y: Int,
+        empiric: Int,
+        directions: Int,
+        pixel_size: Int
+    ): IntArray
+
     private fun drawGrid() {
         for(i in pixelSize until aStarMapWidth - 1 step pixelSize) {
             for(j in 0 until aStarMapHeight - 1) {
@@ -236,21 +236,29 @@ class AStarActivity : AppCompatActivity() {
                 inputState = 4
             }
             R.id.buttonRunAStar -> {
-                if(startX != -1 && startY != -1 &&
-                        finishX != -1 && finishY != -1) {
+                runAStar()
+            }
+        }
+    }
 
-                    path = algorithmAStar(
-                        aStarMap,
-                        startX / pixelSize,
-                        startY / pixelSize,
-                        finishX / pixelSize,
-                        finishY / pixelSize,
-                        empirics,
-                        directions,
-                        pixelSize
-                    )
+    private fun runAStar() {
+        if(startX != -1 && startY != -1 &&
+            finishX != -1 && finishY != -1) {
+            progressBarAStar.visibility = View.VISIBLE
+            Thread {
+                path = algorithmAStar(
+                    aStarMap,
+                    startX / pixelSize,
+                    startY / pixelSize,
+                    finishX / pixelSize,
+                    finishY / pixelSize,
+                    empirics,
+                    directions,
+                    pixelSize
+                )
 
-                    for(i in path) {
+                imageViewAStarMap.post {
+                    for (i in path) {
                         colorizeSquare(
                             pixelSize * (i % (aStarMapWidth / pixelSize)),
                             pixelSize * (i / (aStarMapWidth / pixelSize)),
@@ -260,13 +268,17 @@ class AStarActivity : AppCompatActivity() {
 
                     colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
                     colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
+                }
 
-                    pathIsDrown = true
+                progressBarAStar.post {
+                    progressBarAStar.visibility = View.GONE
                 }
-                else {
-                    Toast.makeText(this, getString(R.string.astar_activity_toast_setpoints), Toast.LENGTH_LONG).show()
-                }
-            }
+
+                pathIsDrown = true
+            }.start()
+        }
+        else {
+            Toast.makeText(this, getString(R.string.astar_activity_toast_setpoints), Toast.LENGTH_LONG).show()
         }
     }
 }

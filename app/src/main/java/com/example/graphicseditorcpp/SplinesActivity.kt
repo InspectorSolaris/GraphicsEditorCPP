@@ -41,7 +41,6 @@ class SplinesActivity : AppCompatActivity() {
         splineRadius = splineRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
 
         imageForSplines.setOnTouchListener { _, motionEvent ->
-
             if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
                 drawCircle(
                     motionEvent.x.toInt(),
@@ -63,10 +62,8 @@ class SplinesActivity : AppCompatActivity() {
     }
 
     private fun tryCopyImageFile(){
-        if(imageForSplinesBitmap != null) {
-            imageForSplinesBitmap!!
-                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSplinesString))
-        }
+        imageForSplinesBitmap!!
+            .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSplinesString))
     }
 
     private external fun drawCircle(
@@ -108,33 +105,7 @@ class SplinesActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonDrawSplines -> {
-                val xArray = IntArray(pointX.size - 1)
-                val yArray = IntArray(pointY.size - 1)
-
-                for(i in 1 until pointX.size) {
-                    xArray[i - 1] = pointX[i]
-                    yArray[i - 1] = pointY[i]
-                }
-
-                val p1x = calculateSplinesP1(xArray.size, xArray)
-                val p1y = calculateSplinesP1(yArray.size, yArray)
-                val p2x = calculateSplinesP2(xArray.size, xArray)
-                val p2y = calculateSplinesP2(yArray.size, yArray)
-
-                drawSplines(
-                    xArray.size,
-                    splineRadius,
-                    getColor(R.color.splinesColorSpline),
-                    xArray,
-                    yArray,
-                    p1x,
-                    p1y,
-                    p2x,
-                    p2y,
-                    imageForSplinesBitmap!!)
-
-                imageForSplines.setImageBitmap(imageForSplinesBitmap!!)
-                drawn = true
+                runDrawSplines()
             }
             R.id.buttonClear -> {
                 pointX = arrayListOf(-1)
@@ -144,5 +115,35 @@ class SplinesActivity : AppCompatActivity() {
                 drawn = false
             }
         }
+    }
+
+    private fun runDrawSplines() {
+        val xArray = IntArray(pointX.size - 1)
+        val yArray = IntArray(pointY.size - 1)
+
+        for(i in 1 until pointX.size) {
+            xArray[i - 1] = pointX[i]
+            yArray[i - 1] = pointY[i]
+        }
+
+        val p1x = calculateSplinesP1(xArray.size, xArray)
+        val p1y = calculateSplinesP1(yArray.size, yArray)
+        val p2x = calculateSplinesP2(xArray.size, xArray)
+        val p2y = calculateSplinesP2(yArray.size, yArray)
+
+        drawSplines(
+            xArray.size,
+            splineRadius,
+            getColor(R.color.splinesColorSpline),
+            xArray,
+            yArray,
+            p1x,
+            p1y,
+            p2x,
+            p2y,
+            imageForSplinesBitmap!!)
+
+        imageForSplines.setImageBitmap(imageForSplinesBitmap!!)
+        drawn = true
     }
 }

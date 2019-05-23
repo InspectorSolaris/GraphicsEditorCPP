@@ -4,7 +4,7 @@
 
 #include "image_retouching.h"
 
-uint32_t blurPixel(
+uint32_t retouchingBlurPixel(
         int x,
         int y,
         int n,
@@ -17,7 +17,7 @@ uint32_t blurPixel(
     if(0 <= x && x < m &&
        0 <= y && y < n)
     {
-        result &= img[x * m + y];
+        result &= img[y * m + x];
     }
 
     uint32_t rc = 0;
@@ -79,7 +79,7 @@ Java_com_example_graphicseditorcpp_RetouchingActivity_imageRetouching(
         {
             if((i - y) * (i - y) + (j - x) * (j - x) <= r * r)
             {
-                new_rgb.push_back(blurPixel(j, i, n, m, (int)ceil(log((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img_ptr));
+                new_rgb.push_back(retouchingBlurPixel(j, i, n, m, (int)ceil(log((r + 1) - (int)sqrt((i - y) * (i - y) + (j - x) * (j - x)))), img_ptr));
             }
         }
     }

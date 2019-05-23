@@ -55,8 +55,8 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
     AndroidBitmap_getInfo(env, bitmap, &info);
     AndroidBitmap_lockPixels(env, bitmap, &ptr);
 
-    int n = info.height;
-    int m = info.width;
+    int n = info.height / pixel_size;
+    int m = info.width / pixel_size;
     int x[2] = {start_y, start_x};
     int y[2] = {finish_y, finish_x};
 
@@ -71,12 +71,11 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
     vector<int> d((unsigned int)n * m, (INT_MAX));
 
     auto * src = (uint32_t *)ptr;
-
     for(unsigned int i = 0; i < m; ++i)
     {
         for(unsigned int j = 0; j < n; ++j)
         {
-            int ind = m + 1 + i * pixel_size + j * pixel_size * pixel_size * m;
+            int ind = m * pixel_size + 1 + i * pixel_size + j * pixel_size * pixel_size * m;
             uint32_t color = src[ind] & 0x00FFFFFFU;
 
             if(color == 0x00000000)
@@ -127,7 +126,7 @@ Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
                 ++u[1];
             }
 
-            if(0 > u[0] || u[0] >= n ||
+                if(0 > u[0] || u[0] >= n ||
                0 > u[1] || u[1] >= m ||
                g[u[0]][u[1]] ||
                (i > 3 && directions == 1) ||

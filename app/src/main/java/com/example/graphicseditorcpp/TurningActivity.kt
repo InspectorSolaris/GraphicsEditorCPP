@@ -99,17 +99,14 @@ class TurningActivity : AppCompatActivity() {
         }
     }
 
-    private fun turnImage(){
+    private fun turnImage() {
         val imageInfo = BitmapFactory.Options()
-
         val imageOriginal = BitmapFactory.decodeFile(imageForTurningString, imageInfo)
-        val imageTurned = Bitmap.createBitmap(imageInfo.outWidth, imageInfo.outHeight, Bitmap.Config.ARGB_8888)
+        val imageTurned  =  Bitmap.createBitmap(imageInfo.outWidth, imageInfo.outHeight, Bitmap.Config.ARGB_8888)
 
-        imageTurning(currentAngle.toDouble(), imageOriginal, imageTurned)
+        imageTurning(currentAngle.toDouble(), imageOriginal!!, imageTurned!!)
 
-        imageForTurning.setImageBitmap(imageTurned)
-
-        if(imageTurnedString == null) {
+        if (imageTurnedString == null) {
             createImageFile(
                 getString(R.string.imageforprocessingname),
                 getString(R.string.imageforprocessingext)
@@ -118,5 +115,7 @@ class TurningActivity : AppCompatActivity() {
 
         imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
         imageChanged = currentAngle != 0
+
+        imageForTurning.setImageBitmap(imageTurned)
     }
 }
