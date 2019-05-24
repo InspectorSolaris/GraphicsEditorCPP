@@ -35,6 +35,9 @@ class SplinesActivity : AppCompatActivity() {
 
         imageForSplinesString = intent.getStringExtra("image")
         imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
+
+        imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
+        imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
         imageForSplines.setImageBitmap(imageForSplinesBitmap)
 
         pointRadius = pointRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
