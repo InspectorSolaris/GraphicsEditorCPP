@@ -63,7 +63,9 @@ class MaskingActivity : AppCompatActivity() {
         }
     }
 
-    private fun gaussBlur(startBitmap: Bitmap, radius: Int): Bitmap? {
+    private fun fastBlur(startBitmap: Bitmap, radius: Int): Bitmap? {
+        // http://qaru.site/questions/10598781/how-to-set-blur-image-in-android-for-all-version
+
         val bitmap = startBitmap.copy(startBitmap.config, true)
 
         if (radius < 1) {
@@ -322,7 +324,7 @@ class MaskingActivity : AppCompatActivity() {
         imageBitmap.getPixels(pixelsArray, 0, width, 0 , 0, width, height)
 
 
-        val gaussPic : Bitmap? = gaussBlur(imageBitmap, 10)
+        val gaussPic : Bitmap? = fastBlur(imageBitmap, 10)
         val gaussArray = IntArray(width*height)
         gaussPic!!.getPixels(gaussArray, 0, width, 0 , 0, width, height)
 
