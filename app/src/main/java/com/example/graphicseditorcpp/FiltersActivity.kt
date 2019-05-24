@@ -7,15 +7,19 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_filters.*
 import java.io.FileOutputStream
 
 class FiltersActivity : AppCompatActivity() {
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var imageChanged = false
 
-    private var imageOriginalString: String? = null
-    private var imageChangedString: String? = null
-    private var imageIsChangedBool: Boolean = false
+    private var imageForFiltersString: String? = null
+    private var imageFilteredBitmap: Bitmap? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -23,10 +27,19 @@ class FiltersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filters)
 
-        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
-        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+        linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
 
-        imageForFilters.setImageURI(Uri.parse(imageOriginalString))
+        imageForFiltersString = intent.getStringExtra("image")
+        imageFilteredBitmap = BitmapFactory.decodeFile(imageForFiltersString)
+        imageForFilters.setImageURI(Uri.parse(imageForFiltersString))
+    }
+
+    private fun tryCopyImageFile(){
+        if(imageFilteredBitmap != null) {
+            val imageLocal = imageFilteredBitmap
+            imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForFiltersString))
+        }
     }
 
     private external fun imageColorcorrection(
@@ -40,13 +53,8 @@ class FiltersActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                setResult(
-                    Activity.RESULT_OK,
-                    Intent().putExtra(
-                        getString(R.string.code_image_is_changed),
-                        imageIsChangedBool
-                    )
-                )
+                tryCopyImageFile()
+                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
                 finish()
             }
             R.id.buttonF1 -> {
@@ -61,43 +69,34 @@ class FiltersActivity : AppCompatActivity() {
             R.id.buttonF4 -> {
                 runFilter(4)
             }
+            R.id.buttonF5 -> {
+                runFilter(5)
+            }
+            R.id.buttonF6 -> {
+                runFilter(6)
+            }
+            R.id.buttonF7 -> {
+                runFilter(7)
+            }
+
         }
     }
 
     private fun runFilter(
         filter: Int
     ) {
-        val imageInfo = BitmapFactory.Options().apply {
-            inJustDecodeBounds = true
-            BitmapFactory.decodeFile(imageOriginalString, this)
-        }
-        val imageLocal = Bitmap.createBitmap(
-            imageInfo.outWidth,
-            imageInfo.outHeight,
-            (application as GlobalVal).bitmapConfig
+        val imageLocal = Bitmap.createBitmap(imageFilteredBitmap!!.width, imageFilteredBitmap!!.height, Bitmap.Config.ARGB_8888)
+        imageColorcorrection(
+            BitmapFactory.decodeFile(imageForFiltersString),
+            imageLocal,
+            filter
         )
-
-        progressBarFilters.visibility = View.VISIBLE
-        Thread {
-            imageColorcorrection(
-                BitmapFactory.decodeFile(imageOriginalString),
-                imageLocal,
-                filter
-            )
-
-            imageLocal.compress(
-                (application as GlobalVal).bitmapCompressFormat,
-                (application as GlobalVal).bitmapCompressQuality,
-                FileOutputStream(imageChangedString)
-            )
-
-            runOnUiThread {
-                imageForFilters.setImageBitmap(imageLocal)
-                imageIsChangedBool = true
-                progressBarFilters.visibility = View.GONE
-            }
-        }.start()
+        imageFilteredBitmap = imageLocal
+        imageChanged = true
+        imageForFilters.setImageBitmap(imageLocal)
     }
+
+
 }
 
 

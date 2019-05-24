@@ -62,6 +62,9 @@
     <string name="filters_activity_button_f2_text">Negative</string>
     <string name="filters_activity_button_f3_text">Cold</string>
     <string name="filters_activity_button_f4_text">Blur</string>
+    <string name="filters_activity_button_f5_text">Brightness</string>
+    <string name="filters_activity_button_f6_text">Opacity</string>
+    <string name="filters_activity_button_f7_text">Red</string>
 
     <string name="scaling_activity_imageview_imageforscaling">Image for scaling</string>
     <string name="scaling_activity_button_scale_text">Scale</string>
@@ -75,6 +78,8 @@
     <string name="retouching_activity_button_dismiss_text">Dismiss</string>
 
     <string name="masking_activity_imaveview_imageformasking">Image for masking</string>
+    <string name="masking_activity_button_mask">Apply</string>
+    <string name="masking_activity_toast">Done</string>
 
     <string name="bilinearfilt_activity_imaveview_imageforbilinearfilt">Image for bilinear filt</string>
 
