@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -38,7 +39,7 @@ class SplinesActivity : AppCompatActivity() {
 
         imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
         imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
-        imageForSplines.setImageBitmap(imageForSplinesBitmap)
+        imageForSplines.setImageURI(Uri.parse(imageForSplinesString))
 
         pointRadius = pointRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
         splineRadius = splineRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
