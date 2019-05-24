@@ -9,20 +9,17 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.net.Uri
-import android.os.Environment
 import kotlinx.android.synthetic.main.activity_scaling.*
 import android.widget.SeekBar
-import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
+import kotlin.math.abs
+import kotlin.math.pow
 
 class ScalingActivity : AppCompatActivity() {
 
-    private var imageChanged = false
-
-    private var imageForScalingString: String? = null
-    private var imageScaledString: String? = null
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -30,57 +27,35 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
-        imageForScalingString = intent.getStringExtra("image")
-        imageForScaling.setImageURI(Uri.parse(imageForScalingString))
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+
+        imageForScaling.setImageURI(Uri.parse(imageOriginalString))
 
         seekBarScaling.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                var scaleNum = ""
-                when (progress)  {
-                    0 -> scaleNum = "*0.0625"
-                    1 -> scaleNum = "*0.125"
-                    2 -> scaleNum = "*0.25"
-                    3 -> scaleNum = "*0.5"
-                    4 -> scaleNum = "*1"
-                    5 -> scaleNum = "*2"
-                    6 -> scaleNum = "*4"
-                    7 -> scaleNum = "*8"
-                    8 -> scaleNum  ="*16"
-                }
-                buttonScale.text = scaleNum
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                buttonScale.text = 2.0.pow(progress - 4).toString()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // empty fun
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // empty fun
             }
         })
     }
 
-    private fun createImageFile(
-        name: String,
-        ext: String
-    ): File {
-        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = ".$ext"
-        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        return File.createTempFile(
-            imageFileName,
-            imageFileExt,
-            imageFileDir
-        ).apply {
-            imageScaledString = absolutePath
-        }
-    }
-
-    private fun tryCopyImageFile(){
-        if(imageScaledString != null) {
-            BitmapFactory.decodeFile(imageScaledString)
-                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForScalingString))
-        }
-    }
-
-    private fun resizeBilinear(pixels: IntArray, w: Int, h: Int, w2: Int, h2: Int): IntArray {
+    private fun resizeBilinear(
+        pixels: IntArray,
+        w: Int,
+        h: Int,
+        w2: Int,
+        h2: Int
+    ): IntArray {
         //code from http://tech-algorithm.com/articles/bilinear-image-scaling/
 
         val temp = IntArray(w2 * h2)
@@ -111,60 +86,56 @@ class ScalingActivity : AppCompatActivity() {
                 b = pixels[index + 1]
                 c = pixels[index + w]
                 d = pixels[index + w + 1]
-                    // Yb = Ab(1-w)(1-h) + Bb(w)(1-h) + Cb(h)(1-w) + Db(wh)
-                    blue =
-                        Color.blue(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.blue(b).toFloat() * xDiff * (1 - yDiff) +
-                                Color.blue(c).toFloat() * yDiff * (1 - xDiff) + Color.blue(d).toFloat() * (xDiff * yDiff)
-                    green =
-                        Color.green(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.green(b).toFloat() * xDiff * (1 - yDiff) +
-                                Color.green(c).toFloat() * yDiff * (1 - xDiff) + Color.green(d).toFloat() * (xDiff * yDiff)
+                // Yb = Ab(1-w)(1-h) + Bb(w)(1-h) + Cb(h)(1-w) + Db(wh)
+                blue =
+                    Color.blue(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.blue(b).toFloat() * xDiff * (1 - yDiff) +
+                            Color.blue(c).toFloat() * yDiff * (1 - xDiff) + Color.blue(d).toFloat() * (xDiff * yDiff)
+                green =
+                    Color.green(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.green(b).toFloat() * xDiff * (1 - yDiff) +
+                            Color.green(c).toFloat() * yDiff * (1 - xDiff) + Color.green(d).toFloat() * (xDiff * yDiff)
 
-                    red =
-                        Color.red(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.red(b).toFloat() * xDiff * (1 - yDiff) +
-                                Color.red(c).toFloat() * yDiff * (1 - xDiff) + Color.red(d).toFloat() * (xDiff * yDiff)
-                    alpha =
-                        Color.alpha(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.alpha(b).toFloat() * xDiff * (1 - yDiff) +
-                                Color.alpha(c).toFloat() * yDiff * (1 - xDiff) + Color.alpha(d).toFloat() * (xDiff * yDiff)
+                red =
+                    Color.red(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.red(b).toFloat() * xDiff * (1 - yDiff) +
+                            Color.red(c).toFloat() * yDiff * (1 - xDiff) + Color.red(d).toFloat() * (xDiff * yDiff)
+                alpha =
+                    Color.alpha(a).toFloat() * (1 - xDiff) * (1 - yDiff) + Color.alpha(b).toFloat() * xDiff * (1 - yDiff) +
+                            Color.alpha(c).toFloat() * yDiff * (1 - xDiff) + Color.alpha(d).toFloat() * (xDiff * yDiff)
 
-
-                    temp[offset] = Color.argb(alpha.toInt(), red.toInt(), green.toInt(), blue.toInt())
+                temp[offset] = Color.argb(alpha.toInt(), red.toInt(), green.toInt(), blue.toInt())
                 offset += 1
             }
         }
+
         return temp
     }
 
     private fun scale(side : Boolean, extent: Int) {
-        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageForScalingString)
+        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageOriginalString)
         val width = imageBitmap.width
         val height = imageBitmap.height
         val pixelsArray = IntArray(width*height)
         imageBitmap.getPixels(pixelsArray, 0, width, 0 , 0, width, height)
         if (side) {
-            val newBitmap : Bitmap = Bitmap.createBitmap(width*extent, height*extent, Bitmap.Config.ARGB_8888)
+            val newBitmap: Bitmap = Bitmap.createBitmap(width*extent, height*extent, Bitmap.Config.ARGB_8888)
             newBitmap.setPixels(resizeBilinear(pixelsArray, width, height, width*extent, height*extent),
                 0, width*extent, 0, 0, width*extent, height*extent)
-            imageForScaling.setImageBitmap(newBitmap)
-            if(imageScaledString == null){
-                createImageFile(
-                    getString(R.string.imageforprocessingname),
-                    getString(R.string.imageforprocessingext)
-                )
-            }
-            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageScaledString))
+
+            newBitmap.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
         }
         else {
-            val newBitmap : Bitmap = Bitmap.createBitmap(width/extent, height/extent, Bitmap.Config.ARGB_8888)
+            val newBitmap: Bitmap = Bitmap.createBitmap(width/extent, height/extent, Bitmap.Config.ARGB_8888)
             newBitmap.setPixels(resizeBilinear(pixelsArray, width, height, width/extent, height/extent),
                 0, width/extent, 0, 0, width/extent, height/extent)
-            imageForScaling.setImageBitmap(newBitmap)
-            if(imageScaledString == null){
-                createImageFile(
-                    getString(R.string.imageforprocessingname),
-                    getString(R.string.imageforprocessingext)
-                )
-            }
-            newBitmap.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageScaledString))
+
+            newBitmap.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
         }
     }
 
@@ -173,24 +144,28 @@ class ScalingActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonScale -> {
-                when (seekBarScaling.progress) {
-                    0 -> scale(false, 16)
-                    1 -> scale(false, 8)
-                    2 -> scale(false, 4)
-                    3 -> scale(false, 2)
-                    4 -> scale(false, 1)
-                    5 -> scale(true, 2)
-                    6 -> scale(true, 4)
-                    7 -> scale(true, 8)
-                    8 -> scale(true, 16)
-                }
+                progressBarScaling.visibility = View.VISIBLE
+                Thread {
+                    with(seekBarScaling) {
+                        scale(progress > 4, 2.0.pow(abs(progress - 4)).toInt())
+                    }
 
-                imageChanged = seekBarScaling.progress != 4
+                    runOnUiThread {
+                        imageForScaling.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                        imageIsChangedBool = seekBarScaling.progress != 4
+                        progressBarScaling.visibility = View.GONE
+                    }
+                }.start()
             }
         }
     }

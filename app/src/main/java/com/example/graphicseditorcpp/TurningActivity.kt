@@ -7,27 +7,19 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_turning.*
 import kotlinx.android.synthetic.main.activity_turning.imageForTurning
-import java.io.File
 import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.math.abs
-import kotlin.math.ceil
-import kotlin.math.cos
-import kotlin.math.sin
 
 class TurningActivity : AppCompatActivity() {
 
-    private var imageChanged = false
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     private var currentAngle = 0
-    private var imageForTurningString: String? = null
-    private var imageTurnedString: String? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -35,12 +27,15 @@ class TurningActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_turning)
 
-        imageForTurningString = intent.getStringExtra("image")
-        imageForTurning.setImageURI(Uri.parse(imageForTurningString))
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+
+        imageForTurning.setImageURI(Uri.parse(imageOriginalString))
 
         seekBarAngle.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 currentAngle = i - 180
+
                 textViewAngle.text = currentAngle.toString()
             }
 
@@ -54,30 +49,6 @@ class TurningActivity : AppCompatActivity() {
         })
     }
 
-    private fun createImageFile(
-        name: String,
-        ext: String
-    ): File {
-        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = ".$ext"
-        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        return File.createTempFile(
-            imageFileName,
-            imageFileExt,
-            imageFileDir
-        ).apply {
-            imageTurnedString = absolutePath
-        }
-    }
-
-    private fun tryCopyImageFile(){
-        if(imageTurnedString != null) {
-            BitmapFactory.decodeFile(imageTurnedString)
-                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForTurningString))
-        }
-    }
-
     private external fun imageTurning(
         angle: Double,
         orig: Bitmap,
@@ -89,8 +60,13 @@ class TurningActivity : AppCompatActivity() {
     ) {
         when(view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonClear -> {
@@ -105,25 +81,22 @@ class TurningActivity : AppCompatActivity() {
 
     private fun turnImage() {
         val imageInfo = BitmapFactory.Options()
-        val imageOriginal = BitmapFactory.decodeFile(imageForTurningString, imageInfo)
+        val imageOriginal = BitmapFactory.decodeFile(imageOriginalString, imageInfo)
         val imageTurned = Bitmap.createBitmap(imageInfo.outWidth, imageInfo.outHeight, Bitmap.Config.ARGB_8888)
 
         progressBarTurning.visibility = View.VISIBLE
         Thread {
             imageTurning(currentAngle.toDouble(), imageOriginal!!, imageTurned!!)
 
-            if (imageTurnedString == null) {
-                createImageFile(
-                    getString(R.string.imageforprocessingname),
-                    getString(R.string.imageforprocessingext)
-                )
-            }
+            imageTurned.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
 
-            imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
-
-            imageForTurning.post {
+            runOnUiThread {
                 imageForTurning.setImageBitmap(imageTurned)
-                imageChanged = currentAngle != 0
+                imageIsChangedBool = currentAngle != 0
                 progressBarTurning.visibility = View.GONE
             }
         }.start()

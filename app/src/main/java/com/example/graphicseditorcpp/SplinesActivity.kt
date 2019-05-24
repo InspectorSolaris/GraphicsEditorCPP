@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,13 +13,12 @@ import java.io.FileOutputStream
 
 class SplinesActivity : AppCompatActivity() {
 
-    private var imageChanged = true
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     private var pointRadius = 75
     private var splineRadius = 10
-
-    private var imageForSplinesString: String? = null
-    private var imageForSplinesBitmap: Bitmap? = null
 
     private var pointX: ArrayList<Int> = arrayListOf(-1) // Array of x coordinates of inputed points
     private var pointY: ArrayList<Int> = arrayListOf(-1) // Array of y coordinates of inputed points
@@ -33,42 +33,48 @@ class SplinesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splines)
 
-        imageForSplinesString = intent.getStringExtra("image")
-        imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+
+        run {
+            BitmapFactory.decodeFile(imageOriginalString)
+                .compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
+                )
+        }
 
         imageForSplines.layoutParams.width = 800
-//        imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
-//        imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
         imageForSplines.layoutParams.height = 1000
-        imageForSplines.setImageBitmap(imageForSplinesBitmap)
+        imageForSplines.setImageURI(Uri.parse(imageOriginalString))
 
         imageForSplines.setOnTouchListener { _, motionEvent ->
             if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
-
+                val imageLocal = BitmapFactory.decodeFile(imageChangedString)
 
                 drawCircle(
                     motionEvent.x.toInt(),
                     motionEvent.y.toInt(),
                     pointRadius,
                     getColor(R.color.splinesColorPoint),
-                    imageForSplinesBitmap!!
+                    imageLocal
+                )
+
+                imageLocal.compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
                 )
 
                 pointX.add(motionEvent.x.toInt())
                 pointY.add(motionEvent.y.toInt())
                 timeCounter = System.currentTimeMillis()
 
-                imageForSplines.setImageBitmap(imageForSplinesBitmap)
+                imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
             }
 
             true
-        }
-    }
-
-    private fun tryCopyImageFile() {
-        if (imageForSplinesBitmap != null) {
-            imageForSplinesBitmap!!
-                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSplinesString))
         }
     }
 
@@ -77,7 +83,8 @@ class SplinesActivity : AppCompatActivity() {
         y: Int,
         r: Int,
         c: Int,
-        image: Bitmap)
+        image: Bitmap
+    )
 
     private external fun drawSplines(
         n: Int,
@@ -89,7 +96,8 @@ class SplinesActivity : AppCompatActivity() {
         p1y: DoubleArray,
         p2x: DoubleArray,
         p2y: DoubleArray,
-        image: Bitmap)
+        image: Bitmap
+    )
 
     private external fun calculateSplinesP1(
         pointsAmount: Int,
@@ -106,8 +114,13 @@ class SplinesActivity : AppCompatActivity() {
     ) {
         when(view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonDrawSplines -> {
@@ -116,8 +129,14 @@ class SplinesActivity : AppCompatActivity() {
             R.id.buttonClear -> {
                 pointX = arrayListOf(-1)
                 pointY = arrayListOf(-1)
-                imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
-                imageForSplines.setImageBitmap(imageForSplinesBitmap)
+                imageForSplines.setImageURI(Uri.parse(imageOriginalString))
+                BitmapFactory.decodeFile(imageOriginalString)
+                    .compress(
+                        (application as GlobalVal).bitmapCompressFormat,
+                        (application as GlobalVal).bitmapCompressQuality,
+                        FileOutputStream(imageChangedString)
+                    )
+                imageIsChangedBool = false
                 drawn = false
             }
         }
@@ -139,6 +158,8 @@ class SplinesActivity : AppCompatActivity() {
             val p2x = calculateSplinesP2(xArray.size, xArray)
             val p2y = calculateSplinesP2(yArray.size, yArray)
 
+            val imageLocal = BitmapFactory.decodeFile(imageChangedString)
+
             drawSplines(
                 xArray.size,
                 splineRadius,
@@ -149,11 +170,18 @@ class SplinesActivity : AppCompatActivity() {
                 p1y,
                 p2x,
                 p2y,
-                imageForSplinesBitmap!!
+                imageLocal
             )
 
-            imageForSplines.post {
-                imageForSplines.setImageBitmap(imageForSplinesBitmap!!)
+            imageLocal.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
+
+            runOnUiThread {
+                imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                imageIsChangedBool = true
                 drawn = true
                 progressBarSplines.visibility = View.GONE
             }

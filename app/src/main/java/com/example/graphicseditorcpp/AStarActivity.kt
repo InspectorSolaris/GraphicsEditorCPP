@@ -1,5 +1,6 @@
 package com.example.graphicseditorcpp
 
+import android.app.Activity
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +15,11 @@ class AStarActivity : AppCompatActivity() {
     private val pixelSize = 50
     private val aStarMapWidth = 800 // aStarMap width
     private val aStarMapHeight = 800 // aStarMap height
-    private val aStarMap = Bitmap.createBitmap(aStarMapWidth, aStarMapHeight, Bitmap.Config.ARGB_8888)
+    private val aStarMap = Bitmap.createBitmap(
+        aStarMapWidth,
+        aStarMapHeight,
+        GlobalVal().bitmapConfig
+    )
 
     private var empirics = 1    // 1 - manhattan, 2 - euclid
     private var directions = 1  // 1 - 4-directional, 2 - 8-directional, 3 - 8-directional with check
@@ -34,7 +39,6 @@ class AStarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_astar)
 
-        aStarMap.eraseColor(getColor(R.color.aStarColorEmpty))
         drawGrid()
 
         imageViewAStarMap.layoutParams.width = aStarMap.width
@@ -131,9 +135,8 @@ class AStarActivity : AppCompatActivity() {
         }
 
         imageButtonAStarSettings.setOnClickListener {
-            tryClearPath()
-
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
+
             popupMenu.inflate(R.menu.a_star_popup_menu)
             popupMenu.setOnMenuItemClickListener { item ->
                 when(item.itemId){
@@ -162,9 +165,12 @@ class AStarActivity : AppCompatActivity() {
                         directions = 3
                         true
                     }
-                    else -> false
+                    else -> {
+                        false
+                    }
                 }
             }
+
             popupMenu.show()
         }
     }
@@ -181,6 +187,8 @@ class AStarActivity : AppCompatActivity() {
     ): IntArray
 
     private fun drawGrid() {
+        aStarMap.eraseColor(getColor(R.color.aStarColorEmpty))
+
         for(i in pixelSize until aStarMapWidth - 1 step pixelSize) {
             for(j in 0 until aStarMapHeight - 1) {
                 aStarMap.setPixel(i, j, getColor(R.color.aStarColorGrid))
@@ -207,7 +215,7 @@ class AStarActivity : AppCompatActivity() {
     }
 
     private fun tryClearPath() {
-        if(pathIsDrown){
+        if (pathIsDrown) {
             for(i in path) {
                 colorizeSquare(
                     pixelSize * (i % (aStarMapWidth / pixelSize)),
@@ -225,7 +233,6 @@ class AStarActivity : AppCompatActivity() {
     fun processButtonPressing(
         view: View
     ) {
-        tryClearPath()
         when(view.id) {
             R.id.imageButtonBack -> {
                 finish()
@@ -243,6 +250,7 @@ class AStarActivity : AppCompatActivity() {
                 inputState = 4
             }
             R.id.buttonRunAStar -> {
+                tryClearPath()
                 runAStar()
             }
         }
@@ -264,7 +272,7 @@ class AStarActivity : AppCompatActivity() {
                     pixelSize
                 )
 
-                imageViewAStarMap.post {
+                runOnUiThread {
                     for (i in path) {
                         colorizeSquare(
                             pixelSize * (i % (aStarMapWidth / pixelSize)),
@@ -275,9 +283,6 @@ class AStarActivity : AppCompatActivity() {
 
                     colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
                     colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
-                }
-
-                progressBarAStar.post {
                     progressBarAStar.visibility = View.GONE
                 }
 

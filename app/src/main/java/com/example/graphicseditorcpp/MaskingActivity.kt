@@ -12,9 +12,9 @@ import kotlinx.android.synthetic.main.activity_masking.*
 
 class MaskingActivity : AppCompatActivity() {
 
-    private var imageChanged = false
-
-    private var imageForMaskingString: String? = null
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -22,10 +22,12 @@ class MaskingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_masking)
 
-        imageForMaskingString = intent.getStringExtra("image")
-        imageForMasking.setImageURI(Uri.parse(imageForMaskingString))
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
 
-        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageForMaskingString)
+        imageForMasking.setImageURI(Uri.parse(imageOriginalString))
+
+        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageOriginalString)
         val width = imageBitmap.width
         val height = imageBitmap.height
         val pixelsArray = IntArray(width*height)
@@ -33,7 +35,6 @@ class MaskingActivity : AppCompatActivity() {
         val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(gaussBlur(pixelsArray, width, height, 5), 0, width, 0, 0, width, height)
         imageForMasking.setImageBitmap(newBitmap)
-
     }
 
     private fun gaussBlur (scl : IntArray, w : Int, h : Int, r : Int) : IntArray {
@@ -65,7 +66,13 @@ class MaskingActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
         }

@@ -19,10 +19,9 @@ import java.io.FileOutputStream
 
 class SegmentationActivity : AppCompatActivity() {
 
-    private var imageChanged = false
-
-    private var imageForSegmentationString: String? = null
-    private var imageSegmentedBitmap: Bitmap? = null
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -30,15 +29,10 @@ class SegmentationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_segmentation)
 
-        imageForSegmentationString = intent.getStringExtra("image")
-        imageForSegmentation.setImageURI(Uri.parse(imageForSegmentationString))
-    }
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
 
-    private fun tryCopyImageFile(){
-        if(imageSegmentedBitmap != null) {
-            val imageLocal = imageSegmentedBitmap
-            imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSegmentationString))
-        }
+        imageForSegmentation.setImageURI(Uri.parse(imageOriginalString))
     }
 
     fun processButtonPressing(
@@ -46,48 +40,73 @@ class SegmentationActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("image", imageForSegmentationString))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonSegmentation -> {
                 segmentation()
             }
             R.id.buttonDismiss -> {
-                imageChanged = false
-                imageSegmentedBitmap = null
-                imageForSegmentation.setImageURI(Uri.parse(imageForSegmentationString))
+                imageIsChangedBool = false
+                imageForSegmentation.setImageURI(Uri.parse(imageOriginalString))
             }
         }
     }
 
     private fun segmentation() {
-        imageSegmentedBitmap = BitmapFactory.decodeFile(imageForSegmentationString)
+        progressBarSegmentation.visibility = View.VISIBLE
+        Thread {
+            val imageInfo = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+                BitmapFactory.decodeFile(imageOriginalString, this)
+            }
+            val imageOriginal = BitmapFactory.decodeFile(imageOriginalString)
 
-        val myRectPaint = Paint()
-        myRectPaint.strokeWidth = 5f
-        myRectPaint.color = Color.RED
-        myRectPaint.style = Paint.Style.STROKE
+            val myRectPaint = Paint().apply {
+                strokeWidth = 5f
+                color = Color.RED
+                style = Paint.Style.STROKE
+            }
 
-        val tempBitmap = Bitmap.createBitmap(imageSegmentedBitmap!!.width, imageSegmentedBitmap!!.height, Bitmap.Config.ARGB_8888)
-        val tempCanvas = Canvas(tempBitmap)
-        tempCanvas.drawBitmap(imageSegmentedBitmap!!, 0.0F, 0.0F, null)
+            val tempBitmap = Bitmap.createBitmap(
+                imageInfo.outWidth,
+                imageInfo.outHeight,
+                (application as GlobalVal).bitmapConfig
+            )
+            val tempCanvas = Canvas(tempBitmap).apply {
+                drawBitmap(imageOriginal, 0.0F, 0.0F, null)
+            }
 
-        val faceDetector = FaceDetector.Builder(applicationContext).setTrackingEnabled(false) .build()
-        val frame = Frame.Builder().setBitmap(imageSegmentedBitmap).build()
-        val faces = faceDetector.detect(frame)
+            val faceDetector = FaceDetector.Builder(applicationContext).setTrackingEnabled(false).build()
+            val frame = Frame.Builder().setBitmap(imageOriginal).build()
+            val faces = faceDetector.detect(frame)
 
-        for (i in 0 until faces.size()) {
-            val thisFace = faces.valueAt(i)
-            val x1 = thisFace.position.x
-            val y1 = thisFace.position.y
-            val x2 = x1 + thisFace.width
-            val y2 = y1 + thisFace.height
-            tempCanvas.drawRoundRect(RectF(x1, y1, x2, y2), 2F, 2F, myRectPaint)
-        }
+            for (i in 0 until faces.size()) {
+                val thisFace = faces.valueAt(i)
+                val x1 = thisFace.position.x
+                val y1 = thisFace.position.y
+                val x2 = x1 + thisFace.width
+                val y2 = y1 + thisFace.height
+                tempCanvas.drawRoundRect(RectF(x1, y1, x2, y2), 2F, 2F, myRectPaint)
+            }
 
-        imageSegmentedBitmap = tempBitmap
-        imageChanged = true
-        imageForSegmentation.setImageBitmap(tempBitmap)
+            tempBitmap.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
+
+            runOnUiThread {
+                imageForSegmentation.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                imageIsChangedBool = true
+                progressBarSegmentation.visibility = View.GONE
+            }
+        }.start()
     }
 }

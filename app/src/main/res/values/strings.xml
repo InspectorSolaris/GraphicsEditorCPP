@@ -1,10 +1,15 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
 
-    <string name="imagebutton_back">Back to previous activity</string>
+    <string name="code_image_original">imageOriginal</string>
+    <string name="code_image_changed">imageChanged</string>
+    <string name="code_image_is_changed">changed</string>
 
-    <string name="imageforprocessingname">processedImg_</string>
-    <string name="imageforprocessingext">png</string>
+    <string name="image_for_processing_name">processedImg_</string>
+    <string name="image_for_processing_ext">jpeg</string>
+    <string name="image_for_processing_time">yyyyMMdd_HHmmss</string>
+
+    <string name="imagebutton_back">Back to previous activity</string>
 
     <string name="main_activity_imagebutton_picknew">Pick new image</string>
     <string name="main_activity_imageview_imageforprocessing">Image for processing</string>
@@ -58,7 +63,7 @@
     <string name="filters_activity_button_f3_text">Cold</string>
     <string name="filters_activity_button_f4_text">Blur</string>
 
-    <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
+    <string name="scaling_activity_imageview_imageforscaling">Image for scaling</string>
     <string name="scaling_activity_button_scale_text">Scale</string>
 
     <string name="segmentation_activity_imageview_imageforsegmentation">Image for segmentation</string>

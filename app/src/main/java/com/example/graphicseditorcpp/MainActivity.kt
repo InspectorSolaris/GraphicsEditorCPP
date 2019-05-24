@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
@@ -47,13 +46,15 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         dialog = BottomSheetDialog(this)
 
         imageButtonPickNew.setOnClickListener {
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
+
             popupMenu.inflate(R.menu.popup_menu)
             popupMenu.setOnMenuItemClickListener { item ->
-                when(item.itemId){
+                when (item.itemId) {
                     R.id.popupPickFromGallery -> {
                         tryPickFromGallery()
                         true
@@ -62,19 +63,19 @@ class MainActivity : AppCompatActivity() {
                         tryPickFromCamera()
                         true
                     }
-                    else -> false
+                    else -> {
+                        false
+                    }
                 }
             }
+
             popupMenu.show()
         }
     }
 
-    private fun createImageFile(
-        name: String,
-        ext: String
-    ): File {
-        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = ".$ext"
+    private fun createImageFile(): File {
+        val imageFileName = getString(R.string.image_for_processing_name) + SimpleDateFormat(getString(R.string.image_for_processing_time), Locale.US).format(Date())
+        val imageFileExt = ".${getString(R.string.image_for_processing_ext)}"
         val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
 
         return File.createTempFile(
@@ -82,20 +83,32 @@ class MainActivity : AppCompatActivity() {
             imageFileExt,
             imageFileDir
         ).apply {
+            while(imageForProcessingInd < imageForProcessingHistory.size - 1) {
+                imageForProcessingHistory.removeAt(imageForProcessingInd + 1)
+            }
+
             imageForProcessingInd++
             imageForProcessingHistory.add(absolutePath)
-            imageForProcessingString = absolutePath
         }
     }
 
-    private fun exportImage() {
-        MediaStore.Images.Media.insertImage(
-            contentResolver,
-            BitmapFactory.decodeFile(imageForProcessingString),
-            getString(R.string.imageforprocessingname) + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date()) + ".${getString(R.string.imageforprocessingext)}",
-            getString(R.string.imageforprocessingname) + ".${getString(R.string.imageforprocessingext)}"
-        )
-        Toast.makeText(this, getString(R.string.main_activity_imageexportsuccess), Toast.LENGTH_LONG).show()
+    private fun tryExportImage() {
+        if (imageForProcessingString != null) {
+            val imageFileTime = SimpleDateFormat(getString(R.string.image_for_processing_time), Locale.US).format(Date())
+            val imageFileName = getString(R.string.image_for_processing_name) + imageFileTime + ".${getString(R.string.image_for_processing_ext)}"
+            val imageFileDescription = getString(R.string.image_for_processing_name) + ".${getString(R.string.image_for_processing_ext)}"
+
+            MediaStore.Images.Media.insertImage(
+                contentResolver,
+                BitmapFactory.decodeFile(imageForProcessingString),
+                imageFileName,
+                imageFileDescription
+            )
+
+            Toast.makeText(this, getString(R.string.main_activity_imageexportsuccess), Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun tryPickFromGallery() {
@@ -105,7 +118,9 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(
                     android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), permissionGallery)
+                ),
+                permissionGallery
+            )
         } else {
             pickFromGallery()
         }
@@ -118,7 +133,9 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(
                     android.Manifest.permission.CAMERA,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), permissionCamera)
+                ),
+                permissionCamera
+            )
         } else {
             pickFromCamera()
         }
@@ -138,10 +155,7 @@ class MainActivity : AppCompatActivity() {
         cameraIntent.putExtra(
             MediaStore.EXTRA_OUTPUT,
             FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
-                createImageFile(
-                    getString(R.string.imageforprocessingname),
-                    getString(R.string.imageforprocessingext)
-                )
+                createImageFile()
             )
         )
 
@@ -151,8 +165,12 @@ class MainActivity : AppCompatActivity() {
     private fun runActivity(
         activity: Activity
     ) {
+        createImageFile()
+
         val activityIntent = Intent(this, activity::class.java)
-        activityIntent.putExtra("image", imageForProcessingString)
+
+        activityIntent.putExtra(getString(R.string.code_image_original), imageForProcessingString)
+        activityIntent.putExtra(getString(R.string.code_image_changed), imageForProcessingHistory[imageForProcessingInd])
         startActivityForResult(activityIntent, idImageChange)
     }
 
@@ -197,9 +215,9 @@ class MainActivity : AppCompatActivity() {
 
         if(resultActivity != null) {
             runActivity(resultActivity)
+
             dialog!!.hide()
-        }
-        else {
+        } else {
             Toast.makeText(this, getString(R.string.main_activity_nophoto), Toast.LENGTH_LONG).show()
         }
     }
@@ -218,6 +236,7 @@ class MainActivity : AppCompatActivity() {
                 if (imageForProcessingInd != 0) {
                     imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 1)
                     imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+
                     imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
                 }
             }
@@ -225,6 +244,7 @@ class MainActivity : AppCompatActivity() {
                 if (imageForProcessingInd != 0) {
                     imageForProcessingInd = max(imageForProcessingInd - 1, 1)
                     imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+
                     imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
                 }
             }
@@ -234,10 +254,11 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.imageButtonAlgorithmAStar -> {
                 val aStarIntent = Intent(this, AStarActivity::class.java)
+
                 startActivity(aStarIntent)
             }
             R.id.buttonExport -> {
-                exportImage()
+                tryExportImage()
             }
         }
     }
@@ -248,6 +269,7 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         when(requestCode) {
             permissionGallery -> {
                 if(grantResults.size > 1 &&
@@ -283,21 +305,22 @@ class MainActivity : AppCompatActivity() {
                 null
             }
             requestCode == idPickFromGallery -> {
-                createImageFile(
-                    getString(R.string.imageforprocessingname),
-                    getString(R.string.imageforprocessingext)
+                createImageFile()
+
+                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
+
+                val fileDescriptor = this.contentResolver.openFileDescriptor(data?.data as Uri, "r")?.fileDescriptor
+                val bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor)
+
+                bitmap.compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageForProcessingString)
                 )
-
-                BitmapFactory.decodeFileDescriptor(
-                    this.contentResolver.openFileDescriptor(
-                        data?.data as Uri,
-                        "r"
-                    )?.fileDescriptor
-                ).compress(Bitmap.CompressFormat.PNG,100, FileOutputStream(imageForProcessingString))
-
                 Uri.parse(imageForProcessingString)
             }
             requestCode == idPickFromCamera -> {
+                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
                 Uri.parse(imageForProcessingString)
             }
             else -> {
@@ -313,24 +336,13 @@ class MainActivity : AppCompatActivity() {
                 imageButtonPickFromCamera.isEnabled = false
 
                 imageForProcessing.setImageURI(imageUri)
-                imageForProcessingString = imageUri.toString()
             }
             requestCode != idImageChange -> {
                 Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()
             }
-            data?.extras!!.getBoolean("changed") -> {
-                val imageForProcessingStringOld = imageForProcessingString
-                while(imageForProcessingInd < imageForProcessingHistory.size - 1) {
-                    imageForProcessingHistory.removeAt(imageForProcessingInd + 1)
-                }
+            data?.extras!!.getBoolean(getString(R.string.code_image_is_changed)) -> {
+                imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
 
-                createImageFile(
-                    getString(R.string.imageforprocessingname),
-                    getString(R.string.imageforprocessingext)
-                )
-
-                BitmapFactory.decodeFile(imageForProcessingStringOld)
-                    .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForProcessingString))
                 imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
             }
         }

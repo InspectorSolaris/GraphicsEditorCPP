@@ -14,11 +14,11 @@ import java.io.FileOutputStream
 
 class RetouchingActivity : AppCompatActivity() {
 
-    private var imageChanged = false
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     private var retouchingRadius = 50
-    private var imageForRetouchingString: String? = null
-    private var imageRetouchedBitmap: Bitmap? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -26,12 +26,26 @@ class RetouchingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_retouching)
 
-        imageForRetouchingString = intent.getStringExtra("image")
-        imageRetouchedBitmap = BitmapFactory.decodeFile(imageForRetouchingString)
-        imageForRetouching.setImageURI(Uri.parse(imageForRetouchingString))
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+
+        run {
+            BitmapFactory.decodeFile(imageOriginalString)
+                .compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
+                )
+        }
+
+        imageForRetouching.setImageURI(Uri.parse(imageOriginalString))
 
         seekBarRetouchingSize.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
+            override fun onProgressChanged(
+                seekBar: SeekBar,
+                i: Int,
+                b: Boolean
+            ) {
                 retouchingRadius = i
             }
 
@@ -45,21 +59,36 @@ class RetouchingActivity : AppCompatActivity() {
         })
 
         imageForRetouching.setOnTouchListener { _, motionEvent ->
-            val imageLocal = imageRetouchedBitmap
+            progressBarRetouching.visibility = View.VISIBLE
 
-            imageRetouching(motionEvent.x.toInt(), motionEvent.y.toInt(), retouchingRadius, imageLocal!!)
-            imageForRetouching.setImageBitmap(imageRetouchedBitmap)
-            imageRetouchedBitmap = imageLocal
-            imageChanged = true
+
+
+            Thread {
+                val imageLocal = BitmapFactory.decodeFile(imageChangedString)
+
+                if(imageLocal != null) {
+                    imageRetouching(
+                        motionEvent.x.toInt(),
+                        motionEvent.y.toInt(),
+                        retouchingRadius,
+                        imageLocal
+                    )
+
+                    imageLocal.compress(
+                        (application as GlobalVal).bitmapCompressFormat,
+                        (application as GlobalVal).bitmapCompressQuality,
+                        FileOutputStream(imageChangedString)
+                    )
+
+                    runOnUiThread {
+                        imageForRetouching.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                        imageIsChangedBool = true
+                        progressBarRetouching.visibility = View.GONE
+                    }
+                }
+            }.start()
 
             true
-        }
-    }
-
-    private fun tryCopyImageFile(){
-        if(imageRetouchedBitmap != null) {
-            val imageLocal = imageRetouchedBitmap
-            imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForRetouchingString))
         }
     }
 
@@ -75,14 +104,18 @@ class RetouchingActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonDismiss -> {
-                imageRetouchedBitmap = BitmapFactory.decodeFile(imageForRetouchingString)
-                imageForRetouching.setImageBitmap(imageRetouchedBitmap)
-                imageChanged = false
+                imageForRetouching.setImageURI(Uri.parse(imageOriginalString))
+                imageIsChangedBool = false
             }
         }
     }

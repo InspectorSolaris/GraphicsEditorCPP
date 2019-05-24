@@ -10,9 +10,9 @@ import kotlinx.android.synthetic.main.activity_bilinear_filt.*
 
 class BilinearFiltActivity : AppCompatActivity() {
 
-    private var imageChanged = false
-
-    private var imageForBilinearFiltString: String? = null
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -20,8 +20,10 @@ class BilinearFiltActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bilinear_filt)
 
-        imageForBilinearFiltString = intent.getStringExtra("image")
-        imageForBilinearFilt.setImageURI(Uri.parse(imageForBilinearFiltString))
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+
+        imageForBilinearFilt.setImageURI(Uri.parse(imageOriginalString))
     }
 
     fun processButtonPressing(
@@ -29,7 +31,13 @@ class BilinearFiltActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
         }
