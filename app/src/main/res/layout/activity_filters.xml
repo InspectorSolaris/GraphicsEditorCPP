@@ -46,6 +46,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.0" android:id="@+id/linearLayout"
             app:layout_constraintBottom_toBottomOf="parent">
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="horizontal"
+                android:id="@+id/recyclerView"
+        />
         <Button
                 android:text="@string/filters_activity_button_f1_text"
                 android:layout_width="match_parent"

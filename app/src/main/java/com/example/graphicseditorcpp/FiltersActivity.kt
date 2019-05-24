@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_filters.*
 import java.io.FileOutputStream
@@ -79,6 +81,8 @@ class FiltersActivity : AppCompatActivity() {
         imageChanged = true
         imageForFilters.setImageBitmap(imageLocal)
     }
+
+
 }
 
 

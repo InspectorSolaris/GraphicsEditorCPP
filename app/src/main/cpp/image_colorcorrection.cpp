@@ -79,13 +79,19 @@ uint32_t newPixel(
     }
     else if(filter == 3)
     {
-        auto new_r = (uint32_t)std::min((uint32_t)(0.393 * r + 0.769 * g + 0.189 * b), (uint32_t)255);
-        auto new_g = (uint32_t)std::min((uint32_t)(0.349 * r + 0.686 * g + 0.168 * b), (uint32_t)255);
-        auto new_b = (uint32_t)std::min((uint32_t)(0.272 * r + 0.534 * g + 0.131 * b), (uint32_t)255);
+        auto new_r = (0.393 * r + 0.769 * g + 0.189 * b);
+        auto new_g = (0.349 * r + 0.686 * g + 0.168 * b);
+        auto new_b = (0.272 * r + 0.534 * g + 0.131 * b);
 
-        r = new_r;
-        g = new_g;
-        b = new_b;
+        if (new_r >255) r = 255;
+        else r = new_r;
+        if (new_g >255) r = 255;
+        else g = new_g;
+        if (new_b >255) r = 255;
+        else  b = new_b;
+
+
+
     }
     else if(filter == 4)
     {
