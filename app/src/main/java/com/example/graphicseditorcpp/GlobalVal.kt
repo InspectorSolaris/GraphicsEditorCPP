@@ -9,4 +9,7 @@ class GlobalVal : Application() {
     val bitmapCompressQuality = 100
     val bitmapConfig = Bitmap.Config.ARGB_8888
 
+    val imageScreenWidthRatio = 0.90
+    val imageScreenHeightRatio = 0.70
+
 }

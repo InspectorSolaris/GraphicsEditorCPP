@@ -83,9 +83,7 @@ class MainActivity : AppCompatActivity() {
             imageFileExt,
             imageFileDir
         ).apply {
-            while(imageForProcessingInd < imageForProcessingHistory.size - 1) {
-                imageForProcessingHistory.removeAt(imageForProcessingInd + 1)
-            }
+            imageForProcessingHistory = imageForProcessingHistory.subList(0, imageForProcessingInd + 1)
 
             imageForProcessingInd++
             imageForProcessingHistory.add(absolutePath)
@@ -151,11 +149,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun pickFromCamera() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        val imageFile = if (imageForProcessingInd == 0) {
+            createImageFile()
+        } else {
+            File(imageForProcessingHistory[imageForProcessingInd])
+        }
 
         cameraIntent.putExtra(
             MediaStore.EXTRA_OUTPUT,
             FileProvider.getUriForFile(this, "com.example.graphicseditorcpp.fileprovider",
-                createImageFile()
+                imageFile
             )
         )
 
@@ -235,7 +238,7 @@ class MainActivity : AppCompatActivity() {
                     imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 2)
                     imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
 
-                    imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                    imageForProcessing.setImageBitmap(BitmapFactory.decodeFile(imageForProcessingString))
                 }
             }
             R.id.imageButtonUndo -> {
@@ -243,7 +246,7 @@ class MainActivity : AppCompatActivity() {
                     imageForProcessingInd = max(imageForProcessingInd - 1, 1)
                     imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
 
-                    imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                    imageForProcessing.setImageBitmap(BitmapFactory.decodeFile(imageForProcessingString))
                 }
             }
             R.id.imageButtonTools -> {
@@ -303,7 +306,9 @@ class MainActivity : AppCompatActivity() {
                 null
             }
             requestCode == idPickFromGallery -> {
-                createImageFile()
+                if(imageForProcessingInd == 0) {
+                    createImageFile()
+                }
 
                 imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
 
@@ -334,7 +339,7 @@ class MainActivity : AppCompatActivity() {
                 imageButtonPickFromCamera.isEnabled = false
 
                 createImageFile()
-                imageForProcessing.setImageURI(imageUri)
+                imageForProcessing.setImageBitmap(BitmapFactory.decodeFile(imageForProcessingString))
             }
             requestCode != idImageChange -> {
                 Toast.makeText(this, getString(R.string.error_main_image_pick), Toast.LENGTH_LONG).show()

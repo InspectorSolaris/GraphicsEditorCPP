@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Point
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_splines.*
 import java.io.FileOutputStream
+import kotlin.collections.ArrayList
 
 class SplinesActivity : AppCompatActivity() {
 
@@ -17,15 +19,13 @@ class SplinesActivity : AppCompatActivity() {
     private var imageChangedString: String? = null
     private var imageIsChangedBool: Boolean = false
 
-    private var pointRadius = 75
-    private var splineRadius = 10
+    private var touchState = false
+    private var touchRatio = 1.0
+    private var pointRadius = 100
+    private var splineRadius = 35
 
     private var pointX: ArrayList<Int> = arrayListOf(-1) // Array of x coordinates of inputed points
     private var pointY: ArrayList<Int> = arrayListOf(-1) // Array of y coordinates of inputed points
-
-    private var timeCounter = System.currentTimeMillis()
-    private var timeDelay = 200
-    private var drawn = false
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -45,33 +45,67 @@ class SplinesActivity : AppCompatActivity() {
                 )
         }
 
-        imageForSplines.layoutParams.width = 800
-        imageForSplines.layoutParams.height = 1000
+        val screenSize = Point()
+        windowManager.defaultDisplay.getSize(screenSize)
+
+        val imageInfo = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+            BitmapFactory.decodeFile(imageOriginalString, this)
+        }
+        val maxWidth = (application as GlobalVal).imageScreenWidthRatio * screenSize.x
+        val maxHeight = (application as GlobalVal).imageScreenHeightRatio * screenSize.y
+
+        val ratio = imageInfo.outHeight.toDouble() / imageInfo.outWidth.toDouble()
+        var width = maxWidth
+        var height = maxWidth * ratio
+
+        if(maxHeight < height) {
+            height = maxHeight
+            width = maxHeight / ratio
+        }
+
+        touchRatio = imageInfo.outWidth.toDouble() / width
+        pointRadius = (pointRadius * imageInfo.outWidth.toDouble() / width).toInt()
+        splineRadius = (splineRadius * imageInfo.outWidth.toDouble() / width).toInt()
+
+        imageForSplines.layoutParams.width = width.toInt()
+        imageForSplines.layoutParams.height = height.toInt()
         imageForSplines.setImageURI(Uri.parse(imageOriginalString))
 
         imageForSplines.setOnTouchListener { _, motionEvent ->
-            if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
-                val imageLocal = BitmapFactory.decodeFile(imageChangedString)
+            val x = (motionEvent.x * touchRatio).toInt()
+            val y = (motionEvent.y * touchRatio).toInt()
 
-                drawCircle(
-                    motionEvent.x.toInt(),
-                    motionEvent.y.toInt(),
-                    pointRadius,
-                    getColor(R.color.splinesColorPoint),
-                    imageLocal
-                )
+            if(!touchState && !imageIsChangedBool) {
+                progressBarSplines.visibility = View.VISIBLE
+                Thread {
+                    touchState = true
 
-                imageLocal.compress(
-                    (application as GlobalVal).bitmapCompressFormat,
-                    (application as GlobalVal).bitmapCompressQuality,
-                    FileOutputStream(imageChangedString)
-                )
+                    val imageLocal = BitmapFactory.decodeFile(imageChangedString)
 
-                pointX.add(motionEvent.x.toInt())
-                pointY.add(motionEvent.y.toInt())
-                timeCounter = System.currentTimeMillis()
+                    drawCircle(
+                        x,
+                        y,
+                        pointRadius,
+                        getColor(R.color.splinesColorPoint),
+                        imageLocal
+                    )
 
-                imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                    imageLocal.compress(
+                        (application as GlobalVal).bitmapCompressFormat,
+                        (application as GlobalVal).bitmapCompressQuality,
+                        FileOutputStream(imageChangedString)
+                    )
+
+                    pointX.add(x)
+                    pointY.add(y)
+
+                    runOnUiThread {
+                        imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                        touchState = false
+                        progressBarSplines.visibility = View.GONE
+                    }
+                }.start()
             }
 
             true
@@ -137,54 +171,54 @@ class SplinesActivity : AppCompatActivity() {
                         FileOutputStream(imageChangedString)
                     )
                 imageIsChangedBool = false
-                drawn = false
             }
         }
     }
 
     private fun runDrawSplines() {
-        progressBarSplines.visibility = View.VISIBLE
-        Thread {
-            val xArray = IntArray(pointX.size - 1)
-            val yArray = IntArray(pointY.size - 1)
+        if(pointX.size > 2) {
+            progressBarSplines.visibility = View.VISIBLE
+            Thread {
+                val xArray = IntArray((pointX.size - 1))
+                val yArray = IntArray((pointY.size - 1))
 
-            for (i in 1 until pointX.size) {
-                xArray[i - 1] = pointX[i]
-                yArray[i - 1] = pointY[i]
-            }
+                for (i in 1 until pointX.size) {
+                    xArray[(i - 1)] = pointX[i]
+                    yArray[(i - 1)] = pointY[i]
+                }
 
-            val p1x = calculateSplinesP1(xArray.size, xArray)
-            val p1y = calculateSplinesP1(yArray.size, yArray)
-            val p2x = calculateSplinesP2(xArray.size, xArray)
-            val p2y = calculateSplinesP2(yArray.size, yArray)
+                val p1x = calculateSplinesP1(xArray.size, xArray)
+                val p1y = calculateSplinesP1(yArray.size, yArray)
+                val p2x = calculateSplinesP2(xArray.size, xArray)
+                val p2y = calculateSplinesP2(yArray.size, yArray)
 
-            val imageLocal = BitmapFactory.decodeFile(imageChangedString)
+                val imageLocal = BitmapFactory.decodeFile(imageChangedString)
 
-            drawSplines(
-                xArray.size,
-                splineRadius,
-                getColor(R.color.splinesColorSpline),
-                xArray,
-                yArray,
-                p1x,
-                p1y,
-                p2x,
-                p2y,
-                imageLocal
-            )
+                drawSplines(
+                    xArray.size,
+                    splineRadius,
+                    getColor(R.color.splinesColorSpline),
+                    xArray,
+                    yArray,
+                    p1x,
+                    p1y,
+                    p2x,
+                    p2y,
+                    imageLocal
+                )
 
-            imageLocal.compress(
-                (application as GlobalVal).bitmapCompressFormat,
-                (application as GlobalVal).bitmapCompressQuality,
-                FileOutputStream(imageChangedString)
-            )
+                imageLocal.compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
+                )
 
-            runOnUiThread {
-                imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
-                imageIsChangedBool = true
-                drawn = true
-                progressBarSplines.visibility = View.GONE
-            }
-        }.start()
+                runOnUiThread {
+                    imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                    imageIsChangedBool = true
+                    progressBarSplines.visibility = View.GONE
+                }
+            }.start()
+        }
     }
 }
