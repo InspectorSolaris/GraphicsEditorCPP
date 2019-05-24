@@ -16,7 +16,7 @@
 extern "C" JNIEXPORT jintArray JNICALL
 Java_com_example_graphicseditorcpp_AStarActivity_algorithmAStar(
         JNIEnv *env,
-        jobject obj,
+        jobject,
         jobject bitmap,
         jint start_x,
         jint start_y,

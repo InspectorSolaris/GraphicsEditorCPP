@@ -42,6 +42,8 @@ class SplinesActivity : AppCompatActivity() {
 
         imageForSplines.setOnTouchListener { _, motionEvent ->
             if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
+
+
                 drawCircle(
                     motionEvent.x.toInt(),
                     motionEvent.y.toInt(),
@@ -61,9 +63,11 @@ class SplinesActivity : AppCompatActivity() {
         }
     }
 
-    private fun tryCopyImageFile(){
-        imageForSplinesBitmap!!
-            .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSplinesString))
+    private fun tryCopyImageFile() {
+        if (imageForSplinesBitmap != null) {
+            imageForSplinesBitmap!!
+                .compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForSplinesString))
+        }
     }
 
     private external fun drawCircle(
