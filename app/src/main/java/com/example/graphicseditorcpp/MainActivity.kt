@@ -165,8 +165,6 @@ class MainActivity : AppCompatActivity() {
     private fun runActivity(
         activity: Activity
     ) {
-        createImageFile()
-
         val activityIntent = Intent(this, activity::class.java)
 
         activityIntent.putExtra(getString(R.string.code_image_original), imageForProcessingString)
@@ -234,7 +232,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.imageButtonRedo -> {
                 if (imageForProcessingInd != 0) {
-                    imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 1)
+                    imageForProcessingInd = min(imageForProcessingInd + 1, imageForProcessingHistory.size - 2)
                     imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
 
                     imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
@@ -335,6 +333,7 @@ class MainActivity : AppCompatActivity() {
                 imageButtonPickFromCamera.visibility = View.GONE
                 imageButtonPickFromCamera.isEnabled = false
 
+                createImageFile()
                 imageForProcessing.setImageURI(imageUri)
             }
             requestCode != idImageChange -> {
@@ -344,6 +343,7 @@ class MainActivity : AppCompatActivity() {
                 imageForProcessingString = imageForProcessingHistory[imageForProcessingInd]
 
                 imageForProcessing.setImageURI(Uri.parse(imageForProcessingString))
+                createImageFile()
             }
         }
     }

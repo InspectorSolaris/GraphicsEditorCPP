@@ -8,24 +8,17 @@ import android.graphics.Color
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_masking.*
-import java.io.File
 import java.io.FileOutputStream
 import java.lang.Math.abs
-import java.text.SimpleDateFormat
-import java.util.*
 
 class MaskingActivity : AppCompatActivity() {
 
-    private var imageChanged = false
-
-    private var imageForMaskingString: String? = null
-    private var imageMaskedString: String? = null
-    private var imageMaskingBitmap: Bitmap? = null
-    private var imageMaskedBitmap: Bitmap? = null
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -33,37 +26,16 @@ class MaskingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_masking)
 
-        imageForMaskingString = intent.getStringExtra("image")
-        imageMaskingBitmap = BitmapFactory.decodeFile(imageForMaskingString)
-        imageForMasking.setImageURI(Uri.parse(imageForMaskingString))
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
 
+        imageForMasking.setImageURI(Uri.parse(imageOriginalString))
     }
 
-    private fun createImageFile(
-        name: String,
-        ext: String
-    ): File {
-        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
-        val imageFileExt = ".$ext"
-        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-
-        return File.createTempFile(
-            imageFileName,
-            imageFileExt,
-            imageFileDir
-        ).apply {
-            imageMaskedString = absolutePath
-        }
-    }
-
-    private fun tryCopyImageFile(){
-        if(imageMaskedBitmap != null) {
-            val imageLocal = imageMaskedBitmap
-            imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForMaskingString))
-        }
-    }
-
-    private fun fastBlur(startBitmap: Bitmap, radius: Int): Bitmap? {
+    private fun fastBlur(
+        startBitmap: Bitmap,
+        radius: Int
+    ): Bitmap? {
         // http://qaru.site/questions/10598781/how-to-set-blur-image-in-android-for-all-version
 
         val bitmap = startBitmap.copy(startBitmap.config, true)
@@ -232,7 +204,7 @@ class MaskingActivity : AppCompatActivity() {
                 sir[1] = g[yi]
                 sir[2] = b[yi]
 
-                rbs = r1 - Math.abs(i)
+                rbs = r1 - abs(i)
 
                 rsum += r[yi] * rbs
                 gsum += g[yi] * rbs
@@ -309,15 +281,20 @@ class MaskingActivity : AppCompatActivity() {
         return bitmap
     }
 
-    private fun changeContrast(pix : Int, contrast : Double) : Int {
+    private fun changeContrast(
+        pix: Int,
+        contrast: Double
+    ): Int {
         var newPix = ((((pix / 255.0) - 0.5) * contrast) + 0.5) * 255.0
         if(newPix < 0) { newPix = 0.0; }
         else if(newPix > 255) { newPix = 255.0; }
         return newPix.toInt()
     }
 
-    private fun unsharpMasking(value : Double) : Bitmap? {
-        val imageBitmap : Bitmap = BitmapFactory.decodeFile(imageForMaskingString)
+    private fun unsharpMasking(
+        value: Double
+    ): Bitmap {
+        val imageBitmap: Bitmap = BitmapFactory.decodeFile(imageOriginalString)
         val width = imageBitmap.width
         val height = imageBitmap.height
         val pixelsArray = IntArray(width*height)
@@ -341,23 +318,22 @@ class MaskingActivity : AppCompatActivity() {
             }
         }
 
-        val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val newBitmap: Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(pixelsArray, 0, width, 0, 0, width, height)
-        if(imageMaskedString == null){
-            createImageFile(
-                getString(R.string.imageforprocessingname),
-                getString(R.string.imageforprocessingext)
-            )
-        }
+
         return newBitmap
     }
 
     private fun change () {
-        imageMaskedBitmap = unsharpMasking(10.0)
-        imageMaskedBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageMaskedString))
-        imageChanged = true
-        imageForMasking.setImageBitmap(imageMaskedBitmap)
-        Toast.makeText(this, getString(R.string.masking_activity_toast), Toast.LENGTH_SHORT).show()
+        unsharpMasking(10.0)
+            .compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
+        imageIsChangedBool = true
+        imageForMasking.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+        Toast.makeText(this, getString(R.string.masking_activity_toast), Toast.LENGTH_LONG).show()
     }
 
     fun processButtonPressing(
@@ -365,8 +341,13 @@ class MaskingActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonMask -> {

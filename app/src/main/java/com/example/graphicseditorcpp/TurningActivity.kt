@@ -86,7 +86,7 @@ class TurningActivity : AppCompatActivity() {
 
         progressBarTurning.visibility = View.VISIBLE
         Thread {
-            imageTurning(currentAngle.toDouble(), imageOriginal!!, imageTurned!!)
+            imageTurning(currentAngle.toDouble(), imageOriginal, imageTurned)
 
             imageTurned.compress(
                 (application as GlobalVal).bitmapCompressFormat,

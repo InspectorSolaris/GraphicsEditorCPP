@@ -15,11 +15,12 @@ import kotlinx.android.synthetic.main.activity_filters.*
 import java.io.FileOutputStream
 
 class FiltersActivity : AppCompatActivity() {
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    private var imageChanged = false
 
-    private var imageForFiltersString: String? = null
-    private var imageFilteredBitmap: Bitmap? = null
+    private var imageOriginalString: String? = null
+    private var imageChangedString: String? = null
+    private var imageIsChangedBool: Boolean = false
+
+    private lateinit var linearLayoutManager: LinearLayoutManager
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -30,16 +31,9 @@ class FiltersActivity : AppCompatActivity() {
         linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
 
-        imageForFiltersString = intent.getStringExtra("image")
-        imageFilteredBitmap = BitmapFactory.decodeFile(imageForFiltersString)
-        imageForFilters.setImageURI(Uri.parse(imageForFiltersString))
-    }
-
-    private fun tryCopyImageFile(){
-        if(imageFilteredBitmap != null) {
-            val imageLocal = imageFilteredBitmap
-            imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForFiltersString))
-        }
+        imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
+        imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
+        imageForFilters.setImageURI(Uri.parse(imageOriginalString))
     }
 
     private external fun imageColorcorrection(
@@ -53,8 +47,13 @@ class FiltersActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
-                tryCopyImageFile()
-                setResult(Activity.RESULT_OK, Intent().putExtra("changed", imageChanged))
+                setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(
+                        getString(R.string.code_image_is_changed),
+                        imageIsChangedBool
+                    )
+                )
                 finish()
             }
             R.id.buttonF1 -> {
@@ -85,18 +84,37 @@ class FiltersActivity : AppCompatActivity() {
     private fun runFilter(
         filter: Int
     ) {
-        val imageLocal = Bitmap.createBitmap(imageFilteredBitmap!!.width, imageFilteredBitmap!!.height, Bitmap.Config.ARGB_8888)
-        imageColorcorrection(
-            BitmapFactory.decodeFile(imageForFiltersString),
-            imageLocal,
-            filter
+        val imageInfo = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+            BitmapFactory.decodeFile(imageOriginalString, this)
+        }
+        val imageLocal = Bitmap.createBitmap(
+            imageInfo.outWidth,
+            imageInfo.outHeight,
+            (application as GlobalVal).bitmapConfig
         )
-        imageFilteredBitmap = imageLocal
-        imageChanged = true
-        imageForFilters.setImageBitmap(imageLocal)
+
+        progressBarFilters.visibility = View.VISIBLE
+        Thread {
+            imageColorcorrection(
+                BitmapFactory.decodeFile(imageOriginalString),
+                imageLocal,
+                filter
+            )
+
+            imageLocal.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
+
+            runOnUiThread {
+                imageForFilters.setImageBitmap(imageLocal)
+                imageIsChangedBool = true
+                progressBarFilters.visibility = View.GONE
+            }
+        }.start()
     }
-
-
 }
 
 

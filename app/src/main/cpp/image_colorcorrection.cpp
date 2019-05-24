@@ -63,7 +63,7 @@ uint32_t newPixel(
         int m,
         uint32_t * img)
 {
-    if(filter == 1) //bnw
+    if(filter == 1) // bnw
     {
         uint32_t color = (r + g + b) / 3;
 
@@ -71,29 +71,23 @@ uint32_t newPixel(
         g = color;
         b = color;
     }
-    else if(filter == 2) //negative
+    else if(filter == 2) // negative
     {
         r = 255 - r;
         g = 255 - g;
         b = 255 - b;
     }
-    else if(filter == 3) //shouldbesepia
+    else if(filter == 3) // shouldbesepia
     {
-        auto new_r = (0.393 * r + 0.769 * g + 0.189 * b);
-        auto new_g = (0.349 * r + 0.686 * g + 0.168 * b);
-        auto new_b = (0.272 * r + 0.534 * g + 0.131 * b);
+        auto new_r = std::min((0.393 * r + 0.769 * g + 0.189 * b), 255.0);
+        auto new_g = std::min((0.349 * r + 0.686 * g + 0.168 * b), 255.0);
+        auto new_b = std::min((0.272 * r + 0.534 * g + 0.131 * b), 255.0);
 
-        if (new_r >255) r = 255;
-        else r = new_r;
-        if (new_g >255) r = 255;
-        else g = new_g;
-        if (new_b >255) r = 255;
-        else b = new_b;
-
-
-
+        r = (uint32_t)new_r;
+        g = (uint32_t)new_g;
+        b = (uint32_t)new_b;
     }
-    else if(filter == 4) //bluer
+    else if(filter == 4) // bluer
     {
         uint32_t pixel = colorcorrectionBlurPixel(x, y, n, m, 10, img);
 
@@ -101,33 +95,30 @@ uint32_t newPixel(
         g = (pixel & 0x0000FF00U) >> 8U;
         b = (pixel & 0x000000FFU) >> 0U;
     }
-    else if (filter==5) //brightness
+    else if (filter==5) // brightness
     {
-        r+=50;
-        g+=50;
-        b+=50;
-        if (r>255) r=255;
-        if (g>255) g=255;
-        if (b>255) b=255;
+        r = std::min(r + 50, 255U);
+        g = std::min(b + 50, 255U);
+        b = std::min(g + 50, 255U);
     }
-    else if (filter==6) //opacity
+    else if (filter==6) // opacity
     {
-        if (r>245 && g>245 && b>245) a=0;
+        if (r>245 && g>245 && b>245) a = 0;
     }
-    else if (filter==7) //red
+    else if (filter==7) // red
     {
-        g=0;
-        b=0;
+        g = 0;
+        b = 0;
     }
-    else if (filter==8) //green
+    else if (filter == 8) // green
     {
-        r=0;
-        b=0;
+        r = 0;
+        b = 0;
     }
-    else if (filter==9) //blue
+    else if (filter == 9) // blue
     {
-        r=0;
-        g=0;
+        r = 0;
+        g = 0;
     }
 
     return (a << 24U) | (r << 16U) | (g << 8U) | (b << 0U);
