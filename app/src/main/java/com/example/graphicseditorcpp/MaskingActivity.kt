@@ -8,11 +8,15 @@ import android.graphics.Color
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_masking.*
+import java.io.File
 import java.io.FileOutputStream
 import java.lang.Math.abs
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MaskingActivity : AppCompatActivity() {
 
@@ -31,6 +35,23 @@ class MaskingActivity : AppCompatActivity() {
         imageMaskingBitmap = BitmapFactory.decodeFile(imageForMaskingString)
         imageForMasking.setImageURI(Uri.parse(imageForMaskingString))
 
+    }
+
+    private fun createImageFile(
+        name: String,
+        ext: String
+    ): File {
+        val imageFileName = name + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFileExt = ".$ext"
+        val imageFileDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            imageFileName,
+            imageFileExt,
+            imageFileDir
+        ).apply {
+            imageForMaskingString = absolutePath
+        }
     }
 
     private fun tryCopyImageFile(){
@@ -283,6 +304,7 @@ class MaskingActivity : AppCompatActivity() {
 
         return bitmap
     }
+
     private fun changeContrast(pix : Int, contrast : Double) : Int {
         var newPix = ((((pix / 255.0) - 0.5) * contrast) + 0.5) * 255.0
         if(newPix < 0) { newPix = 0.0; }
@@ -317,6 +339,12 @@ class MaskingActivity : AppCompatActivity() {
 
         val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(pixelsArray, 0, width, 0, 0, width, height)
+        if(imageForMaskingString == null){
+            createImageFile(
+                getString(R.string.imageforprocessingname),
+                getString(R.string.imageforprocessingext)
+            )
+        }
         return newBitmap
     }
 
