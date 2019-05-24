@@ -8,13 +8,14 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.activity_filters.*
 import java.io.FileOutputStream
 
 class FiltersActivity : AppCompatActivity() {
-
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private var imageChanged = false
 
     private var imageForFiltersString: String? = null
@@ -25,6 +26,9 @@ class FiltersActivity : AppCompatActivity() {
     ) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filters)
+
+        linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
 
         imageForFiltersString = intent.getStringExtra("image")
         imageFilteredBitmap = BitmapFactory.decodeFile(imageForFiltersString)
@@ -65,6 +69,16 @@ class FiltersActivity : AppCompatActivity() {
             R.id.buttonF4 -> {
                 runFilter(4)
             }
+            R.id.buttonF5 -> {
+                runFilter(5)
+            }
+            R.id.buttonF6 -> {
+                runFilter(6)
+            }
+            R.id.buttonF7 -> {
+                runFilter(7)
+            }
+
         }
     }
 
