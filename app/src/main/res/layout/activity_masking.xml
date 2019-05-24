@@ -36,7 +36,19 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
+            app:layout_constraintBottom_toTopOf="@id/buttonMask"
             android:layout_marginBottom="32dp" app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="@string/masking_activity_imaveview_imageformasking"/>
+    <Button
+            android:text="@string/masking_activity_button_mask"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteY="609dp"
+            tools:layout_editor_absoluteX="4dp" android:id="@+id/buttonMask"
+            android:onClick="processButtonPressing"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:background="@color/colorPrimaryDark"
+            android:textColor="@color/buttonColor"/>/>
 
 </android.support.constraint.ConstraintLayout>
