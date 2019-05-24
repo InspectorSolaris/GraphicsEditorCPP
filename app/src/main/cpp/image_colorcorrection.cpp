@@ -89,7 +89,7 @@ uint32_t newPixel(
     }
     else if(filter == 4)
     {
-        uint32_t pixel = colorcorrectionBlurPixel(x, y, n, m, 10, img);
+        uint32_t pixel = colorcorrectionBlurPixel(x, y, n, m, 5, img);
 
         r = (pixel & 0x00FF0000U) >> 16U;
         g = (pixel & 0x0000FF00U) >> 8U;

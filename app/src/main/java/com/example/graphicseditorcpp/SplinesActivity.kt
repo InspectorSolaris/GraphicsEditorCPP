@@ -36,12 +36,11 @@ class SplinesActivity : AppCompatActivity() {
         imageForSplinesString = intent.getStringExtra("image")
         imageForSplinesBitmap = BitmapFactory.decodeFile(imageForSplinesString)
 
-        imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
-        imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
+        imageForSplines.layoutParams.width = 800
+//        imageForSplines.layoutParams.width = imageForSplinesBitmap!!.width
+//        imageForSplines.layoutParams.height = imageForSplinesBitmap!!.height
+        imageForSplines.layoutParams.height = 1000
         imageForSplines.setImageBitmap(imageForSplinesBitmap)
-
-        pointRadius = pointRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
-        splineRadius = splineRadius * (imageForSplinesBitmap!!.width * imageForSplinesBitmap!!.height) / (2048 * 1024)
 
         imageForSplines.setOnTouchListener { _, motionEvent ->
             if(!drawn && (System.currentTimeMillis() - timeCounter) > timeDelay) {
@@ -125,32 +124,39 @@ class SplinesActivity : AppCompatActivity() {
     }
 
     private fun runDrawSplines() {
-        val xArray = IntArray(pointX.size - 1)
-        val yArray = IntArray(pointY.size - 1)
+        progressBarSplines.visibility = View.VISIBLE
+        Thread {
+            val xArray = IntArray(pointX.size - 1)
+            val yArray = IntArray(pointY.size - 1)
 
-        for(i in 1 until pointX.size) {
-            xArray[i - 1] = pointX[i]
-            yArray[i - 1] = pointY[i]
-        }
+            for (i in 1 until pointX.size) {
+                xArray[i - 1] = pointX[i]
+                yArray[i - 1] = pointY[i]
+            }
 
-        val p1x = calculateSplinesP1(xArray.size, xArray)
-        val p1y = calculateSplinesP1(yArray.size, yArray)
-        val p2x = calculateSplinesP2(xArray.size, xArray)
-        val p2y = calculateSplinesP2(yArray.size, yArray)
+            val p1x = calculateSplinesP1(xArray.size, xArray)
+            val p1y = calculateSplinesP1(yArray.size, yArray)
+            val p2x = calculateSplinesP2(xArray.size, xArray)
+            val p2y = calculateSplinesP2(yArray.size, yArray)
 
-        drawSplines(
-            xArray.size,
-            splineRadius,
-            getColor(R.color.splinesColorSpline),
-            xArray,
-            yArray,
-            p1x,
-            p1y,
-            p2x,
-            p2y,
-            imageForSplinesBitmap!!)
+            drawSplines(
+                xArray.size,
+                splineRadius,
+                getColor(R.color.splinesColorSpline),
+                xArray,
+                yArray,
+                p1x,
+                p1y,
+                p2x,
+                p2y,
+                imageForSplinesBitmap!!
+            )
 
-        imageForSplines.setImageBitmap(imageForSplinesBitmap!!)
-        drawn = true
+            imageForSplines.post {
+                imageForSplines.setImageBitmap(imageForSplinesBitmap!!)
+                drawn = true
+                progressBarSplines.visibility = View.GONE
+            }
+        }.start()
     }
 }

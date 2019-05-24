@@ -42,19 +42,7 @@ class AStarActivity : AppCompatActivity() {
         imageViewAStarMap.setImageBitmap(aStarMap)
 
         imageViewAStarMap.setOnTouchListener { _, motionEvent ->
-            if(pathIsDrown){
-                for(i in path) {
-                    colorizeSquare(
-                        pixelSize * (i % (aStarMapWidth / pixelSize)),
-                        pixelSize * (i / (aStarMapWidth / pixelSize)),
-                        getColor(R.color.aStarColorEmpty)
-                    )
-                }
-
-                colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
-                colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
-                pathIsDrown = false
-            }
+            tryClearPath()
 
             var coordX = (motionEvent.x / pixelSize).toInt() * pixelSize
             var coordY = (motionEvent.y / pixelSize).toInt() * pixelSize
@@ -143,6 +131,8 @@ class AStarActivity : AppCompatActivity() {
         }
 
         imageButtonAStarSettings.setOnClickListener {
+            tryClearPath()
+
             val popupMenu = android.support.v7.widget.PopupMenu(this, it)
             popupMenu.inflate(R.menu.a_star_popup_menu)
             popupMenu.setOnMenuItemClickListener { item ->
@@ -216,9 +206,26 @@ class AStarActivity : AppCompatActivity() {
         }
     }
 
+    private fun tryClearPath() {
+        if(pathIsDrown){
+            for(i in path) {
+                colorizeSquare(
+                    pixelSize * (i % (aStarMapWidth / pixelSize)),
+                    pixelSize * (i / (aStarMapWidth / pixelSize)),
+                    getColor(R.color.aStarColorEmpty)
+                )
+            }
+
+            colorizeSquare(startX, startY, getColor(R.color.aStarColorStart))
+            colorizeSquare(finishX, finishY, getColor(R.color.aStarColorFinish))
+            pathIsDrown = false
+        }
+    }
+
     fun processButtonPressing(
         view: View
     ) {
+        tryClearPath()
         when(view.id) {
             R.id.imageButtonBack -> {
                 finish()

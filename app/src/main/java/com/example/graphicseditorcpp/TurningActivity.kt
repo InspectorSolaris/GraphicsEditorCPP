@@ -102,20 +102,26 @@ class TurningActivity : AppCompatActivity() {
     private fun turnImage() {
         val imageInfo = BitmapFactory.Options()
         val imageOriginal = BitmapFactory.decodeFile(imageForTurningString, imageInfo)
-        val imageTurned  =  Bitmap.createBitmap(imageInfo.outWidth, imageInfo.outHeight, Bitmap.Config.ARGB_8888)
+        val imageTurned = Bitmap.createBitmap(imageInfo.outWidth, imageInfo.outHeight, Bitmap.Config.ARGB_8888)
 
-        imageTurning(currentAngle.toDouble(), imageOriginal!!, imageTurned!!)
+        progressBarTurning.visibility = View.VISIBLE
+        Thread {
+            imageTurning(currentAngle.toDouble(), imageOriginal!!, imageTurned!!)
 
-        if (imageTurnedString == null) {
-            createImageFile(
-                getString(R.string.imageforprocessingname),
-                getString(R.string.imageforprocessingext)
-            )
-        }
+            if (imageTurnedString == null) {
+                createImageFile(
+                    getString(R.string.imageforprocessingname),
+                    getString(R.string.imageforprocessingext)
+                )
+            }
 
-        imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
-        imageChanged = currentAngle != 0
+            imageTurned.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageTurnedString))
 
-        imageForTurning.setImageBitmap(imageTurned)
+            imageForTurning.post {
+                imageForTurning.setImageBitmap(imageTurned)
+                imageChanged = currentAngle != 0
+                progressBarTurning.visibility = View.GONE
+            }
+        }.start()
     }
 }
