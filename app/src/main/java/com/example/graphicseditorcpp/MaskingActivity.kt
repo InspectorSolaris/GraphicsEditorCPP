@@ -23,7 +23,9 @@ class MaskingActivity : AppCompatActivity() {
     private var imageChanged = false
 
     private var imageForMaskingString: String? = null
+    private var imageMaskedString: String? = null
     private var imageMaskingBitmap: Bitmap? = null
+    private var imageMaskedBitmap: Bitmap? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -50,13 +52,13 @@ class MaskingActivity : AppCompatActivity() {
             imageFileExt,
             imageFileDir
         ).apply {
-            imageForMaskingString = absolutePath
+            imageMaskedString = absolutePath
         }
     }
 
     private fun tryCopyImageFile(){
-        if(imageMaskingBitmap != null) {
-            val imageLocal = imageMaskingBitmap
+        if(imageMaskedBitmap != null) {
+            val imageLocal = imageMaskedBitmap
             imageLocal?.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageForMaskingString))
         }
     }
@@ -339,13 +341,21 @@ class MaskingActivity : AppCompatActivity() {
 
         val newBitmap : Bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         newBitmap.setPixels(pixelsArray, 0, width, 0, 0, width, height)
-        if(imageForMaskingString == null){
+        if(imageMaskedString == null){
             createImageFile(
                 getString(R.string.imageforprocessingname),
                 getString(R.string.imageforprocessingext)
             )
         }
         return newBitmap
+    }
+
+    private fun change () {
+        imageMaskedBitmap = unsharpMasking(10.0)
+        imageMaskedBitmap!!.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(imageMaskedString))
+        imageChanged = true
+        imageForMasking.setImageBitmap(imageMaskedBitmap)
+        Toast.makeText(this, getString(R.string.masking_activity_toast), Toast.LENGTH_SHORT).show()
     }
 
     fun processButtonPressing(
@@ -358,10 +368,7 @@ class MaskingActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonMask -> {
-                imageMaskingBitmap = unsharpMasking(5.0)
-                imageChanged = true
-                imageForMasking.setImageBitmap(imageMaskingBitmap)
-                Toast.makeText(this, getString(R.string.masking_activity_toast), Toast.LENGTH_SHORT).show()
+                change()
             }
         }
     }
