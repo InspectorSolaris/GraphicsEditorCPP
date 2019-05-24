@@ -17,7 +17,7 @@ uint32_t colorcorrectionBlurPixel(
     if(0 <= x && x < m &&
        0 <= y && y < n)
     {
-        result &= img[x * m + y];
+        result &= img[y * m + x];
     }
 
     uint32_t rc = 0;
@@ -79,9 +79,9 @@ uint32_t newPixel(
     }
     else if(filter == 3)
     {
-        auto new_r = (uint32_t)std::max((0.393 * r + 0.769 * g + 0.189 * b), 255.0);
-        auto new_g = (uint32_t)std::max((0.349 * r + 0.686 * g + 0.168 * b), 255.0);
-        auto new_b = (uint32_t)std::max((0.272 * r + 0.534 * g + 0.131 * b), 255.0);
+        auto new_r = (uint32_t)std::min((uint32_t)(0.393 * r + 0.769 * g + 0.189 * b), (uint32_t)255);
+        auto new_g = (uint32_t)std::min((uint32_t)(0.349 * r + 0.686 * g + 0.168 * b), (uint32_t)255);
+        auto new_b = (uint32_t)std::min((uint32_t)(0.272 * r + 0.534 * g + 0.131 * b), (uint32_t)255);
 
         r = new_r;
         g = new_g;
@@ -121,7 +121,7 @@ Java_com_example_graphicseditorcpp_FiltersActivity_imageColorcorrection(
     int n = orig_info.height;
     int m = orig_info.width;
     auto orig = (uint32_t *)orig_ptr;
-    auto clrd = (uint32_t *)orig_ptr;
+    auto clrd = (uint32_t *)clrd_ptr;
     for(int i = 0; i < n; ++i)
     {
         for(int j = 0; j < m; ++j)

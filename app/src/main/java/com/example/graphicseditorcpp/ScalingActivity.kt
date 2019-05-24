@@ -30,6 +30,9 @@ class ScalingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scaling)
 
+        imageForScalingString = intent.getStringExtra("image")
+        imageForScaling.setImageURI(Uri.parse(imageForScalingString))
+
         seekBarScaling.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 var scaleNum = ""
@@ -51,9 +54,6 @@ class ScalingActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
-
-        imageForScalingString = intent.getStringExtra("image")
-        imageForScaling.setImageURI(Uri.parse(imageForScalingString))
     }
 
     private fun createImageFile(

@@ -30,6 +30,7 @@ Java_com_example_graphicseditorcpp_TurningActivity_imageTurning(
 
     auto orig = (uint32_t *)orig_ptr;
     auto turn = (uint32_t *)turn_ptr;
+
     for(unsigned int i = 0; i < n; ++i)
     {
         for(unsigned int j = 0; j < m; ++j)
