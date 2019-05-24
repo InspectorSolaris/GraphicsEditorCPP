@@ -60,6 +60,9 @@ class FiltersActivity : AppCompatActivity() {
             R.id.buttonF3 -> {
                 runFilter(3)
             }
+            R.id.buttonF4 -> {
+                runFilter(4)
+            }
         }
     }
 
@@ -68,11 +71,13 @@ class FiltersActivity : AppCompatActivity() {
     ) {
         val imageLocal = Bitmap.createBitmap(imageFilteredBitmap!!.width, imageFilteredBitmap!!.height, Bitmap.Config.ARGB_8888)
         imageColorcorrection(
-            imageFilteredBitmap!!,
+            BitmapFactory.decodeFile(imageForFiltersString),
             imageLocal,
             filter
         )
         imageFilteredBitmap = imageLocal
+        imageChanged = true
+        imageForFilters.setImageBitmap(imageLocal)
     }
 }
 

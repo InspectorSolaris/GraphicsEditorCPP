@@ -54,8 +54,9 @@
 
     <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
     <string name="filters_activity_button_f1_text">BnW</string>
-    <string name="filters_activity_button_f2_text">Sepia</string>
-    <string name="filters_activity_button_f3_text">Negative</string>
+    <string name="filters_activity_button_f2_text">Negative</string>
+    <string name="filters_activity_button_f3_text">Cold</string>
+    <string name="filters_activity_button_f4_text">Blur</string>
 
     <string name="scaling_activity_imageview_imageforturning">Image for turning</string>
     <string name="scaling_activity_button_scale_text">Scale</string>
