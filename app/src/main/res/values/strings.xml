@@ -80,8 +80,8 @@
     <string name="masking_activity_imaveview_imageformasking">Image for masking</string>
     <string name="masking_activity_button_mask">Apply</string>
     <string name="masking_activity_toast">Done</string>
-    <string name="masking_activity_seekbar_contrast">Sharpness</string>
-    <string name="masking_activity_seekbar_radius">Radius</string>
+    <string name="masking_activity_seekbar_contrast">Sharpness  10</string>
+    <string name="masking_activity_seekbar_radius">Radius  5</string>
 
     <string name="bilinearfilt_activity_imaveview_imageforbilinearfilt">Image for bilinear filt</string>
 

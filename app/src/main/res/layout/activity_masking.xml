@@ -84,5 +84,14 @@
             android:layout_marginBottom="16dp" android:id="@+id/textViewRadius"
             android:textColor="@color/buttonColor"
             android:layout_marginStart="7dp"/>
+    <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBarMasking" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/buttonMask" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>
