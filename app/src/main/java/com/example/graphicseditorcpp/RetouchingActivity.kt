@@ -8,7 +8,6 @@ import android.graphics.Point
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.TouchDelegate
 import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_retouching.*
@@ -96,27 +95,39 @@ class RetouchingActivity : AppCompatActivity() {
             val x = (motionEvent.x * touchRatio).toInt()
             val y = (motionEvent.y * touchRatio).toInt()
 
-            if(!taskState) {
-                progressBarRetouching.visibility = View.VISIBLE
-                Thread {
-                    taskState = true
+            xQueue.add(x)
+            yQueue.add(y)
+            taskQueue.add(Thread {
+                taskState = true
 
-                    val blurR = touchRatio * retouchingRadius
+                val blurR = touchRatio * retouchingRadius
 
-                    imageRetouching(
-                        x,
-                        y,
-                        blurR.toInt(),
-                        imageChangedBitmap!!
-                    )
+                imageRetouching(
+                    x,
+                    y,
+                    blurR.toInt(),
+                    imageChangedBitmap!!
+                )
 
-                    runOnUiThread {
-                        imageForRetouching.setImageBitmap(imageChangedBitmap)
-                        imageIsChangedBool = true
+                runOnUiThread {
+                    imageForRetouching.setImageBitmap(imageChangedBitmap)
+                    imageIsChangedBool = true
+                    progressBarRetouching.visibility = View.GONE
+
+                    taskQueue.remove()
+                    if (taskQueue.isEmpty()) {
                         taskState = false
-                        progressBarRetouching.visibility = View.GONE
+                    } else {
+                        taskQueue.peek().start()
                     }
-                }.start()
+                }
+            })
+
+            if(!taskState){
+                progressBarRetouching.visibility = View.GONE
+
+                taskState = true
+                taskQueue.peek().start()
             }
 
             true
