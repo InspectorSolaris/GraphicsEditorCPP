@@ -292,7 +292,8 @@ class MaskingActivity : AppCompatActivity() {
     }
 
     private fun unsharpMasking(
-        value: Double
+        value: Double,
+        radius: Int
     ): Bitmap {
         val imageBitmap: Bitmap = BitmapFactory.decodeFile(imageOriginalString)
         val width = imageBitmap.width
@@ -301,7 +302,7 @@ class MaskingActivity : AppCompatActivity() {
         imageBitmap.getPixels(pixelsArray, 0, width, 0 , 0, width, height)
 
 
-        val gaussPic : Bitmap? = fastBlur(imageBitmap, 10)
+        val gaussPic : Bitmap? = fastBlur(imageBitmap, radius)
         val gaussArray = IntArray(width*height)
         gaussPic!!.getPixels(gaussArray, 0, width, 0 , 0, width, height)
 
@@ -325,14 +326,16 @@ class MaskingActivity : AppCompatActivity() {
     }
 
     private fun change () {
-        with (seekBarMasking) {
-            unsharpMasking(progress.toDouble()*5)
-                .compress(
-                    (application as GlobalVal).bitmapCompressFormat,
-                    (application as GlobalVal).bitmapCompressQuality,
-                    FileOutputStream(imageChangedString)
-                )
-        }
+
+        val contrast = seekBarMaskingContrast.progress.toDouble() * 5
+        val radius = seekBarMaskingRadius.progress
+        unsharpMasking(contrast, radius)
+            .compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
+
 
         imageIsChangedBool = true
         imageForMasking.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
