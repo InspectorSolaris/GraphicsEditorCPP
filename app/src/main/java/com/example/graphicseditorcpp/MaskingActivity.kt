@@ -326,7 +326,7 @@ class MaskingActivity : AppCompatActivity() {
 
     private fun change () {
         with (seekBarMasking) {
-            unsharpMasking(progress.toDouble()*5)
+            unsharpMasking(Math.ceil(progress.toDouble())*5)
                 .compress(
                     (application as GlobalVal).bitmapCompressFormat,
                     (application as GlobalVal).bitmapCompressQuality,
