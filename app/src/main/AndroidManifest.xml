@@ -21,30 +21,40 @@
             android:supportsRtl="true"
             android:theme="@style/DarkAppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".TrilinearFiltActivity">
+        <activity android:name=".TrilinearFiltActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".BilinearFiltActivity">
+        <activity android:name=".BilinearFiltActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".MaskingActivity">
+        <activity android:name=".MaskingActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".RetouchingActivity">
+        <activity android:name=".RetouchingActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".SegmentationActivity">
+        <activity android:name=".SegmentationActivity"
+                  android:screenOrientation="portrait">
         </activity>
 
         <meta-data
                 android:name="com.google.android.gms.vision.DEPENDENCIES"
                 android:value="face" />
 
-        <activity android:name=".FiltersActivity">
+        <activity android:name=".FiltersActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".TurningActivity">
+        <activity android:name=".TurningActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".ScalingActivity">
+        <activity android:name=".ScalingActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".SplinesActivity">
+        <activity android:name=".SplinesActivity"
+                  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".AStarActivity">
+        <activity android:name=".AStarActivity"
+                  android:screenOrientation="portrait">
         </activity> <!-- android:fullBackupContent="@xml/my_backup_rules" -->
         <provider
                 android:name="android.support.v4.content.FileProvider"
@@ -56,7 +66,8 @@
                     android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
