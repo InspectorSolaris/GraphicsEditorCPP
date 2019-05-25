@@ -103,7 +103,7 @@ uint32_t newPixel(
     }
     else if (filter==6) // opacity
     {
-        if (r>200 && g>200 && b>200) a = 0;
+        if (r > 150 && g > 150 && b > 150) a = 0;
     }
     else if (filter==7) // red
     {

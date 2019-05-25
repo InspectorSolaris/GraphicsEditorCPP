@@ -108,6 +108,7 @@
     <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
     <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
     <string name="error_main_image_pick">Error: Image picking fail</string>
+    <string name="error_image_to_large">Error: Image too large</string>
 
     <string name="intent_code_image_for_processing">processing</string>
     <string name="intent_code_image_processed">processed</string>

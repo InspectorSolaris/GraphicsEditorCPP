@@ -13,8 +13,8 @@ import java.lang.Math.min
 class AStarActivity : AppCompatActivity() {
 
     private val pixelSize = 50
-    private val aStarMapWidth = 800 // aStarMap width
-    private val aStarMapHeight = 800 // aStarMap height
+    private val aStarMapWidth = 13 * pixelSize // aStarMap width
+    private val aStarMapHeight = 20 * pixelSize // aStarMap height
     private val aStarMap = Bitmap.createBitmap(
         aStarMapWidth,
         aStarMapHeight,
