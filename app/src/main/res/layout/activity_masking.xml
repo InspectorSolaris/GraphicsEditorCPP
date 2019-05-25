@@ -36,7 +36,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
             app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
-            app:layout_constraintBottom_toTopOf="@id/buttonMask"
+            app:layout_constraintBottom_toTopOf="@id/seekBarMasking"
             android:layout_marginBottom="32dp" app:layout_constraintBottom_toBottomOf="parent"
             android:contentDescription="@string/masking_activity_imaveview_imageformasking"/>
     <Button
@@ -49,6 +49,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" android:background="@color/colorPrimaryDark"
-            android:textColor="@color/buttonColor"/>/>
+            android:textColor="@color/buttonColor"/>
+    <SeekBar
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/buttonMask"
+            android:layout_marginBottom="16dp"
+            android:max="10"
+            android:progress="0" android:id="@+id/seekBarMasking"/>/>
 
 </android.support.constraint.ConstraintLayout>

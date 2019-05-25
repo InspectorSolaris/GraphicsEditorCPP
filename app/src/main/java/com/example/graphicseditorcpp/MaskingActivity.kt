@@ -325,12 +325,15 @@ class MaskingActivity : AppCompatActivity() {
     }
 
     private fun change () {
-        unsharpMasking(10.0)
-            .compress(
-                (application as GlobalVal).bitmapCompressFormat,
-                (application as GlobalVal).bitmapCompressQuality,
-                FileOutputStream(imageChangedString)
-            )
+        with (seekBarMasking) {
+            unsharpMasking(progress.toDouble()*5)
+                .compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
+                )
+        }
+
         imageIsChangedBool = true
         imageForMasking.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
         Toast.makeText(this, getString(R.string.masking_activity_toast), Toast.LENGTH_LONG).show()
