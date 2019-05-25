@@ -21,14 +21,14 @@ class RetouchingActivity : AppCompatActivity() {
     private var imageChangedString: String? = null
     private var imageIsChangedBool: Boolean = false
 
+    private var imageChangedBitmap: Bitmap? = null
+
     private var taskState = false
     private val taskQueue: Queue<Thread> = ArrayDeque<Thread>()
     private val xQueue: Queue<Int> = ArrayDeque<Int>()
     private val yQueue: Queue<Int> = ArrayDeque<Int>()
 
     private var touchRatio = 1.0
-    private val touchDelay = 100
-    private var touchTime = System.currentTimeMillis()
     private var retouchingRadius = 50
 
     override fun onCreate(
@@ -41,12 +41,12 @@ class RetouchingActivity : AppCompatActivity() {
         imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
 
         run {
-            BitmapFactory.decodeFile(imageOriginalString)
-                .compress(
-                    (application as GlobalVal).bitmapCompressFormat,
-                    (application as GlobalVal).bitmapCompressQuality,
-                    FileOutputStream(imageChangedString)
-                )
+            imageChangedBitmap = BitmapFactory.decodeFile(imageOriginalString)
+            imageChangedBitmap?.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
         }
 
         val screenSize = Point()
@@ -96,49 +96,27 @@ class RetouchingActivity : AppCompatActivity() {
             val x = (motionEvent.x * touchRatio).toInt()
             val y = (motionEvent.y * touchRatio).toInt()
 
-            if(System.currentTimeMillis() - touchTime > touchDelay) {
-                xQueue.add(x)
-                yQueue.add(y)
-                taskQueue.add(Thread {
-                    val imageLocal = BitmapFactory.decodeFile(imageChangedString)
-
-                    if (imageLocal != null) {
-                        val blurR = touchRatio * retouchingRadius
-
-                        imageRetouching(
-                            xQueue.remove(),
-                            yQueue.remove(),
-                            blurR.toInt(),
-                            imageLocal
-                        )
-
-                        imageLocal.compress(
-                            (application as GlobalVal).bitmapCompressFormat,
-                            (application as GlobalVal).bitmapCompressQuality,
-                            FileOutputStream(imageChangedString)
-                        )
-
-                        runOnUiThread {
-                            imageForRetouching.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
-                            imageIsChangedBool = true
-                            progressBarRetouching.visibility = View.GONE
-
-                            taskQueue.remove()
-                            if (taskQueue.isNotEmpty()) {
-                                taskQueue.peek().start()
-                            } else {
-                                taskState = false
-                            }
-                        }
-                    }
-                })
-            }
-
-            if (!taskState) {
+            if(!taskState) {
                 progressBarRetouching.visibility = View.VISIBLE
+                Thread {
+                    taskState = true
 
-                taskState = true
-                taskQueue.peek().start()
+                    val blurR = touchRatio * retouchingRadius
+
+                    imageRetouching(
+                        x,
+                        y,
+                        blurR.toInt(),
+                        imageChangedBitmap!!
+                    )
+
+                    runOnUiThread {
+                        imageForRetouching.setImageBitmap(imageChangedBitmap)
+                        imageIsChangedBool = true
+                        taskState = false
+                        progressBarRetouching.visibility = View.GONE
+                    }
+                }.start()
             }
 
             true
@@ -157,6 +135,11 @@ class RetouchingActivity : AppCompatActivity() {
     ) {
         when (view.id) {
             R.id.imageButtonBack -> {
+                imageChangedBitmap?.compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
+                )
                 setResult(
                     Activity.RESULT_OK,
                     Intent().putExtra(
@@ -167,6 +150,7 @@ class RetouchingActivity : AppCompatActivity() {
                 finish()
             }
             R.id.buttonDismiss -> {
+                imageChangedBitmap = BitmapFactory.decodeFile(imageOriginalString)
                 imageForRetouching.setImageURI(Uri.parse(imageOriginalString))
                 imageIsChangedBool = false
             }

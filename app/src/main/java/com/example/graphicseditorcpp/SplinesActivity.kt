@@ -19,7 +19,8 @@ class SplinesActivity : AppCompatActivity() {
     private var imageChangedString: String? = null
     private var imageIsChangedBool: Boolean = false
 
-    private var touchState = false
+    private var taskState = false
+
     private var touchRatio = 1.0
     private var pointRadius = 100
     private var splineRadius = 35
@@ -76,10 +77,10 @@ class SplinesActivity : AppCompatActivity() {
             val x = (motionEvent.x * touchRatio).toInt()
             val y = (motionEvent.y * touchRatio).toInt()
 
-            if(!touchState && !imageIsChangedBool) {
+            if(!taskState && !imageIsChangedBool) {
                 progressBarSplines.visibility = View.VISIBLE
                 Thread {
-                    touchState = true
+                    taskState = true
 
                     val imageLocal = BitmapFactory.decodeFile(imageChangedString)
 
@@ -102,7 +103,7 @@ class SplinesActivity : AppCompatActivity() {
 
                     runOnUiThread {
                         imageForSplines.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
-                        touchState = false
+                        taskState = false
                         progressBarSplines.visibility = View.GONE
                     }
                 }.start()
