@@ -100,7 +100,7 @@ class RetouchingActivity : AppCompatActivity() {
             taskQueue.add(Thread {
                 taskState = true
 
-                val blurR = touchRatio * retouchingRadius / 5
+                val blurR = touchRatio * retouchingRadius
 
                 imageRetouching(
                     x,
