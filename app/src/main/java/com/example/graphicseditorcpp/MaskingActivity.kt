@@ -9,10 +9,13 @@ import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.SeekBar
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_masking.*
+import kotlinx.android.synthetic.main.activity_scaling.*
 import java.io.FileOutputStream
 import java.lang.Math.abs
+import kotlin.math.pow
 
 class MaskingActivity : AppCompatActivity() {
 
@@ -30,6 +33,39 @@ class MaskingActivity : AppCompatActivity() {
         imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
 
         imageForMasking.setImageURI(Uri.parse(imageOriginalString))
+
+        seekBarMaskingRadius.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+
+                textViewRadius.text = "Radius  $progress"
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // empty fun
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // empty fun
+            }
+        })
+
+        seekBarMaskingContrast.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
+                textViewContrast.text = "Sharpness ${progress*5}"
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                // empty fun
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                // empty fun
+            }
+        })
     }
 
     private fun fastBlur(
@@ -326,20 +362,24 @@ class MaskingActivity : AppCompatActivity() {
     }
 
     private fun change () {
-
         val contrast = seekBarMaskingContrast.progress.toDouble() * 5
         val radius = seekBarMaskingRadius.progress
-        unsharpMasking(contrast, radius)
-            .compress(
-                (application as GlobalVal).bitmapCompressFormat,
-                (application as GlobalVal).bitmapCompressQuality,
-                FileOutputStream(imageChangedString)
-            )
 
+        progressBarMasking.visibility = View.VISIBLE
+        Thread {
+            unsharpMasking(contrast, radius)
+                .compress(
+                    (application as GlobalVal).bitmapCompressFormat,
+                    (application as GlobalVal).bitmapCompressQuality,
+                    FileOutputStream(imageChangedString)
+                )
 
-        imageIsChangedBool = true
-        imageForMasking.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
-        Toast.makeText(this, getString(R.string.masking_activity_toast), Toast.LENGTH_LONG).show()
+            runOnUiThread {
+                imageForMasking.setImageBitmap(BitmapFactory.decodeFile(imageChangedString))
+                imageIsChangedBool = true
+                progressBarMasking.visibility = View.GONE
+            }
+        }.start()
     }
 
     fun processButtonPressing(
