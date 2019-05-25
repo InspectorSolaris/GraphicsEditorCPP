@@ -1,15 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.example.graphicseditorcpp">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-feature
+            android:name="android.hardware.camera"
+            android:required="true"/>
+
     <application
+            android:name=".GlobalVal"
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
+            android:largeHeap="true"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+            android:theme="@style/DarkAppTheme"
+            tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".TrilinearFiltActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".BilinearFiltActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".MaskingActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".RetouchingActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".SegmentationActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+
+        <meta-data
+                android:name="com.google.android.gms.vision.DEPENDENCIES"
+                android:value="face" />
+
+        <activity android:name=".FiltersActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".TurningActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".ScalingActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".SplinesActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".AStarActivity"
+                  android:screenOrientation="portrait">
+        </activity> <!-- android:fullBackupContent="@xml/my_backup_rules" -->
+        <provider
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="com.example.graphicseditorcpp.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/file_paths"/>
+        </provider>
+
+        <activity android:name=".MainActivity"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

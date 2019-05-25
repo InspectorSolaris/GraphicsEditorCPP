@@ -1,3 +1,118 @@
 <resources>
     <string name="app_name">GraphicsEditorCPP</string>
+
+    <string name="code_image_original">imageOriginal</string>
+    <string name="code_image_changed">imageChanged</string>
+    <string name="code_image_is_changed">changed</string>
+
+    <string name="image_for_processing_name">processedImg_</string>
+    <string name="image_for_processing_ext">jpeg</string>
+    <string name="image_for_processing_time">yyyyMMdd_HHmmss</string>
+
+    <string name="imagebutton_back">Back to previous activity</string>
+
+    <string name="main_activity_imagebutton_picknew">Pick new image</string>
+    <string name="main_activity_imageview_imageforprocessing">Image for processing</string>
+    <string name="main_activity_imagebutton_pickfromgallery">Pick image from gallery</string>
+    <string name="main_activity_imagebutton_pickfromcamera">Pick image from camera</string>
+    <string name="main_activity_imagebutton_algorithmastar">AStar algorithm</string>
+    <string name="main_activity_imagebutton_tools">Image processing tools</string>
+    <string name="main_activity_button_export">Export processed image</string>
+    <string name="main_activity_nophoto">Please choose the photo first</string>
+    <string name="main_activity_imageexportsuccess">Image export success</string>
+    <string name="main_activity_imagebutton_redo">Redo changes</string>
+    <string name="main_activity_imagebutton_undo">Undo changes</string>
+    <string name="main_activity_popup_pickfromgallery">Pick from Gallery</string>
+    <string name="main_activity_popup_pickfromcamera">Pick from Camera</string>
+
+    <string name="astar_activity_button_setstart_text">Start</string>
+    <string name="astar_activity_button_setfinish_text">Finish</string>
+    <string name="astar_activity_button_setwall_text">Wall</string>
+    <string name="astar_activity_button_erase_text">Erase</string>
+    <string name="astar_activity_button_runastar_text">Run</string>
+    <string name="astar_activity_imagebutton_astarsettings">Settings for AStar algorithm</string>
+    <string name="astar_activity_imageview_astarmap">AStar Map</string>
+    <string name="astar_activity_button_setstart">Set start for AStar</string>
+    <string name="astar_activity_button_setfinish">Set finish for AStar</string>
+    <string name="astar_activity_button_setwall">Set wall for AStar</string>
+    <string name="astar_activity_button_erase">Erase point from AStar map</string>
+    <string name="astar_activity_button_runastar">Run AStar algorithm</string>
+    <string name="astar_activity_popup_resizemap">Size</string>
+    <string name="astar_activity_popup_empirics">Empirics</string>
+    <string name="astar_activity_popup_manhattandist">Manhattan</string>
+    <string name="astar_activity_popup_eucliddist">Euclid</string>
+    <string name="astar_activity_popup_directions">Directions</string>
+    <string name="astar_activity_popup_4directional">4 directional</string>
+    <string name="astar_activity_popup_8directional">8 directional</string>
+    <string name="astar_activity_popup_8directionalcheck">8 directional (check)</string>
+    <string name="astar_activity_toast_manhattan">You chose Manhattan Dist as empiric</string>
+    <string name="astar_activity_toast_euclid">You chose Euclid Dist as empiric</string>
+    <string name="astar_activity_toast_4dir">4 directions</string>
+    <string name="astar_activity_toast_8dir">8 directions</string>
+    <string name="astar_activity_toast_8dirc">8 directions with check</string>
+    <string name="astar_activity_toast_setpoints">Set start and finish points before run algorithm</string>
+
+    <string name="turning_activity_imageview_imageforturning">Image for turning</string>
+    <string name="turning_activity_button_turn_text">Turn</string>
+    <string name="turning_activity_button_clear_text">Clear</string>
+    <string name="turning_activity_textview_angle_text">0</string>
+
+    <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
+    <string name="filters_activity_button_filters_text">Filters</string>
+    <string name="filters_activity_button_f1_text">BnW</string>
+    <string name="filters_activity_button_f2_text">Negative</string>
+    <string name="filters_activity_button_f3_text">Cold</string>
+    <string name="filters_activity_button_f4_text">Blur</string>
+    <string name="filters_activity_button_f5_text">Brightness</string>
+    <string name="filters_activity_button_f6_text">Opacity</string>
+    <string name="filters_activity_button_f7_text">Blue</string>
+    <string name="filters_activity_button_f8_text">Green</string>
+    <string name="filters_activity_button_f9_text">Red</string>
+
+    <string name="scaling_activity_imageview_imageforscaling">Image for scaling</string>
+    <string name="scaling_activity_button_scale_text">Scale</string>
+
+    <string name="segmentation_activity_imageview_imageforsegmentation">Image for segmentation</string>
+    <string name="segmentation_activity_button_segmentation_text">Segmentation</string>
+    <string name="segmentation_activity_button_segmentation">Run segmentation</string>
+    <string name="segmentation_activity_button_dismiss_text">Dismiss</string>
+
+    <string name="retouching_activity_imageview_imageforretouching">Image for retouching</string>
+    <string name="retouching_activity_button_dismiss_text">Dismiss</string>
+
+    <string name="masking_activity_imaveview_imageformasking">Image for masking</string>
+    <string name="masking_activity_button_mask">Apply</string>
+    <string name="masking_activity_toast">Done</string>
+    <string name="masking_activity_seekbar_contrast">Sharpness  10</string>
+    <string name="masking_activity_seekbar_radius">Radius  5</string>
+
+    <string name="bilinearfilt_activity_imaveview_imageforbilinearfilt">Image for bilinear filt</string>
+
+    <string name="trilinearfilt_activity_imageview_imagefortrilinear_filt">Image for trilinear filt</string>
+
+    <string name="splines_activitu_button_drawsplines_text">Draw</string>
+    <string name="splines_activity_button_drawsplines">Draw splines</string>
+    <string name="splines_activity_button_clear_text">Clear</string>
+
+    <string name="tools_rotate">Rotate</string>
+    <string name="tools_filters">Filters</string>
+    <string name="tools_scaling">Scaling</string>
+    <string name="tools_segmentation">Segm</string>
+    <string name="tools_retouching">Retouching</string>
+    <string name="tools_masking">Masking</string>
+    <string name="tools_2linear_filtering">2-linear flt</string>
+    <string name="tools_3linear_filtering">3-linear flt</string>
+    <string name="tools_splines">Splines</string>
+    <string name="tools_freespace">Free space</string>
+
+    <string name="error_main_gallery_permissions">Error: Gallery permissions denied</string>
+    <string name="error_main_camera_permissions">Error: Camera permissions denied</string>
+    <string name="error_main_image_pick">Error: Image picking fail</string>
+    <string name="error_image_to_large">Error: Image too large</string>
+
+    <string name="intent_code_image_for_processing">processing</string>
+    <string name="intent_code_image_processed">processed</string>
+
+    <string name="coming_soon">Coming soon</string>
+
 </resources>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             tools:context=".MainActivity"
+                                             android:layout_height="match_parent"
+                                             android:background="@color/colorPrimaryDark"
+                                             app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+
+>
+    <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/tableLayout" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+    >
+
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="51dp"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureTurning"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_rotate" android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_rotate_left_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureColorCorrection"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_filters"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_photo_filter_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureScaling"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_scaling"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_zoom_in_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureSegmentation"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_segmentation"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_pie_chart_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureRetouching"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_retouching"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_brush_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureUnsharpMasking"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_masking"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_filter_b_and_w_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="116dp">
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureBilinearFiltration"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_2linear_filtering"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_drag_handle_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonPictureTrilinearFiltration"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_3linear_filtering"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_dehaze_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:srcCompat="@drawable/ic_rotate_left_black_24dp"
+                    android:id="@+id/buttonSplines"
+                    android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                    android:onClick="processToolsButtons"
+                    android:layout_weight="1" android:text="@string/tools_splines"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="14sp"
+                    android:foreground="@drawable/ic_gesture_black_24dp"
+                    android:foregroundGravity="center" android:gravity="bottom|center_horizontal"
+            />
+        </TableRow>
+    </TableLayout>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="20dp" app:srcCompat="@color/colorPrimaryDark"
+            android:id="@+id/imageViewFreeSpace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tableLayout"
+            android:contentDescription="@string/tools_freespace"/>
+</android.support.constraint.ConstraintLayout>

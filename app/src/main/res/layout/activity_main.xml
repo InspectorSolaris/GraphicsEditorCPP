@@ -5,16 +5,121 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        android:background="@color/colorPrimary"
+>
+    <include layout="@layout/tools_layout" android:visibility="invisible" android:id="@+id/include"/>
 
-    <TextView
-            android:id="@+id/sample_text"
-            android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:background="@color/colorPrimaryDark"
+            android:id="@+id/constraintLayoutAccessoryTools"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_undo"
+                android:id="@+id/imageButtonUndo"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#00FFFFFF" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonRedo"
+                android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="1.0" android:onClick="processButtonPressing"
+                android:contentDescription="@string/main_activity_imagebutton_undo"/>
+        <ImageButton
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_redo"
+                android:id="@+id/imageButtonRedo"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#00FFFFFF" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonPickNew"
+                android:onClick="processButtonPressing"
+                android:contentDescription="@string/main_activity_imagebutton_redo"/>
+        <ImageButton
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_image"
+                android:id="@+id/imageButtonPickNew"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#00FFFFFF" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
+                android:contentDescription="@string/main_activity_imagebutton_picknew"/>
+    </android.support.constraint.ConstraintLayout>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@color/colorPrimary"
+            android:id="@+id/imageForProcessing"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
+            android:contentDescription="@string/main_activity_imageview_imageforprocessing"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools" android:layout_marginTop="32dp"
+            app:layout_constraintTop_toTopOf="@+id/imageButtonPickFromGallery" android:layout_marginBottom="32dp"
+    />
+    <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_photo_library"
+            android:id="@+id/imageButtonPickFromGallery"
+            android:background="#00FFFFFF"
+            android:onClick="processButtonPressing" android:contentDescription="@string/main_activity_imagebutton_pickfromgallery"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/imageButtonPickFromCamera"/>
+    <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_add_a_photo"
+            android:id="@+id/imageButtonPickFromCamera"
+            android:background="#00FFFFFF" android:onClick="processButtonPressing"
+            android:contentDescription="@string/main_activity_imagebutton_pickfromcamera"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayoutMainTools"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButtonPickFromGallery"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:id="@+id/linearLayoutMainTools">
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_star_border_black_24dp"
+                android:id="@+id/imageButtonAlgorithmAStar"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="1.0"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonRedo"
+                android:layout_marginStart="0dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="1.0" android:onClick="processButtonPressing"
+                android:layout_weight="1"
+                android:contentDescription="@string/main_activity_imagebutton_algorithmastar"/>
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_palette_black_24dp"
+                android:id="@+id/imageButtonTools"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/imageButtonPickNew"
+                android:layout_weight="1" android:contentDescription="@string/main_activity_imagebutton_tools"
+                android:onClick="processButtonPressing"/>
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="54dp"
+                app:srcCompat="@drawable/ic_file_upload_black_24dp"
+                android:id="@+id/buttonExport"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/colorPrimaryDark" android:scaleType="centerInside"
+                app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="processButtonPressing"
+                android:layout_weight="1" android:contentDescription="@string/main_activity_button_export"/>
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

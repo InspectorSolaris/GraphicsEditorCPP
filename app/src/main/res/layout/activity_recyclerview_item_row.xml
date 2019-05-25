@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryDark">
+    <TableLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f1_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF1"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"/>
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f2_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF2"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f3_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF3"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+        </TableRow>
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f4_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF4"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f5_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF5"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f6_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF6"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+        </TableRow>
+        <TableRow android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f7_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF7"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f8_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF8"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+            <Button
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/filters_activity_button_f9_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" android:id="@+id/buttonF9"
+                    android:background="@color/colorPrimaryDark" android:textColor="@color/buttonColor"
+                    android:onClick="processButtonPressing"
+                    android:layout_weight="1"
+            />
+        </TableRow>
+    </TableLayout>
+</android.support.constraint.ConstraintLayout>
