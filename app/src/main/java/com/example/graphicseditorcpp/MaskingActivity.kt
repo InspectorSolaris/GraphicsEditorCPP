@@ -54,7 +54,7 @@ class MaskingActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                textViewContrast.text = "Sharpness  ${progress*2}"
+                textViewContrast.text = "Sharpness  ${progress*5}"
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 // empty fun
@@ -359,7 +359,7 @@ class MaskingActivity : AppCompatActivity() {
     }
 
     private fun change () {
-        val contrast = seekBarMaskingContrast.progress.toDouble() * 2
+        val contrast = seekBarMaskingContrast.progress.toDouble() * 5
         val radius = seekBarMaskingRadius.progress
 
         progressBarMasking.visibility = View.VISIBLE
