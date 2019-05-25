@@ -100,7 +100,7 @@ class RetouchingActivity : AppCompatActivity() {
             taskQueue.add(Thread {
                 taskState = true
 
-                val blurR = touchRatio * retouchingRadius
+                val blurR = touchRatio * retouchingRadius / 5
 
                 imageRetouching(
                     x,
@@ -124,8 +124,6 @@ class RetouchingActivity : AppCompatActivity() {
             })
 
             if(!taskState){
-                progressBarRetouching.visibility = View.GONE
-
                 taskState = true
                 taskQueue.peek().start()
             }

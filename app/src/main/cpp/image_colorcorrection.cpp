@@ -89,7 +89,7 @@ uint32_t newPixel(
     }
     else if(filter == 4) // bluer
     {
-        uint32_t pixel = colorcorrectionBlurPixel(x, y, n, m, 10, img);
+        uint32_t pixel = colorcorrectionBlurPixel(x, y, n, m, 5, img);
 
         r = (pixel & 0x00FF0000U) >> 16U;
         g = (pixel & 0x0000FF00U) >> 8U;
@@ -103,7 +103,7 @@ uint32_t newPixel(
     }
     else if (filter==6) // opacity
     {
-        if (r>245 && g>245 && b>245) a = 0;
+        if (r>200 && g>200 && b>200) a = 0;
     }
     else if (filter==7) // red
     {

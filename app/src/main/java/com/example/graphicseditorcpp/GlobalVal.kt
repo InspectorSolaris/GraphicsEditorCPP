@@ -10,6 +10,6 @@ class GlobalVal : Application() {
     val bitmapConfig = Bitmap.Config.ARGB_8888
 
     val imageScreenWidthRatio = 0.95
-    val imageScreenHeightRatio = 0.675
+    val imageScreenHeightRatio = 0.70
 
 }

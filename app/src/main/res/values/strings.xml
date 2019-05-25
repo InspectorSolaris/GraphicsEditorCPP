@@ -58,13 +58,16 @@
     <string name="turning_activity_textview_angle_text">0</string>
 
     <string name="filters_activity_imageview_imageforfilters">Image for filters</string>
+    <string name="filters_activity_button_filters_text">Filters</string>
     <string name="filters_activity_button_f1_text">BnW</string>
     <string name="filters_activity_button_f2_text">Negative</string>
     <string name="filters_activity_button_f3_text">Cold</string>
     <string name="filters_activity_button_f4_text">Blur</string>
     <string name="filters_activity_button_f5_text">Brightness</string>
     <string name="filters_activity_button_f6_text">Opacity</string>
-    <string name="filters_activity_button_f7_text">Red</string>
+    <string name="filters_activity_button_f7_text">Blue</string>
+    <string name="filters_activity_button_f8_text">Green</string>
+    <string name="filters_activity_button_f9_text">Red</string>
 
     <string name="scaling_activity_imageview_imageforscaling">Image for scaling</string>
     <string name="scaling_activity_button_scale_text">Scale</string>
@@ -106,5 +109,7 @@
 
     <string name="intent_code_image_for_processing">processing</string>
     <string name="intent_code_image_processed">processed</string>
+
+    <string name="coming_soon">Coming soon</string>
 
 </resources>

@@ -29,14 +29,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:contentDescription="@string/imagebutton_back"/>
     </android.support.constraint.ConstraintLayout>
-    <ImageView
-            android:layout_width="0dp"
-            android:layout_height="0dp" app:srcCompat="@android:color/background_light"
-            android:id="@+id/imageForTrilinearFilt" android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="32dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="32dp"
-            android:layout_marginBottom="32dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.6" android:contentDescription="@string/trilinearfilt_activity_imageview_imagefortrilinear_filt"/>
+    <TextView
+            android:text="@string/coming_soon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewNoTV1" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAccessoryTools"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent" android:textSize="55sp"/>
 
 </android.support.constraint.ConstraintLayout>

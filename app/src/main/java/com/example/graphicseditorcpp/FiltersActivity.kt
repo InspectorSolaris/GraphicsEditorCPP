@@ -7,10 +7,9 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import android.support.design.widget.BottomSheetDialog
 import android.view.View
+import android.view.ViewGroup
 import kotlinx.android.synthetic.main.activity_filters.*
 import java.io.FileOutputStream
 
@@ -20,7 +19,7 @@ class FiltersActivity : AppCompatActivity() {
     private var imageChangedString: String? = null
     private var imageIsChangedBool: Boolean = false
 
-    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var dialog: BottomSheetDialog? = null
 
     override fun onCreate(
         savedInstanceState: Bundle?
@@ -28,8 +27,7 @@ class FiltersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_filters)
 
-        linearLayoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = linearLayoutManager
+        dialog = BottomSheetDialog(this)
 
         imageOriginalString = intent.getStringExtra(getString(R.string.code_image_original))
         imageChangedString = intent.getStringExtra(getString(R.string.code_image_changed))
@@ -58,26 +56,49 @@ class FiltersActivity : AppCompatActivity() {
             }
             R.id.buttonF1 -> {
                 runFilter(1)
+                dialog!!.hide()
             }
             R.id.buttonF2 -> {
                 runFilter(2)
+                dialog!!.hide()
             }
             R.id.buttonF3 -> {
                 runFilter(3)
+                dialog!!.hide()
             }
             R.id.buttonF4 -> {
                 runFilter(4)
+                dialog!!.hide()
             }
             R.id.buttonF5 -> {
                 runFilter(5)
+                dialog!!.hide()
             }
             R.id.buttonF6 -> {
                 runFilter(6)
+                dialog!!.hide()
             }
             R.id.buttonF7 -> {
                 runFilter(7)
+                dialog!!.hide()
             }
-
+            R.id.buttonF8 -> {
+                runFilter(8)
+                dialog!!.hide()
+            }
+            R.id.buttonF9 -> {
+                runFilter(9)
+                dialog!!.hide()
+            }
+            R.id.buttonFilters -> {
+                dialog!!.setContentView(
+                    layoutInflater.inflate(
+                        R.layout.activity_recyclerview_item_row,
+                        null as ViewGroup?
+                    )
+                )
+                dialog!!.show()
+            }
         }
     }
 
