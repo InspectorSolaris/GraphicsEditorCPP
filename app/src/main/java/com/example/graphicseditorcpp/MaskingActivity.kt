@@ -10,12 +10,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.SeekBar
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_masking.*
-import kotlinx.android.synthetic.main.activity_scaling.*
 import java.io.FileOutputStream
 import java.lang.Math.abs
-import kotlin.math.pow
 
 class MaskingActivity : AppCompatActivity() {
 
@@ -57,7 +54,7 @@ class MaskingActivity : AppCompatActivity() {
                 progress: Int,
                 fromUser: Boolean
             ) {
-                textViewContrast.text = "Sharpness ${progress*2}"
+                textViewContrast.text = "Sharpness  ${progress*2}"
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
                 // empty fun

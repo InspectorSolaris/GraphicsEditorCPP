@@ -115,41 +115,32 @@ class ScalingActivity : AppCompatActivity() {
         val width = imageBitmap.width
         val height = imageBitmap.height
 
-        val new_w: Long = extent * width.toLong()
-        val new_h: Long = extent * height.toLong()
+        val pixelsArray = IntArray(width * height)
+        imageBitmap.getPixels(pixelsArray, 0, width, 0, 0, width, height)
+        if (side) {
+            val newBitmap: Bitmap = Bitmap.createBitmap(width * extent, height * extent, Bitmap.Config.ARGB_8888)
+            newBitmap.setPixels(
+                resizeBilinear(pixelsArray, width, height, width * extent, height * extent),
+                0, width * extent, 0, 0, width * extent, height * extent
+            )
 
-        if(new_w * new_h < 16000000) {
-            val pixelsArray = IntArray(width * height)
-            imageBitmap.getPixels(pixelsArray, 0, width, 0, 0, width, height)
-            if (side) {
-                val newBitmap: Bitmap = Bitmap.createBitmap(width * extent, height * extent, Bitmap.Config.ARGB_8888)
-                newBitmap.setPixels(
-                    resizeBilinear(pixelsArray, width, height, width * extent, height * extent),
-                    0, width * extent, 0, 0, width * extent, height * extent
-                )
-
-                newBitmap.compress(
-                    (application as GlobalVal).bitmapCompressFormat,
-                    (application as GlobalVal).bitmapCompressQuality,
-                    FileOutputStream(imageChangedString)
-                )
-            } else {
-                val newBitmap: Bitmap = Bitmap.createBitmap(width / extent, height / extent, Bitmap.Config.ARGB_8888)
-                newBitmap.setPixels(
-                    resizeBilinear(pixelsArray, width, height, width / extent, height / extent),
-                    0, width / extent, 0, 0, width / extent, height / extent
-                )
-
-                newBitmap.compress(
-                    (application as GlobalVal).bitmapCompressFormat,
-                    (application as GlobalVal).bitmapCompressQuality,
-                    FileOutputStream(imageChangedString)
-                )
-            }
+            newBitmap.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
         } else {
-            runOnUiThread {
-                Toast.makeText(this, getString(R.string.error_image_to_large), Toast.LENGTH_LONG).show()
-            }
+            val newBitmap: Bitmap = Bitmap.createBitmap(width / extent, height / extent, Bitmap.Config.ARGB_8888)
+            newBitmap.setPixels(
+                resizeBilinear(pixelsArray, width, height, width / extent, height / extent),
+                0, width / extent, 0, 0, width / extent, height / extent
+            )
+
+            newBitmap.compress(
+                (application as GlobalVal).bitmapCompressFormat,
+                (application as GlobalVal).bitmapCompressQuality,
+                FileOutputStream(imageChangedString)
+            )
         }
     }
 
